@@ -8,6 +8,8 @@ import SharpL1.Probability.CDFOrder
 import SharpL1.Probability.ExponentialRecurrence
 import SharpL1.Probability.ScaledExponential
 import SharpL1.Analysis.FourierScalars
+import SharpL1.Analysis.LowOrders
+import SharpL1.Analysis.NodeSpeed
 import SharpL1.Analysis.Exterior
 import SharpL1.Analysis.CenterCriterion
 import SharpL1.Probability.SignMean

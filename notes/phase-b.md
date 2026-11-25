@@ -27,6 +27,12 @@ paper's cutoff at 20.
 - **Fourier scalars.** The accepted result of Gemini task 01 includes
   the exact rational estimates behind `traceRatio` and `Gbound`.
   The remaining matrix trace and Fourier arguments are separate dependencies.
+- **Low orders and node speed.** `LowOrders.lean` (Gemini task 02) proves
+  strict center maximality for the explicit order-1 and order-2 functions.
+  Their identification with the interpolation error still requires a proof.
+  `NodeSpeed.lean` (task 04) proves the polynomial speed identity, simplicity
+  for interior roots, and the exact speed and its bounds along differentiable
+  root branches. The existence and ordering of those branches remain open.
 - **Exterior region.** `Exterior.lean` proves the speed factor decreases
   on [t,1], the nonnegative exterior weights increase, and their alternating
   sum is nonnegative for ordered nodes. A direct scalar consequence is the
@@ -45,9 +51,10 @@ paper's cutoff at 20.
    identification since `cdfExact []` is a default and the empty sum is zero.
    Reuse coefficient comparison and the no-atom lemma to supply the four real
    sign enclosures.
-2. Establish smooth ordered Jacobi root curves, the node-speed formula and
-   the error/derivative identities, especially `dS`, `Hderivative` and
-   `Hcomp`. The exterior scalar lemmas are ready for those identities.
+2. Establish smooth ordered Jacobi root curves and apply `hasDerivAt_node_speed`
+   to them. Prove the error and derivative identities, especially `dS`,
+   `Hderivative` and `Hcomp`. The exterior scalar lemmas are ready for those
+   identities.
 3. Apply the uniform origin bound, interval positivity and the center
    criterion. The numeric verification and this real-variable theorem
    have separate acceptance conditions.
@@ -63,10 +70,8 @@ neighborhoods. High orders use two-row proof chunks and the two largest
 orders run as independent CI jobs.
 [Certificate run](https://github.com/Ye-Chern/sharp-L1-interpolation/actions/runs/45636804324).
 
-Manual Gemini task files for the current round are in isolated worktrees
-under `D:/work/sharp-L1-team/manual-gemini`. The main proof integrated
-tasks 01 and 03 after recompiling their relevant statements. The remaining
-two task cards concern the exact order-1/2 comparison and the implicit
-Jacobi node-speed formula. The local Agent Harness uses explicit Medium
-for scoped Qwen work. Its latest no-atom trial reached the deadline, and
-the accepted proof of that lemma was completed directly.
+Gemini tasks 01 through 04 were recompiled and integrated. The next independent
+tasks are [05, the CDF table](tasks/05-cdf-table.md) and [06, local root
+branches](tasks/06-root-branches.md). The local Agent Harness uses explicit
+Medium for scoped Qwen work. Its latest no-atom trial reached the deadline,
+and the accepted proof of that lemma was completed directly.

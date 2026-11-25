@@ -48,6 +48,11 @@ private theorem firstRowSigns :
 #print axioms SharpL1.Probability.measure_sum_mul_le_antitone_of_expMeasure
 #print axioms SharpL1.Analysis.traceRatio_nat_ineq
 #print axioms SharpL1.Analysis.gbound_sqrt_lt
+#print axioms SharpL1.Analysis.e₁_lt_e₁_zero
+#print axioms SharpL1.Analysis.e₂_lt_e₂_zero
+#print axioms SharpL1.nodePolynomial_speed_identity
+#print axioms SharpL1.hasDerivAt_node_speed
+#print axioms SharpL1.node_speed_bounds
 #print axioms SharpL1.Analysis.exteriorWeight_alternating_nonneg
 #print axioms SharpL1.Analysis.exterior_derivative_neg
 #print axioms SharpL1.Analysis.center_min_of_deriv_and_outer
