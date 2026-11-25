@@ -2,7 +2,14 @@ name: Lean certificate data
 on:
   pull_request:
     paths:
-      - 'Lean/**'
+      - 'Lean/SharpL1/Certificate/**'
+      - 'Lean/SharpL1/Chebyshev.lean'
+      - 'Lean/SharpL1/RootBrackets.lean'
+      - 'Lean/SharpL1Data.lean'
+      - 'Lean/SharpL1Data/**'
+      - 'Lean/lakefile.toml'
+      - 'Lean/lake-manifest.json'
+      - 'Lean/lean-toolchain'
       - 'certificates/brackets.csv'
       - '.github/workflows/lean-data.yml'
   workflow_dispatch:

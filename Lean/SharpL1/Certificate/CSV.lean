@@ -70,9 +70,11 @@ open Lean Elab Command in
 theorem refers to the generated `nameData` declaration. -/
 elab "certify_order " n:num " as " name:ident : command => do
   let data := mkIdentFrom name (name.getId.appendAfter "Data")
-  elabCommand (← `(command| def $data : ImportedOrder := certificate_order% $n))
   elabCommand (← `(command|
-    set_option maxRecDepth 4096 in
+    set_option maxRecDepth 32768 in
+    def $data : ImportedOrder := certificate_order% $n))
+  elabCommand (← `(command|
+    set_option maxRecDepth 32768 in
     set_option maxHeartbeats 0 in
     theorem $name : checkOrder $n ($data).rows = true := by
       refine ImportedOrder.check $n $data (by decide +kernel) ?_
