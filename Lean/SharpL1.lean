@@ -11,6 +11,7 @@ import SharpL1.Probability.ExponentialRecurrence
 import SharpL1.Probability.ScaledExponential
 import SharpL1.Analysis.FourierScalars
 import SharpL1.Analysis.LowOrders
+import SharpL1.Analysis.LowOrderNodes
 import SharpL1.Analysis.NodeSpeed
 import SharpL1.Analysis.NodeWeights
 import SharpL1.Analysis.RootBranches

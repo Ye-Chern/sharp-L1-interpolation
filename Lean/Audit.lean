@@ -52,6 +52,8 @@ private theorem firstRowSigns :
 #print axioms SharpL1.Analysis.gbound_sqrt_lt
 #print axioms SharpL1.Analysis.e₁_lt_e₁_zero
 #print axioms SharpL1.Analysis.e₂_lt_e₂_zero
+#print axioms SharpL1.Analysis.explicitError_orderedNode_one_lt_center
+#print axioms SharpL1.Analysis.explicitError_orderedNode_two_lt_center
 #print axioms SharpL1.nodePolynomial_speed_identity
 #print axioms SharpL1.hasDerivAt_node_speed
 #print axioms SharpL1.node_speed_bounds

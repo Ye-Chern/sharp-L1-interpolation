@@ -7,3 +7,7 @@
 3. 对列表长度强归纳。两端异号用 `weightedCdfZero_mixed`。单节点含等号，禁止第一步直接使用 `max⋅0` 代替零阶指示函数。
 
 从 `Lean` 构建新模块。报告每条结果是单点、矩恒等式、递推还是最终概率等式。
+
+## 当前接续点
+
+`DividedCDF.lean` 的三个递推分支已编译。本机工作区 `D:/work/sharp-L1-team/luna-divided-cdf` 的 `Lean/SharpL1/Analysis/DividedCDFLaw.lean` 是 Luna 的持续草稿。该文件前两条公开引理，即 `toFinset_erase_head_of_nodup` 与 `toFinset_erase_last_of_nodup`，已在只有辅助引理时独立编译。下半段的总定理尚未通过。先明确使用长度强归纳的局部递归结构，再修复 `dropLast`、`tail = middle ++ [a]` 的重写和同号分支的等式方向。可将草稿缩回两个引理后重新增补，原文件仍留作比对。

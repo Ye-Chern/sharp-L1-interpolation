@@ -54,7 +54,11 @@ paper's cutoff at 20.
   The remaining matrix trace and Fourier arguments are separate dependencies.
 - **Low orders and node speed.** `LowOrders.lean` (Gemini task 02) proves
   strict center maximality for the explicit order-1 and order-2 functions.
-  Their identification with the interpolation error still requires a proof.
+  `LowOrderNodes.lean` (Gemini task 11a) identifies the complete ordered root
+  sets and matches the paper's explicit error to these functions on `[0,1]`.
+  Both strict center comparisons on the positive half of the interval now
+  hold for the canonical ordered nodes. The all-order identification with
+  the integral error and its reflection identity are separate steps.
   `NodeSpeed.lean` (task 04) proves the polynomial speed identity, simplicity
   for interior roots, and the exact speed and its bounds along differentiable
   root branches. `RootBranches.lean` (task 06) proves local existence,
