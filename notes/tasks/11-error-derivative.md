@@ -8,3 +8,5 @@
 4. 补齐误差反射、`E(±1)=0` 和积分定义 `E` 与显式式子的等价。`LowOrderNodes.lean` 已将一、二阶显式式子接到 `e₁`、`e₂`，证明了 `0<t≤1` 的严格比较。应用统一反射后覆盖负半区。
 
 分派时先做一个小步。禁止把 `|t|<1` 的假设误用于端点，或把只对自变量求导的密度公式当成总导数。
+
+收尾时保存了显式误差求导的本机草稿 `D:/work/sharp-L1-team/results/ExplicitError.lean`。最近一次 Lean 检查只报告 `hpow` 的指数 `n + 1 - 1` 尚未化简为 `n`，可从这个报错继续。草稿未进入主库构建。`hasDerivAt_truncatedPower_zero` 已独立编译。
