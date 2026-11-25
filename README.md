@@ -8,7 +8,7 @@ For positive integer n, the goal is to find the lexicographically best pair (A_n
 ||F^(n)||_1 <= A_n ||F||_1 + B_n ||F^(n+1)||_1,  F in W^(n+1,1)([-1,1]).
 ```
 
-The draft proves the reduction to a single-variable maximum E_n, a uniform analytic estimate for n >= 20, and a finite interval certificate for n = 3,...,19. The cases n=1,2 are elementary; n=3 also admits an elementary calculation. The remaining open objectives of this project are a uniform purely analytic proof, independent proof review, literature verification, and Lean formalization. No claim of novelty or publication priority is made.
+The draft proves the reduction to a single-variable maximum E_n, a uniform analytic estimate for n >= 20, and a finite interval certificate for n = 3,...,19. The cases n=1,2 are elementary; n=3 also admits an elementary calculation. The current priorities are independent proof review, literature verification, and Lean formalization of this computer-assisted route. A uniform purely analytic proof is deferred. No claim of novelty or publication priority is made.
 
 ## Contents
 
@@ -18,7 +18,7 @@ The draft proves the reduction to a single-variable maximum E_n, a uniform analy
 - `certificates/check_constants.py`: rational checks of the explicit analytic constants.
 - `certificates/verify.cpp`: fast certificate generator, using floating point only to propose root brackets; not trusted by the independent verifier.
 - `certificates/check.log`, `constants.log`, `generation.log`: actual run output.
-- `FORMALIZATION.md`: suggested Lean architecture and trusted-base audit.
+- [Phase A status](notes/phase-a.md), [formalization plan](FORMALIZATION.md), and [Lean build](Lean/README.md): theorem dependencies, review status, and reproduction.
 
 ## Reproduce
 

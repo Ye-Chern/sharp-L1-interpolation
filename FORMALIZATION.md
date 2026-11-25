@@ -1,6 +1,6 @@
-# Lean formalization plan (proposed; no Lean code has been compiled)
+# Lean formalization plan
 
-Start with the finite theorem, not the whole Sobolev statement. Pin a Lean and mathlib version; keep definitions stable, use small independently checkable modules, and explicitly track gaps. The suggested file names below are architecture, not claims about existing mathlib APIs.
+Start with the finite theorem, not the whole Sobolev statement. Pin a Lean and mathlib version; keep definitions stable, use small independently checkable modules, and explicitly track gaps. The [Phase A map](notes/phase-a.md) records the current Lean results and remaining dependencies. See [Lean/README.md](Lean/README.md) for the pinned build and axiom audit.
 
 ## Milestone A — algebraic and finite certificate layer
 

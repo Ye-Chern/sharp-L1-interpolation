@@ -1,0 +1,20 @@
+name: Lean proof checks
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+concurrency:
+  group: lean-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  lean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@ba3fdfe5c4476c925da13bf11a005ddb47e47aee # v1
+        env:
+          LEAN_NUM_THREADS: "2"
+        with:
+          lake-package-directory: Lean
+          use-mathlib-cache: "true"
+          axiom-audit: "true"
