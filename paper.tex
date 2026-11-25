@@ -221,7 +221,7 @@ v&=\tr A^2=1/2+2/n+r^2(n+3/2)/n^2<0.654.
  I_2&=\int_0^\infty \xi^2W\,d\xi=7\pi 24^{3/2}/512<5.051,\notag\\
  J(L)&=\int_L^\infty W\,d\xi,\qquad J(2.85)<0.153,\quad J(5.7)<0.006.\label{integrals}
 \end{align}
-前两式由 Beta 积分直接得到。后两个上界可由 $\xi=\sqrt{24}\tan u$ 后的余弦幂积分递推严格计算：设 $I_k(a)=\int_a^{\pi/2}\cos^k u\,du$，则 $I_k=(k-1)I_{k-2}/k-\sin a\cos^{k-1}a/k$，$I_0=\pi/2-a$，且 $J(L)=\sqrt{24}I_{10}(\arctan(L/\sqrt{24}))$。用 $3.14159<\pi<3.14160$、$4.89897<\sqrt{24}<4.89898$ 及反正切交错级数前 100 项和余项，或附带的纯有理数积分界检查器 \texttt{check\_constants.py}，均可核查这些常数。
+前两式由 Beta 积分直接得到。后两个上界可由 $\xi=\sqrt{24}\tan u$ 后的余弦幂积分递推严格计算：设 $I_k(a)=\int_a^{\pi/2}\cos^k u\,du$，则 $I_k=(k-1)I_{k-2}/k-\sin a\cos^{k-1}a/k$，$I_0=\pi/2-a$，且 $J(L)=\sqrt{24}I_{10}(\arctan(L/\sqrt{24}))$。用 $3.14159<\pi<3.14160$、$4.89897<\sqrt{24}<4.89898$ 及反正切交错级数前 100 项和余项（当参数 $x>1$ 时，先用 $\arctan x=\pi/2-\arctan(1/x)$），或附带的纯有理数积分界检查器 \texttt{check\_constants.py}，均可核查这些常数。
 \subsection{符号期望的单侧估计}
 由行列式求导，
 \[\partial_r\theta(\xi)=\frac{\xi}{n}\tr(D_n(I+\xi^2A^2)^{-1}).\]
