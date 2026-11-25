@@ -11,4 +11,5 @@ import SharpL1.Analysis.FourierScalars
 import SharpL1.Analysis.Exterior
 import SharpL1.Analysis.CenterCriterion
 import SharpL1.Probability.SignMean
+import SharpL1.Probability.WeightedExponential
 import SharpL1.Analysis.FiniteCenter

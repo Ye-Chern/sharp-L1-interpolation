@@ -53,4 +53,8 @@ private theorem firstRowSigns :
 #print axioms SharpL1.Analysis.center_min_of_deriv_and_outer
 
 #print axioms SharpL1.Probability.lawSignMean_eq_cdf
+#print axioms SharpL1.Probability.weightedExpSum_mixed
+#print axioms SharpL1.Probability.weightedCdfZero_mixed
+#print axioms SharpL1.Probability.weightedCdfZero_nonpos
+#print axioms SharpL1.Probability.weightedCdfZero_nonneg_pos
 #print axioms SharpL1.Analysis.center_min_of_checked_order
