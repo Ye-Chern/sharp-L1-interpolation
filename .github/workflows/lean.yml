@@ -1,5 +1,9 @@
 name: Lean proof checks
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
 concurrency:
@@ -18,3 +22,5 @@ jobs:
           lake-package-directory: Lean
           use-mathlib-cache: "true"
           axiom-audit: "true"
+      - run: lake env lean Audit.lean
+        working-directory: Lean
