@@ -17,21 +17,24 @@ private theorem scaledAverage_eq (s l h : ℤ) (x y : ℝ) :
     scaledAverage s l h x y = (s : ℝ) * cdfMixed l h x y := by
   rw [scaledAverage, cdfMixed, mul_div_assoc]
 
-private def cdfEntries {α : Type} (zero one : α) (mix : ℤ → ℤ → α → α → α) :
+/-- Compute one row from adjacent entries of the previous row. -/
+def cdfEntries {α : Type} (zero one : α) (mix : ℤ → ℤ → α → α → α) :
     List ℤ → List ℤ → List α → List α
   | l :: lows, h :: highs, x :: y :: values =>
     (if h ≤ 0 then one else if 0 ≤ l then zero else mix l h x y) ::
       cdfEntries zero one mix lows highs (y :: values)
   | _, _, _ => []
 
-private def cdfRows {α : Type} (zero one : α) (mix : ℤ → ℤ → α → α → α)
+/-- Advance the table by the indicated number of rows. -/
+def cdfRows {α : Type} (zero one : α) (mix : ℤ → ℤ → α → α → α)
     (knots : List ℤ) (gap : ℕ) (values : List α) : ℕ → List α
   | 0 => values
   | count + 1 =>
     cdfRows zero one mix knots (gap + 1)
       (cdfEntries zero one mix knots (knots.drop (gap + 1)) values) count
 
-private def cdfRun {α : Type} (zero one : α) (mix : ℤ → ℤ → α → α → α)
+/-- Run the shared arithmetic table from singleton entries. -/
+def cdfRun {α : Type} (zero one : α) (mix : ℤ → ℤ → α → α → α)
     (knots : List ℤ) : α :=
   (cdfRows zero one mix knots 0 (knots.map fun x => if x ≤ 0 then one else zero)
     (knots.length - 1)).headD zero

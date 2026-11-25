@@ -8,8 +8,10 @@ paper's cutoff at 20.
 - **Jacobi endpoints and reflection.** `JacobiSymmetry.lean` proves the
   three specializations at t=−1,0,1 and the full root-multiset reflection
   under t↦−t. Together with the preceding spectrum commit, the roots are
-  all real and simple for every real parameter. Smooth dependence and the
-  node-speed identity are separate steps.
+  all real and simple for every real parameter. See the node-speed item below
+  for regularity and the formula along an interior branch.
+  `JacobiContainment.lean` (Luna High) bounds every root in `(−1,1)` for
+  interior parameters by the Chebyshev recurrence and endpoint reflection.
 - **Probability law.** `ExponentialMix.lean` proves the Fubini calculation
   for the strict tail of B−A. `NoAtom.lean` proves that any nonzero
   independent exponential term gives zero mass to a level set.
@@ -21,6 +23,21 @@ paper's cutoff at 20.
   CDF at zero to its sign expectation when there is no atom at zero.
   `WeightedExponential.lean` defines the iterated convolution law and proves
   all three branches of its zero-threshold CDF recurrence.
+  `WeightedComparison.lean` proves the CDF ordering for entire coefficient
+  lists, invariance under a positive common scale and the sign expectation
+  formula for any list with a nonzero coefficient.
+- **Probability semantics of the exact table.** `CDFSemantics.lean` is the
+  accepted result of Gemini task 05. The table's entry at gap `g` and index
+  `i` is the zero-threshold CDF of the associated slice. For every nonempty
+  nondecreasing integer list, the final `cdfExact` equals the weighted CDF.
+  The analytic proof lives in a separate module from the executable checker.
+  `CDFBridge.lean` then proves the sign-mean enclosure from ordered coefficient
+  lists bracketing the true coefficients at any positive integer scale.
+- **Barycentric differences.** `DividedDifference.lean` proves polynomial
+  coefficient reproduction and deletion after multiplication by a node's
+  linear factor. `DividedCDF.lean` proves the two constant branches and the
+  two-endpoint recurrence for truncated-power differences. The induction
+  identifying the two families of recurrences remains open.
 - **Coefficient comparison.** The accepted result of Gemini task 03 is
   `measure_sum_mul_le_antitone_of_expMeasure`. It allows both positive
   and negative coefficients. The two sums use the same random variables.
@@ -32,7 +49,15 @@ paper's cutoff at 20.
   Their identification with the interpolation error still requires a proof.
   `NodeSpeed.lean` (task 04) proves the polynomial speed identity, simplicity
   for interior roots, and the exact speed and its bounds along differentiable
-  root branches. The existence and ordering of those branches remain open.
+  root branches. `RootBranches.lean` (task 06) proves local existence,
+  uniqueness, differentiability and the speed on a neighborhood. For an
+  ordered interior family of full size, the simultaneous disjoint branches
+  exhaust the root multiset locally. The global ordered-node interface and
+  endpoint continuity remain open.
+  `NodeWeights.lean` (Qwen Medium, task 07) uses Chebyshev's Cassini identity
+  to prove the inverse-denominator speed formula for the monic polynomial.
+  The Qwen call ended by timeout after writing the source. The module passed
+  the independent targeted build in the main worktree.
 - **Exterior region.** `Exterior.lean` proves the speed factor decreases
   on [t,1], the nonnegative exterior weights increase, and their alternating
   sum is nonnegative for ordered nodes. A direct scalar consequence is the
@@ -44,15 +69,12 @@ paper's cutoff at 20.
 
 ## Resume the proof
 
-1. Show that each row of the triangular integer-knots computation represents
-   the zero-threshold CDFs of its corresponding contiguous slices using
-   `weightedCdfZero_mixed`, `weightedCdfZero_nonpos` and
-   `weightedCdfZero_nonneg_pos`. Use nonempty sorted lists for the final
-   identification since `cdfExact []` is a default and the empty sum is zero.
-   Reuse coefficient comparison and the no-atom lemma to supply the four real
-   sign enclosures.
-2. Establish smooth ordered Jacobi root curves and apply `hasDerivAt_node_speed`
-   to them. Prove the error and derivative identities, especially `dS`,
+1. Use the exact table's CDF semantics, coefficient comparison and the
+   ordered root families to supply the four real sign enclosures. Use
+   nonempty sorted lists since `cdfExact []` is a default and the empty
+   sum is zero.
+2. Identify the global ordered Jacobi roots with the local branches and
+   prove endpoint continuity. Prove the error and derivative identities, especially `dS`,
    `Hderivative` and `Hcomp`. The exterior scalar lemmas are ready for those
    identities.
 3. Apply the uniform origin bound, interval positivity and the center
@@ -70,8 +92,10 @@ neighborhoods. High orders use two-row proof chunks and the two largest
 orders run as independent CI jobs.
 [Certificate run](https://github.com/Ye-Chern/sharp-L1-interpolation/actions/runs/45636804324).
 
-Gemini tasks 01 through 04 were recompiled and integrated. The next independent
-tasks are [05, the CDF table](tasks/05-cdf-table.md) and [06, local root
-branches](tasks/06-root-branches.md). The local Agent Harness uses explicit
-Medium for scoped Qwen work. Its latest no-atom trial reached the deadline,
-and the accepted proof of that lemma was completed directly.
+Gemini tasks 01 through 06 were recompiled and integrated. The remaining
+work and the order for delegated tasks are in [the handoff](tasks/START.md).
+The [finite algebraic bridge](finite-algebraic-bridge.md) derives `Hcomp` from
+the weighted CDF by a common divided-difference recurrence and deletion
+identities. This removes the simplex-integral and density-regularity
+dependencies from that particular bridge. Its mathematical derivation and
+the compiled modules above have separate statuses.

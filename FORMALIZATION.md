@@ -2,6 +2,8 @@
 
 Start with the finite theorem, not the whole Sobolev statement. Pin a Lean and mathlib version; keep definitions stable, use small independently checkable modules, and explicitly track gaps. The [Phase A map](notes/phase-a.md) records the current Lean results and remaining dependencies. See [Lean/README.md](Lean/README.md) for the pinned build and axiom audit.
 
+For the latest verified results and next assignments, see the [analytic progress](notes/phase-b.md) and the [task handoff](notes/tasks/START.md). The finite certificate bridge can use the [common divided-difference and exponential CDF recurrence](notes/finite-algebraic-bridge.md).
+
 ## Milestone A — algebraic and finite certificate layer
 
 1. `Chebyshev.lean`: define `U`, prove the recurrence, degree, parity, and scaled integer evaluation identity. Prove the `n+1` disjoint sign-change brackets certify the complete root list, using continuity and polynomial degree. Define the Jacobi matrix and prove the characteristic polynomial identity independently.
