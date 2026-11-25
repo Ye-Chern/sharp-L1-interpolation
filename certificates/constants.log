@@ -1,0 +1,3 @@
+PASS: all numerical bounds in Section 6
+J(2.85) upper: 0.1513354362901304 J(5.7) upper: 0.005049763169370412
+G/r lower: 0.6611784414898189 |Delta|/r upper: 0.6523585986713734

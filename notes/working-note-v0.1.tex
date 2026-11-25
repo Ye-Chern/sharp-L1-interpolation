@@ -1,0 +1,418 @@
+\documentclass[11pt,a4paper,fontset=fandol]{ctexart}
+\usepackage[margin=25mm,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,booktabs,enumitem,xcolor,hyperref,fancyhdr}
+\definecolor{navy}{HTML}{203B59}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=navy}
+\ctexset{section={format=\Large\bfseries\color{navy}},subsection={format=\large\bfseries}}
+\pagestyle{fancy}\fancyhf{}\lhead{高阶 $L^1$ 插值不等式}\rhead{Research note · 2026-11-25}\cfoot{\thepage}
+\setlength{\parindent}{2em}\setlength{\parskip}{3pt}
+\allowdisplaybreaks[2]
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prob}{\mathbb P}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\norm}[1]{\left\|#1\right\|_1}
+\newcommand{\G}{\mathcal G}
+\newtheorem{theorem}{定理}
+\newtheorem{lemma}{引理}
+\theoremstyle{remark}\newtheorem{conjecture}{猜想}
+\title{\vspace{-1em}从极值多项式到移动 Gauss 节点\\[5pt]\large 高阶 $L^1$ 插值不等式及中心最大值问题}
+\author{Lijails 与 GPT 的讨论笔记（GPT 整理）}
+\date{2026 年 11 月 25 日 · Working note v0.1}
+\begin{document}
+\maketitle
+\begin{abstract}
+从二阶锐插值不等式出发，构造任意阶的移动节点差商算子。第一最佳常数为 $2^n n!$；第二最佳常数严格地等于一个单变量误差函数 $E_n$ 的最大值。节点具有 Jacobi 矩阵、Chebyshev 多项式和广义 Gauss 求积三种等价解释。本文整理中心最大值猜想、已证结论、概率与 B 样条化简，以及充分大阶数的局部极限定理证明。附带给出一个未经优化的有效门槛 $n\ge 10^{40}$（由本文的显式估计推出，并非数值穷举）。所有阶数的中心最大值仍是开放于本笔记的问题；此处不主张其在已有文献中必然未知。
+\end{abstract}
+\setcounter{tocdepth}{1}
+\tableofcontents
+\clearpage
+
+\section{问题与结论的地图}
+统一在 $I=[-1,1]$ 上讨论实值函数，$\norm{f}=\int_I|f|$，$n\ge1$。原问题在 $n=2$ 时为
+\[
+ \norm{F''}\le 8\norm F+\frac{2\sqrt2-1}{3}\norm{F'''}.
+\]
+自然的推广是寻找最小的 $A_n$，再在 $A_n$ 固定时寻找最小的 $B_n$，使
+\begin{equation}\label{main}
+ \norm{F^{(n)}}\le A_n\norm F+B_n\norm{F^{(n+1)}}\qquad(F\in W^{n+1,1}(I)).
+\end{equation}
+\begin{center}
+\begin{tabular}{p{.48\linewidth}p{.43\linewidth}}
+\toprule 结论 & 状态\\ \midrule
+$A_n=2^n n!$；$B_n=\max E_n$ & 任意阶严格成立（\S\ref{sec:sharp}）\\
+节点反射、交错、矩阵与求积表示 & 任意阶严格成立（\S\ref{sec:matrix}）\\
+$E_n$ 偶；$E_n(0)$ 的精确式与渐近式 & 任意阶严格成立（\S\ref{sec:center}）\\
+$n=1,2,3$ 的中心唯一最大值 & 严格成立；低阶可直接计算\\
+任意阶的中心严格局部最大值 & 严格成立（\S\ref{sec:center}）\\
+$n$ 充分大时中心唯一最大值 & 严格成立（\S\ref{sec:large}）；\S\ref{sec:effective} 给出粗门槛\\
+所有 $n$ 的中心唯一最大值 & 尚未完成；不应将 $E_n(0)$ 一律称作已证的 $B_n$\\
+$E_n''<0$ 全区间；$B_n$ 严格递增 & 仍为猜想；不用于本文定理\\
+\bottomrule
+\end{tabular}
+\end{center}
+本文记 $U_n$ 为第二类 Chebyshev 多项式，即 $U_n(\cos\theta)=\sin((n+1)\theta)/\sin\theta$。原讨论中的二阶证明来自《从二次多项式出发：一个 $L^1$ 插值不等式》（11 月 20 日，Lijails 与 GPT 6.2 Astra，Qwen 辅助写作）。以下按照证明依赖关系重排，而非逐轮聊天记录。
+
+\section{极值多项式与差商算子的构造}
+设 $Q_n=2^{-n}U_n$ 为首一多项式，$s_n=\sgn Q_n$。换元 $y=\cos\theta$ 后，$s_n(\cos\theta)=\sgn\sin((n+1)\theta)$，而 $\cos^k\theta\sin\theta$ 只含不超过 $k+1$ 的正弦频率。因此
+\begin{equation}\label{mom}
+ \int_{-1}^1s_n(y)y^k\,dy=0\quad(0\le k<n),\qquad \norm{Q_n}=2^{1-n}.
+\end{equation}
+若 $P(y)=a_ny^n+\cdots+a_0$，则 $\norm{P^{(n)}}=2n!|a_n|=2^nn!|\int s_nP|\le 2^nn!\norm P$。取 $P=Q_n$ 取等，且非零取等多项式必须在 $Q_n$ 的所有变号点为零，故恰为其常数倍。这说明任何 \eqref{main} 的第一常数不得小于 $A_n=2^nn!$。
+
+令 $r_j=-\cos(j\pi/(n+1))$（$0\le j\le n+1$），$\varepsilon_j=(-1)^{n-j}$。希望构造递增双射 $u_j:I\to[r_j,r_{j+1}]$，并定义
+\begin{equation}\label{T}
+ T_nF(x)=A_n\sum_{j=0}^n\varepsilon_j u_j'(x)F(u_j(x)).
+\end{equation}
+由换元立即有 $\norm{T_nF}\le A_n\norm F$。要求 $T_nP=P^{(n)}$ 对 $\deg P\le n$ 成立，等价于
+\[
+ \sum_j\varepsilon_j u_j'u_j^k=0\ (k<n),\qquad \sum_j\varepsilon_j u_j'u_j^n=2^{-n}.
+\]
+比较 Lagrange 插值的最高次系数即可解出
+\begin{equation}\label{ode}
+ u_j'=\frac{2^{-n}}{\prod_{i\ne j}|u_j-u_i|},\quad u_j(-1)=r_j,\qquad T_nF=n!F[u_0,\ldots,u_n].
+\end{equation}
+这绕过了二阶证明中积分后消元的困难。下一节的矩阵直接保证全局存在、端点和单调性；原来的 ODE 构造也可用矩守恒证明：令 $S_x(y)=\sgn\prod_j(y-u_j(x))$，则
+\begin{equation}\label{S-mom}
+ \int_I S_x(y)y^k\,dy=0\ (k<n),\qquad \int_I S_x(y)y^n\,dy=-2^{1-n}x.
+\end{equation}
+在节点仍处于 $I$ 时直接微分可得这些式子。若节点碰撞，内部变号点少于 $n$，取与 $S_x$ 同号的低次多项式便与矩正交矛盾；当右端节点首次达到 $1$ 时，其余节点由 \eqref{mom} 的极值多项式唯一性确定，再由第 $n$ 阶矩确定该时刻为 $1$。
+
+\section{Jacobi 矩阵、对称性与 Gauss 求积}\label{sec:matrix}
+令 $J_n(x)$ 为 $(n+1)\times(n+1)$ 实对称三对角矩阵，两个端点对角元为 $x/2$，其他对角元为零，相邻非对角元为 $1/2$：
+\begin{equation}\label{J}
+ J_n(x)=\frac12\begin{pmatrix}x&1&&&\\1&0&1&&\\&1&\ddots&\ddots&\\&&\ddots&0&1\\&&&1&x\end{pmatrix}.
+\end{equation}
+（$n=1$ 时为 $\frac12\left(\begin{smallmatrix}x&1\\1&x\end{smallmatrix}\right)$。）其首一特征多项式由行列式递推得
+\begin{equation}\label{char}
+ p_x(y)=2^{-n-1}\bigl(U_{n+1}(y)-2xU_n(y)+x^2U_{n-1}(y)\bigr).
+\end{equation}
+所有特征值为单根，按升序记为 $u_j(x)$。由 $U_{n+1}+U_{n-1}=2yU_n$，
+\[
+ p_{-1}=2^{-n}(y+1)U_n,\quad p_0=2^{-n-1}U_{n+1},\quad p_1=2^{-n}(y-1)U_n.
+\]
+单位特征向量 $v_j$ 在反对角线反射下为奇或偶，所以 $|v_{j,0}|=|v_{j,n}|$。特征值导数公式给出 $u_j'=|v_{j,0}|^2>0$。再取
+$\operatorname{adj}(u_jI-J_n)=p_x'(u_j)v_jv_j^*$ 的右上角元素，该余子式为 $2^{-n}$，便恢复 \eqref{ode}。这同时证明了全部节点的存在、严格递增和端点条件。
+
+\subsection{节点的恒等式与特殊位置}
+反射及交替符号的对角共轭给出 $J_n(-x)$ 与 $-J_n(x)$ 酉相似。因此
+\begin{equation}\label{sym}
+ u_j(-x)=-u_{n-j}(x),\quad u_j'(-x)=u_{n-j}'(x),\quad T_nR=(-1)^nRT_n,
+ \quad RF(y)=F(-y).
+\end{equation}
+由矩阵迹和特征值导数，
+\[
+ \sum_j u_j=x,\qquad \sum_j u_j^2=\tfrac{n+x^2}{2},\qquad 0<u_j'\le\tfrac12.
+\]
+更高次幂和均为 $\tr J_n(x)^k$。在 $|x|<1$ 时，由 \eqref{char} 的三角形式或隐式求导可得
+\begin{equation}\label{speed}
+ u_j'=\frac{2(1-u_j^2)}{L_x(u_j)},\qquad L_x(y)=n+2-2(n+1)xy+nx^2.
+\end{equation}
+因为 $L_x(y)=(n+1)(1-y^2)+(n+1)(y-x)^2+1-x^2$，还得到 $u_j'\le2/(n+1)$。在中心，$u_j(0)=-\cos((j+1)\pi/(n+2))$，$u_j'(0)=2(1-u_j(0)^2)/(n+2)$。代入 $y=x$ 可知 $p_x(x)=2^{-n-1}(x^2-1)U_{n-1}(x)$，因而所有节点与对角线的交点参数恰为 $\cos(k\pi/n)$，$k=0,\ldots,n$。
+
+\subsection{为什么应同时考虑所有阶数？}
+令 $\phi_x(\theta)=\arg((e^{i\theta}-x)/(1-xe^{i\theta}))$，辐角从 $0$ 连续增至 $\pi$，$|x|<1$。\eqref{char} 的零点条件等价于
+\[
+ (n+1)\theta+\phi_x(\theta)=k\pi,\quad k=1,\dots,n+1,\qquad \phi_x'=\frac{1-x^2}{1-2x\cos\theta+x^2}>0.
+\]
+增阶后相位增加 $\theta\in(0,\pi)$，所以 $u_{n+1,j}(x)<u_{n,j}(x)<u_{n+1,j+1}(x)$。更进一步，谱分解给出
+\begin{equation}\label{quad}
+ \sum_j u_j'(x)P(u_j(x))=\int P(y)\,d\mu_x(y),\qquad \deg P\le 2n,
+ \quad d\mu_x(y)=\frac{2\sqrt{1-y^2}}{\pi(1-2xy+x^2)}\,dy.
+\end{equation}
+证明：无限半直线 Jacobi 矩阵与 $J_n(x)$ 前端相同，尾端对角元为零。其从第 0 个坐标出发的闭合路径，在长度不超过 $2n$ 时无法使用第 $n$ 个对角元，因此矩与有限矩阵一致。自由半直线的 Stieltjes 变换 $m_0(z)=2(z-\sqrt{z^2-1})$（平方根在无穷远与 $z$ 同号），由 Schur 补得 $m_x(z)=(z-x/2-m_0(z)/4)^{-1}$；取边界虚部得到 $\mu_x$。当 $x=0$，末端扰动消失，公式对 $\deg P\le2n+1$ 也精确，此即标准 Chebyshev--Gauss 求积。一般 $x\ne0$ 时只能保证 $2n$ 次精确，故称广义 Gauss 型而非标准 Gauss 求积。
+
+这里的跨阶统一性非常重要：同一个 $x$ 对应同一极限测度，不同阶数给出交错的正权离散化。但是误差 $E_n$ 涉及截断幂和带符号的差商，\eqref{quad} 本身还没有推出最大值比较。
+
+\section{误差函数与第二常数的锐性}\label{sec:sharp}
+定义 $h_t(y)=(y-t)_+^n/n!$。Hermite--Genocchi 公式为
+\[
+ T_nF(x)=\E F^{(n)}\Big(\sum_{j=0}^n\lambda_j u_j(x)\Big),
+\]
+其中 $\lambda$ 在标准 $n$ 维单纯形上均匀分布。由光滑逼近或直接用积分公式，这也适用于 $h_t$，且 $0\le T_nh_t\le1$。Taylor 积分余项及 $T_nP=P^{(n)}$ 给出
+\[
+ (D^n-T_n)F(x)=\int_I(\mathbf1_{x>t}-T_nh_t(x))F^{(n+1)}(t)\,dt.
+\]
+记
+\begin{equation}\label{E}
+ E_n(t)=\int_{-1}^tT_nh_t(x)\,dx+\int_t^1(1-T_nh_t(x))\,dx.
+\end{equation}
+则 $\norm{(D^n-T_n)F}\le (\max E_n)\norm{F^{(n+1)}}$。对 \eqref{T} 换元积分，内部端点的交错贡献抵消，得到
+\begin{equation}\label{Eexplicit}
+ \boxed{E_n(t)=1-t-\frac{2^n}{n+1}(1-t)^{n+1}
+ +\frac{2^{n+1}}{n+1}\sum_j\varepsilon_j(u_j(t)-t)_+^{n+1}.}
+\end{equation}
+由 \eqref{sym} 和 $h_t(y)+(-1)^nh_{-t}(-y)=(y-t)^n/n!$，有 $T_nh_t(x)+T_nh_{-t}(-x)=1$，故 $E_n(-t)=E_n(t)$。
+
+\begin{theorem}[任意阶的锐常数]\label{thm:sharp}
+\eqref{main} 中第一常数最小为 $A_n=2^nn!$，固定它后第二常数最小为 $B_n=\max_{t\in I}E_n(t)$。
+\end{theorem}
+\begin{proof}
+上界已经证明。对任意内点 $t$，取 $P_t$ 为 $h_t$ 在 $u_j(t)$ 上的 $n$ 次插值多项式，令 $G_t=h_t-P_t$。由于 $D^{n+1}h_t=\delta_t\ge0$，插值余项
+\[
+ G_t(y)=h_t[u_0(t),\ldots,u_n(t),y]\prod_{j=0}^n(y-u_j(t))
+\]
+的第一个因子非负（由光滑逼近的差商中值定理）。各 $u_j$ 单调且在各自区间内运动，所以 $\varepsilon_jG_t(u_j(x))$ 在 $x>t$ 时非负，在 $x<t$ 时非正，因而 $\norm{T_nG_t}=A_n\norm{G_t}$。此外 $P_t^{(n)}=T_nh_t(t)$，于是
+\[
+ G_t^{(n)}=\mathbf1_{x>t}-T_nh_t(t),\qquad (D^n-T_n)G_t=\mathbf1_{x>t}-T_nh_t(x).
+\]
+它们与 $T_nG_t$ 具有相同的分段符号，所有三角不等式取等。故 $\norm{G_t^{(n)}}-A_n\norm{G_t}=E_n(t)$，且 $D^{n+1}G_t=\delta_t$。在全实线定义截断幂与多项式后作紧支撑光滑核卷积，得到光滑逼近，$F,F^{(n)}$ 分别在 $L^1$ 中收敛，且 $\norm{F^{(n+1)}}=1$（核支撑充分小）。于是 $B_n\ge E_n(t)$。端点误差为零，连续性完成证明。
+\end{proof}
+换回长度 $L=b-a$ 的区间，锐不等式为 $\norm{f^{(n)}}\le 4^nn!L^{-n}\norm f+(L/2)B_n\norm{f^{(n+1)}}$（这里各范数在 $[a,b]$）。
+
+\section{中心值、数值与局部结构}\label{sec:center}
+中心节点为 $U_{n+1}$ 的零点，故 \eqref{Eexplicit} 立刻给出
+\begin{equation}\label{center}
+ b_n:=E_n(0)=1-\frac{2^n}{n+1}+\frac{2^{n+1}}{n+1}
+ \sum_{k=1}^{\lfloor(n+1)/2\rfloor}(-1)^{k-1}\cos^{n+1}\frac{k\pi}{n+2}.
+\end{equation}
+记号 $b_n$ 特意与最佳常数 $B_n$ 区分：在中心最大值未证的阶数，只知 $b_n\le B_n$。
+\begin{center}
+\begin{tabular}{rll@{\qquad}rll}\toprule
+$n$ & $b_n$ & 数值 & $n$ & $b_n$ & 数值\\\midrule
+1 & $1/2$ & 0.500000000 & 6 & & 0.768440330\\
+2 & $(2\sqrt2-1)/3$ & 0.609475708 & 7 & & 0.785472584\\
+3 & $3\sqrt5/4-1$ & 0.677050983 & 8 & & 0.799271257\\
+4 & $(9\sqrt3-12)/5$ & 0.717691454 & 10 & & 0.820466444\\
+5 & & 0.746758277 & 20 & & 0.873268528\\
+50 & & 0.920034893 & 100 & & 0.943514627\\\bottomrule
+\end{tabular}
+\end{center}
+数值为本次用高精度算术重新计算 \eqref{center} 所得，不表示这些阶数已被严格证明在中心取最大值。
+
+另有适合高阶计算的无严重抵消的积分公式：
+\begin{equation}\label{beta}
+ 1-b_n=\frac{n+2}{\pi(n+1)}\int_0^1\frac{s^{-1/2}(1-s)^{n+1}}{1-(-s)^{n+2}}\,ds.
+\end{equation}
+证明提纲：令 $m=n+1,N=n+2$，$g(\theta)=\cos^m\theta$ 在 $[-\pi/2,\pi/2]$ 上、其余为零。由 \eqref{center}，$1-b_n=(2^{m-1}/m)\sum_{j\in\mathbb Z}(-1)^jg(j\pi/N)$。对交错采样用 Poisson 求和，结合
+\[
+ \widehat g(\xi)=\frac{\pi\Gamma(m+1)}{2^m\Gamma((m+2+\xi)/2)\Gamma((m+2-\xi)/2)}
+\]
+和 Gamma 反射公式，将奇数倍 $N$ 的频率项化为 $(-1)^{kN}B(kN+1/2,N)$；求和即 \eqref{beta}。交换积分求和可由绝对收敛保证。用 $1$ 替代分母的误差为 $O(4^{-n})$（利用 $s(1-s)\le1/4$ 并保留端点可积因子），得到
+\begin{equation}\label{asym}
+ 1-b_n=\frac{4^{n+2}}{\pi(n+1)\binom{2n+4}{n+2}}+O(4^{-n})
+ =\frac{1}{\sqrt{\pi n}}\left(1+\frac1{8n}+O(n^{-2})\right).
+\end{equation}
+
+\subsection{任意阶的严格局部最大值}
+由 \eqref{speed} 再求一次导数，记 $a_j=u_j(0)$，得
+\[
+ u_j'(0)=\frac{2(1-a_j^2)}{n+2},\qquad
+ u_j''(0)=\frac{4(n-1)a_j(1-a_j^2)}{(n+2)^2}.
+\]
+对 \eqref{Eexplicit} 求两次导数，设 $z_j=(u_j(t)-t)_+$，则 $n\ge2$ 时
+\[
+ 2^{-n}E_n''(t)=-n(1-t)^{n-1}+2n\sum_j\varepsilon_jz_j^{n-1}(1-u_j')^2+2\sum_j\varepsilon_jz_j^nu_j''.
+\]
+定义 $D_p=1-2\sum_{k=1}^{\lfloor(n+1)/2\rfloor}(-1)^{k-1}\cos^p(k\pi/(n+2))$。在中心代入上式得
+\[
+ E_n''(0)=-\frac{2^n}{(n+2)^2}\left[n^3 D_{n-1}+(4n^2+4n-4)D_{n+1}+4D_{n+3}\right].
+\]
+注意 $D_p=p\int_0^1\sgn U_{n+1}(y)y^{p-1}\,dy$。用与定理 \ref{thm:sharp} 相同的插值余项符号论证（此处插值 $y_+^{p-1}$ 于 $U_{n+1}$ 的零点），有 $D_{n+1},D_{n+3}>0$。为控制负项，记 $w(s)=(1-(-s)^{n+2})^{-1}$。与 \eqref{beta} 相同的 Poisson 求和和 Gamma 反射公式给出（$n\ge3$）
+\[
+ \frac{-D_{n-1}}{D_{n+1}}=4\frac{\int_0^1s^{1/2}(1-s)^{n-1}w(s)\,ds}{\int_0^1s^{-1/2}(1-s)^{n+1}w(s)\,ds}.
+\]
+偶数 $n\ge4$ 时 $1\le w\le(1-s)^{-1}$，奇数 $n\ge3$ 时 $1-s\le w\le1$。用 Beta 积分估计，上述比值分别不超过
+\[
+ \frac{2(n+1/2)(n+3/2)}{(n-1)n(n+1)},\qquad
+ \frac{2(n+3/2)(n+5/2)}{n(n+1)(n+2)},
+\]
+两者均小于 $4/n$。故方括号严格大于 $(4n-4)D_{n+1}+4D_{n+3}>0$。$n=1,2$ 由下节公式直接验证。于是所有阶数均有 $E_n''(0)<0$，结合偶性可知中心为严格局部最大值。局部结论并不能排除远离中心的其他峰值。
+
+\subsection{低阶验证}
+$n=1$ 时 $E_1(t)=(1-t^2)/2$；$n=2$ 时，对 $0\le t\le1$，
+\[
+ 6E_2(t)=(2+7t^2)\sqrt{8+t^2}-2-24t^2-t^3,
+\]
+直接求导可得严格递减。$n=3$ 时，对 $0\le t\le1$，令
+\[
+ a=\frac{-1-3t+\sqrt{5+2t+t^2}}4,\qquad b=\frac{1-3t+\sqrt{5-2t+t^2}}4.
+\]
+则 $E_3=1-t-2(1-t)^4+4b^4-4(a_+)^4$。$t\ge1/2$ 时 $a\le0,b'<0$，故 $E_3'\le-1+8(1-t)^3$，且在内点严格为负。在 $0\le t\le1/2$，写 $C_\pm=3\pm13t+17t^2\pm15t^3$，$r_\pm=\sqrt{5\pm2t+t^2}$，展开得
+\[
+ E_3(t)=\frac{C_+r_++C_-r_-}{8}-1-12t^2-2t^4.
+\]
+由平方根凹性 $r_\pm\le\sqrt5+(t^2\pm2t)/(2\sqrt5)$；若 $C_-<0$，使用 $r_-\ge\sqrt5+(t^2-2t)/(2\sqrt5)-t^2/16$（Taylor 余项，区间内根号内至少为 $4$）。又 $C_-\ge-6$，合并可得
+\[
+ E_3(t)-E_3(0)\le\Big(\frac{34\sqrt5}8+\frac{58}{16\sqrt5}-12+\frac3{64}\Big)t^2
+ +\Big(\frac{94}{16\sqrt5}-2\Big)t^4\le-\frac{11}{32}t^2.
+\]
+所以前三阶的 $B_n=b_n$。
+
+\section{最大值问题的概率与 B 样条化简}\label{sec:prob}
+\begin{conjecture}[中心最大值]\label{conj}
+对每个 $n\ge1$，$E_n(t)<E_n(0)$ 对所有 $0<|t|\le1$ 成立。更强但非必要的猜想为 $E_n''(t)<0$（内点）。
+\end{conjecture}
+令 $H_n=1-E_n$，$K_n(x,t)=T_nh_t(x)$。若 $V$ 均匀分布于 $\mathbb C^{n+1}$ 的单位球面，则其模方坐标均匀分布于单纯形，由酉不变性
+\begin{equation}\label{prob}
+ K_n(x,t)=\Prob(Y_x>t),\quad Y_x=V^*J_n(x)V=Z+\alpha x,
+ \quad \alpha=(|V_0|^2+|V_n|^2)/2\in(0,1/2],
+\end{equation}
+其中 $Z=V^*J_n(0)V$。若 $X$ 独立且均匀分布于 $I$，则 $E_n(t)=2\Prob((X-t)(Y_X-t)<0)$。它表示随机仿射压缩跨过阈值的平均长度。仅凭对称和压缩性，不能直接证明中心最大值，因为固定的 $(Z,\alpha)$ 可有不同的峰值位置。
+
+\subsection{给节点加上两个端点}
+令 $\boldsymbol z_t=(-1,u_0(t),\ldots,u_n(t),1)$，$P_t^*(y)=(y^2-1)p_t(y)$（与前文插值多项式 $P_t$ 区分）。$S_t$ 在区间外零延拓，则
+\begin{equation}\label{dS}
+ dS_t=(-1)^{n+1}\delta_{-1}+2\sum_j\varepsilon_j\delta_{u_j(t)}-\delta_1
+ =-2^{-n}\sum_{z\in\boldsymbol z_t}\frac{L_t(z)}{(P_t^*)'(z)}\delta_z.
+\end{equation}
+内部节点由 \eqref{ode}、\eqref{speed} 验证，端点由 $2^{n+1}p_t(1)=L_t(1)$ 及其反射式验证。令 $W_t=\sum_{z\in\boldsymbol z_t}\lambda_z z$，其中 $\lambda$ 均匀分布于相应单纯形，记分布函数及密度为 $F_t(s),f_t(s)$。此密度是正规化的 B 样条。由 Hermite--Genocchi 公式，对 $n+3$ 个节点的差商有
+\[
+ [\boldsymbol z_t](y-s)_+^{n+2}=1-F_t(s),\quad
+ [\boldsymbol z_t](y-s)_+^{n+1}=\frac{f_t(s)}{n+2},\quad
+ [\boldsymbol z_t](y-s)_+^n=-\frac{f_t'(s)}{(n+1)(n+2)}.
+\]
+对 \eqref{Eexplicit} 求导，用 \eqref{dS} 将交错和合为差商；再用
+$L_t(y)-2(1-y^2)=n(1-t^2)-2(n-1)t(y-t)+2(y-t)^2$，得到
+\begin{equation}\label{HprimeSpline}
+ H_n'(t)=2F_t(t)-1+\frac{2(n-1)t}{n+2}f_t(t)
+ +\frac{n(1-t^2)}{(n+1)(n+2)}f_t'(t).
+\end{equation}
+这里 $f_t'$ 是对密度自变量求导，而非全导数。
+
+\subsection{指数变量比较与一个充分条件}
+取标准复高斯 $g\in\mathbb C^{n+1}$（$|g_j|^2$ 是均值 1 的指数变量），及独立的标准指数变量 $e_+,e_-$。令
+\[
+ Q_t^0=g^*(tI-J_n(t))g,\qquad Q_t=Q_t^0+(t+1)e_++(t-1)e_-.
+\]
+写 $\rho_t$ 为 $Q_t$ 的密度，$\G(Q)=\E\sgn Q$。复高斯方向与长度平方独立，后者为 Gamma$(n+3,1)$，所以 $\rho_t(0)=f_t(t)/(n+2)$，$\rho_t'(0)=-f_t'(t)/((n+1)(n+2))$。\eqref{HprimeSpline} 等价于
+\begin{equation}\label{HprimeGauss}
+ H_n'(t)=\G(Q_t)+2(n-1)t\rho_t(0)-n(1-t^2)\rho_t'(0).
+\end{equation}
+若 $Y=X+ae$ 且 $e$ 独立标准指数变量，则 $\rho_X=\rho_Y+a\rho_Y'$，故 $\G(X)=\G(Y)-2a\rho_Y(0)$。连续两次使用该恒等式给出
+\begin{align}\label{comp}
+ H_n'(t)={}&\tfrac12\{\G(Q_t^0+(t+1)e_+)+\G(Q_t^0+(t-1)e_-)\}\notag\\
+ &+\tfrac n2\{\G(Q_t)-\G(Q_t^0)\}.
+\end{align}
+第一行在 $t>0$ 严格为正：两个二次型关于 $t$ 严格增加，且 $t=0$ 时互为分布反射；严格性可由高斯在所有开集上有正概率及二次型在零附近的符号跨越得到。
+
+\begin{conjecture}[密度比较，足以解决中心最大值]\label{conj:density}
+对于 $0<t<1$，
+\begin{equation}\label{density}
+ -\frac{f_t'(t)}{f_t(t)}\le\frac{2(n+1)t}{1-t^2}.
+\end{equation}
+等价地，$\G(Q_t)\ge\G(Q_t^0)$，因为两次指数卷积给出 $\G(Q_t)-\G(Q_t^0)=4t\rho_t(0)-2(1-t^2)\rho_t'(0)$。
+\end{conjecture}
+上一轮讨论曾报告该不等式得到网格数值支持，但本文未重新验证其完整扫描，故不将之作为证明依据。它比直接研究高阶交错和更适合继续研究；可以尝试利用加端点前后 B 样条的变差递减性质、谱测度求积比较，或指数卷积的符号保持性。注意普通密度的对数凹性不能直接给出 \eqref{density} 所需的方向和常数。
+
+\section{充分大阶数：统一的严格证明}\label{sec:large}
+\begin{theorem}\label{thm:large}
+存在 $N_0$，使对每个 $n\ge N_0$，$E_n$ 在 $t=0$ 取得唯一全局最大值。并且在任意固定的 $r$ 紧区间上，
+\begin{align*}
+ \sqrt n\,H_n(r/\sqrt n)&\longrightarrow r\operatorname{erf}(r)+\pi^{-1/2}e^{-r^2},\\
+ H_n'(r/\sqrt n)&\longrightarrow\operatorname{erf}(r),\\
+ n^{-1/2}H_n''(r/\sqrt n)&\longrightarrow 2\pi^{-1/2}e^{-r^2},
+\end{align*}
+均为一致收敛。
+\end{theorem}
+\subsection{先排除远离中心的区域}
+由 \eqref{prob}，$Y_t\le Y_0+t/2$，$K_n(x,t)$ 随 $x$ 递增。设 $q=K_n(t,t)$，则 $E_n(t)\le(1+t)q+(1-t)(1-q)$。由 $Y_0$ 的球面二阶矩，
+\[
+ \operatorname{Var}(Y_0)=\frac{\tr J_n(0)^2}{(n+1)(n+2)}=\frac{n}{2(n+1)(n+2)}<\frac1{2n}.
+\]
+由反射对称性，$q\le\Prob(Y_0>t/2)\le1/2$，所以 $E_n(t)\le1$。结合 $b_n\le B_n$ 与 \eqref{asym}，已经得到 $B_n\to1$，无需中心最大值猜想。进一步，Chebyshev 不等式给出 $q\le2/(nt^2)$，故
+\begin{equation}\label{outer}
+ H_n(t)\ge t-\frac4{nt}\ge\frac5{3\sqrt n}\qquad(t\ge3/\sqrt n).
+\end{equation}
+由 \eqref{asym}，$H_n(0)\sim1/\sqrt{\pi n}$。因此只须研究 $|t|\le3/\sqrt n$。
+
+\subsection{中心尺度的局部极限定理}
+把 \eqref{HprimeGauss} 的 $Q_t$ 写成 $g^*(tD_n-M_n)g$，现在 $g$ 为 $n+3$ 维复高斯，$M_n=\diag(-1,1)\oplus J_n(0)$；$D_n$ 为对角矩阵，除路径的两个端点为 $1/2$ 外均为 $1$。于是
+\[
+ \tr D_n=n+2,\quad\tr M_n=\tr(D_nM_n)=0,\quad\tr M_n^2=n/2+2,
+ \quad \|M_n\|_{op},\|D_n\|_{op}\le1.
+\]
+令 $R_{n,r}=Q_{r/\sqrt n}/\sqrt n$，其特征函数（约定 $\E e^{i\xi R}$）为
+\begin{equation}\label{phi}
+ \Phi_{n,r}(\xi)=\det(I-i\xi A_{n,r})^{-1},\quad A_{n,r}=rD_n/n-M_n/\sqrt n.
+\end{equation}
+利用 $-\log\det(I-A)=\sum_{k\ge1}\tr(A^k)/k$，前两阶给出 $\log\Phi\to ir\xi-\xi^2/4$，其余为 $O(n^{-1/2})$（固定频率，$r$ 在紧区间）。因此 $R_{n,r}$ 依分布收敛于 $N(r,1/2)$。
+
+更重要的是一致的 Fourier 控制：$J_n(0)$ 的特征值为 $\cos(k\pi/(n+2))$，故至少 $n/2$ 个 $M_n$ 特征值绝对值不小于 $1/2$（充分大 $n$）。用 Weyl 扰动估计，$A_{n,r}$ 至少有 $n/2$ 个特征值绝对值不小于 $1/(4\sqrt n)$。因此
+\begin{equation}\label{tail}
+ |\Phi_{n,r}(\xi)|\le(1+\xi^2/(16n))^{-n/4},\quad
+ |\partial_r\Phi_{n,r}(\xi)|\le2|\xi|\,|\Phi_{n,r}(\xi)|\quad(n\ge3).
+\end{equation}
+第二式来自对行列式求导以及 $\|(I-i\xi A_{n,r})^{-1}\|_{op}\le1$。第一式的右端随 $n$ 递减，取一个充分大的固定下限便有带任意所需固定多项式权重的可积控制。由 Fourier 反演，记 $p_{n,r}(q)$ 为 $R_{n,r}$ 密度，则 $p_{n,r},\partial_qp_{n,r},\partial_rp_{n,r},\partial_r\partial_qp_{n,r}$ 一致收敛到 $p_r(q)=\pi^{-1/2}e^{-(q-r)^2}$ 的对应函数（对 $r$ 紧区间，$q$ 甚至可在全实线）。又由
+\[
+ \G(R_{n,r})=\frac2\pi\int_0^\infty\frac{\operatorname{Im}\Phi_{n,r}(\xi)}{\xi}\,d\xi,
+\]
+其值和 $r$ 导数分别一致收敛于 $\operatorname{erf}(r)$ 和 $2\pi^{-1/2}e^{-r^2}$。原点的 $1/\xi$ 奇性由一阶矩及导数估计消除。
+
+\subsection{高斯抵消与完成证明}
+由缩放，$\rho_{r/\sqrt n}(0)=n^{-1/2}p_{n,r}(0)$，$\rho_{r/\sqrt n}'(0)=n^{-1}\partial_qp_{n,r}(0)$。于是 \eqref{HprimeGauss} 成为
+\begin{equation}\label{rescale}
+ H_n'(r/\sqrt n)=\G(R_{n,r})+2(1-1/n)r p_{n,r}(0)-(1-r^2/n)\partial_qp_{n,r}(0).
+\end{equation}
+极限中 $\partial_qp_r(0)=2rp_r(0)$，后两项恰好抵消。上节的一致导数收敛说明对 $r$ 再求导仍可取极限，得到定理中最后一式。结合 $\sqrt n H_n(0)\to1/\sqrt\pi$ 及积分，得到第一式。其极限可理解为 $\E|r-Z|$，$Z\sim N(0,1/2)$。
+
+在 $|r|\le3$ 上，极限二阶导数至少为 $2e^{-9}/\sqrt\pi>0$。因此 $n$ 足够大时，$H_n$ 在 $[-3/\sqrt n,3/\sqrt n]$ 严格凸。偶性保证中心是这段内唯一最小值；\eqref{outer} 排除了其余区域。这就证明了定理 \ref{thm:large}。
+
+\section{有效化：一个粗略但显式的阶数门槛}\label{sec:effective}
+本节是对之前讨论的新增定量化。目的不是得到可实际枚举的门槛，而是说明 Fourier 证明完全可以有效化。不追求最佳常数。
+\begin{theorem}[保守的有效门槛]
+对整数 $n\ge 10^{40}$，有 $B_n=E_n(0)$，且中心为唯一最大值。
+\end{theorem}
+\begin{proof}
+以下固定 $|r|\le3$。记 $\phi_r(\xi)=e^{ir\xi-\xi^2/4}$。当 $n\ge10^{40}$ 且 $|\xi|\le100$，有 $\|A_{n,r}\|_{op}\le2/\sqrt n$，维数 $n+3\le2n$。由迹的公式，
+\[
+ |\tr A_{n,r}-r|\le6/n,\qquad |\tr A_{n,r}^2-1/2|\le20/n.
+\]
+将对数展开的三阶及以上项用几何级数估计，得到
+\[
+ |\log\Phi_{n,r}-(ir\xi-\xi^2/4)|
+ \le6|\xi|/n+10\xi^2/n+32|\xi|^3/\sqrt n
+ \le3.3\cdot10^{-15}|\xi|.
+\]
+这里最后一步使用 $|\xi|\le100$；对数取在 $\xi=0$ 为零的连续分支。由 $|e^z-1|\le |z|e^{|z|}$，可得
+\begin{equation}\label{err1}
+ |\Phi_{n,r}-\phi_r|\le4\cdot10^{-15}|\xi|.
+\end{equation}
+此外，$\partial_r\log\Phi=(i\xi/n)\tr((I-i\xi A_{n,r})^{-1}D_n)$，故
+\[
+ |\partial_r\log\Phi-i\xi|\le2|\xi|/n+4\xi^2/\sqrt n,
+\]
+从而
+\begin{equation}\label{err2}
+ |\partial_r\Phi-\partial_r\phi_r|\le5\cdot10^{-15}(|\xi|+\xi^2).
+\end{equation}
+尾部：当 $n\ge4096$、$|r|\le3$ 时，\eqref{tail} 的 Weyl 条件已经满足。因此 $|\Phi|\le(1+\xi^2/65536)^{-1024}$，且当 $|\xi|\ge100$ 时
+\[
+ (1+\xi^2/65536)^{-1024}
+ \le e^{-67}(1+\xi^2/65536)^{-4},
+\]
+因为 $512\log(1+10000/65536)>67$。乘以 $1+\xi^2$ 在正半轴积分，右边小于 $2e^{-67}\,256(1+256^2)<10^{-21}$（用 $\int_0^\infty(1+s^2)^{-3}ds<2$）。高斯的同类尾部更小。由 \eqref{err1}、\eqref{err2} 和 \eqref{tail}，逐项 Fourier 反演，可得到以下五个误差均小于 $10^{-7}$，对 $|r|\le3$ 一致：
+\begin{align*}
+ |p_{n,r}(0)-p_r(0)|,&\qquad |\partial_qp_{n,r}(0)-\partial_qp_r(0)|,\\
+ |\partial_rp_{n,r}(0)-\partial_rp_r(0)|,&\qquad |\partial_r\partial_qp_{n,r}(0)-\partial_r\partial_qp_r(0)|,\\
+ &|\partial_r\G(R_{n,r})-2e^{-r^2}/\sqrt\pi|.
+\end{align*}
+例如最大的有限频段上界来自混合导数，为 $(5\cdot10^{-15}/\pi)\int_0^{100}(\xi^2+\xi^3)d\xi<4.1\cdot10^{-8}$；符号期望导数积分除以 $\xi$，仍可由 \eqref{err2} 控制。
+
+在 \eqref{rescale} 中对 $r$ 求导，结合上述五个误差和高斯恒等式 $\partial_qp_r(0)=2rp_r(0)$，有
+\[
+ \left|n^{-1/2}H_n''(r/\sqrt n)-2e^{-r^2}/\sqrt\pi\right|<2\cdot10^{-6}.
+\]
+具体而言，误差项的系数绝对值之和小于 $1+2+6+1+6/n$，其余仅为高斯密度及其导数乘以 $O(1/n)$；在 $|r|\le3$ 上这些导数绝对值均小于 $100$。故 $H_n''>0$，因为 $2e^{-9}/\sqrt\pi>10^{-4}$。
+
+最后，需要有效地控制外部区域的比较基准。由 \eqref{dS} 在 $t=0$ 时 $L_0=n+2$，再结合 \eqref{center} 或 \eqref{Eexplicit}，得 $H_n(0)=f_0(0)/(n+1)$，因此
+\[
+ \sqrt n\,H_n(0)=\frac{n+2}{n+1}p_{n,0}(0)<1
+\]
+（用上面的密度误差估计）。这比 \eqref{outer} 的 $5/3$ 小，完成内外两区域的严格比较。
+\end{proof}
+这个门槛极不经济，不能称为可实际验证的有限范围。下一步可避免在 $[0,100]$ 上丢弃 $|\phi_r|$ 的高斯衰减，保留三阶迹抵消，缩小定位半径，并以较精细浓缩不等式代替 Chebyshev 界。目标是把门槛降到可配合区间算术验证的量级。
+
+\section{下一步：统一证明、或有效有限验证}
+目前有两条独立路线。第一条是证明猜想 \ref{conj:density} 或较弱的足以使 \eqref{comp} 为正的比较；这里最值得探索的是 Gauss 求积、B 样条与跨阶节点交错之间的关系。第二条是优化 \S\ref{sec:effective} 的门槛，然后对剩余阶数做严格有限验证。
+
+任意阶还有一个不依赖 Fourier 的外部单调性结果：$E_n'(t)<0$ 对 $1/2\le t<1$ 成立。固定 $t$，$v(y)=2(1-y^2)/L_t(y)$ 在 $[t,1]$ 递减（$v' $ 的符号由 $-yL_t(y)+(n+1)t(1-y^2)$ 决定；其相反数在 $y=t$ 为 $t(1-t^2)$，导数非负），故 $g(y)=(y-t)_+^n(1-v(y))$ 非负递增。事实上 $1-v(y)>0$ 由 $L_t(y)>2(1-y^2)$ 对 $y\ge t$ 成立，且在 $n=1$ 可直接验证。交错和 $\sum\varepsilon_j g(u_j(t))\ge0$，故 $E_n'\le-1+[2(1-t)]^n$；边界 $t=1/2$ 的严格性来自正部区间最右侧节点的贡献，或对 $n=1$ 直接计算。
+
+若进行有限验证，应在 $[0,1/2]$ 按已知的对角线交点 $\cos(k\pi/n)$ 分段；用矩阵本征值或 \eqref{char} 的隔根性质控制每个节点。中心小邻域可证 $E_n''<0$，其余用 $E_n(t)-b_n$ 或 $E_n'$ 的区间界。普通浮点网格、或把所有高阶交错项直接相减，都不能替代严格验证。建议用 B 样条递推或带证明的高精度区间计算。
+
+\paragraph{给接续研究者的最短入口。} 核心对象是 \eqref{J}、\eqref{Eexplicit}、\eqref{HprimeGauss}。锐性已经由定理 \ref{thm:sharp} 完成，不必再证明一般插值不等式；未完成的是猜想 \ref{conj} 的全阶结论。若研究 Gauss 路线，先读 \eqref{quad}、\eqref{dS}、\eqref{density}；若研究有效化，先读 \eqref{outer}、\eqref{phi}、\eqref{rescale} 和 \S\ref{sec:effective}。尤其要避免把中心候选 $b_n$ 与已证最佳常数 $B_n$ 混同。
+
+\paragraph{说明。} 本笔记为讨论的整理及数学复核，不是文献综述或正式发表稿。经典工具包括 Lagrange 插值、Hermite--Genocchi 公式、Jacobi 谱测度、Gauss 求积、Poisson 求和及 Fourier 局部极限定理。前次对话的网格扫描和全区间凹性猜想未重新执行，因此仅保留可独立推导的公式与中心数值；新给出的有效门槛为解析估计，不代表程序已验证所有更小阶数。
+\end{document}

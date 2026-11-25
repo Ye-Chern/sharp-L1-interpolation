@@ -1,0 +1,3 @@
+PASS n=3..19: 2128 intervals, 17 origin neighborhoods
+Minimum normalized interval lower bound: 0.34227039804682136
+Minimum origin margin: 1.8179550990462303
