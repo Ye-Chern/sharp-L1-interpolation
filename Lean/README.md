@@ -36,3 +36,12 @@ Start with one or two simultaneous local Lean processes and tune using free
 RAM and warm-build timings. The initial Windows host had 16 logical CPUs,
 15.7 GiB installed RAM and about 3.3 GiB free. Use `LEAN_NUM_THREADS=2` for
 constrained local builds and delegate full clean validation to CI when useful.
+
+## Full-order certificate builds
+
+The arithmetic certificates are an optional Lean library, separate from the
+usual theorem-development build. Run `lake build SharpL1Data.Order03` from
+this directory to check the full order-3 dataset. Subsequent order targets
+are named `SharpL1Data.Order04` through `SharpL1Data.Order19`. Build heavy
+orders one at a time on the local Windows host. Altering the source CSV
+invalidates the Lake input target.

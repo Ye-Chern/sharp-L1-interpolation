@@ -23,3 +23,15 @@ private theorem firstRowSigns :
       scaledNodeEval (2 ^ 55) 2147483648 (-29147908778419584) 2 < 0 := by decide
 
 #print axioms firstRowSigns
+
+#print axioms SharpL1.Certificate.cdfLower_sound
+#print axioms SharpL1.Certificate.cdfUpper_sound
+#print axioms SharpL1.Certificate.cdfToSign_encloses
+#print axioms SharpL1.Certificate.checkRootRow_sound
+#print axioms SharpL1.Certificate.checkOrder_sound
+#print axioms SharpL1.Certificate.checkOrder_derivative_pos
+#print axioms SharpL1.Certificate.origin_derivative_pos
+#print axioms SharpL1.jacobi_charpoly
+#print axioms SharpL1.jacobi_eigenspace_finrank_le_one
+#print axioms SharpL1.nodePolynomial_roots_nodup
+#print axioms SharpL1.jacobi_pencil_affine
