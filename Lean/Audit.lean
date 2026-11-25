@@ -35,3 +35,22 @@ private theorem firstRowSigns :
 #print axioms SharpL1.jacobi_eigenspace_finrank_le_one
 #print axioms SharpL1.nodePolynomial_roots_nodup
 #print axioms SharpL1.jacobi_pencil_affine
+
+#print axioms SharpL1.nodePolynomial_zero
+#print axioms SharpL1.nodePolynomial_one
+#print axioms SharpL1.nodePolynomial_neg_one
+#print axioms SharpL1.nodePolynomial_roots_reflect
+#print axioms SharpL1.Probability.exp_difference_product_tail
+#print axioms SharpL1.Probability.prod_add_mul_exp_level_set_null
+#print axioms SharpL1.Probability.exp_difference_law
+#print axioms SharpL1.Probability.exp_difference_conv_cdf_zero
+#print axioms SharpL1.Probability.expMeasure_one_map_mul
+#print axioms SharpL1.Probability.measure_sum_mul_le_antitone_of_expMeasure
+#print axioms SharpL1.Analysis.traceRatio_nat_ineq
+#print axioms SharpL1.Analysis.gbound_sqrt_lt
+#print axioms SharpL1.Analysis.exteriorWeight_alternating_nonneg
+#print axioms SharpL1.Analysis.exterior_derivative_neg
+#print axioms SharpL1.Analysis.center_min_of_deriv_and_outer
+
+#print axioms SharpL1.Probability.lawSignMean_eq_cdf
+#print axioms SharpL1.Analysis.center_min_of_checked_order
