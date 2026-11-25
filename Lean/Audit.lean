@@ -41,6 +41,7 @@ private theorem firstRowSigns :
 #print axioms SharpL1.nodePolynomial_neg_one
 #print axioms SharpL1.nodePolynomial_roots_reflect
 #print axioms SharpL1.nodePolynomial_root_mem_Ioo
+#print axioms SharpL1.orderedNode_eq_of_strictMono_of_roots
 #print axioms SharpL1.Probability.exp_difference_product_tail
 #print axioms SharpL1.Probability.prod_add_mul_exp_level_set_null
 #print axioms SharpL1.Probability.exp_difference_law
@@ -59,6 +60,8 @@ private theorem firstRowSigns :
 #print axioms SharpL1.exists_local_root_branch
 #print axioms SharpL1.eventually_hasDerivAt_node_speed_localRootBranch
 #print axioms SharpL1.simultaneous_full_root_branches_roots_eq
+#print axioms SharpL1.hasDerivAt_orderedNode
+#print axioms SharpL1.orderedNode_coefficient_monotoneOn
 #print axioms SharpL1.Analysis.exteriorWeight_alternating_nonneg
 #print axioms SharpL1.Analysis.exterior_derivative_neg
 #print axioms SharpL1.Analysis.center_min_of_deriv_and_outer
@@ -74,9 +77,12 @@ private theorem firstRowSigns :
 #print axioms SharpL1.Probability.weightedExpSum_signMean
 #print axioms SharpL1.Certificate.cdfExact_eq_weightedCdfZero
 #print axioms SharpL1.Certificate.cdfSign_encloses_weightedLaw
+#print axioms SharpL1.Certificate.checkRootRow_core_sign
 #print axioms SharpL1.Analysis.barycentricDividedDifference_eval_eq_coeff
 #print axioms SharpL1.Analysis.barycentricDividedDifferenceOn_mul_sub_erase
 #print axioms SharpL1.Analysis.barycentric_truncatedPower_nonneg_side
 #print axioms SharpL1.Analysis.barycentric_truncatedPower_nonpos_side
 #print axioms SharpL1.Analysis.barycentric_truncatedPower_erase_pair
+#print axioms SharpL1.Analysis.barycentric_Hcomp
+#print axioms SharpL1.Analysis.hasDerivAt_truncatedPower_zero
 #print axioms SharpL1.Analysis.center_min_of_checked_order

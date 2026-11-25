@@ -22,7 +22,7 @@ denominator `|p_t'(u)|`).
 5. `abs_deriv_monicNodePolynomial_mul_u'_eq` : dividing by the leading coefficient
    `2 ^ (k + 2)` of `nodePolynomial k t` (`leadingCoeff_nodePolynomial`), for the monic
    pencil polynomial `p_t = monicNodePolynomial k t` one gets
-   `|p_t'(u(t))| * u' = 2 ^ (-(k+1))`, i.e. `2 / 2 ^ n` with `n = k + 1`.
+   `|p_t'(u(t))| * u' = 2 ^ (-(k+1))`, i.e. `2 / 2 ^ (n+1)` with `n = k + 1`.
    Since for a monic polynomial `|p_t'(x_i)|` is (up to sign) the product of the distances
    from a node `x_i` to the other nodes, this is exactly the divided-difference denominator
    of the node weights.
@@ -150,7 +150,7 @@ theorem leadingCoeff_nodePolynomial (k : ℕ) (t : ℝ) :
   exact hlc
 
 /-- The monic node polynomial `p_t` of `paper.tex`:
-`p_t = 2 ^ (-(k+2)) · nodePolynomial k t`, matching `jacobiMatrix_charpoly`
+`p_t = 2 ^ (-(k+2)) · nodePolynomial k t`, matching `jacobi_charpoly`
 (`charpoly (jacobiMatrix k t) = C ((1/2)^(k+2)) * nodePolynomial k t`). -/
 noncomputable def monicNodePolynomial (k : ℕ) (t : ℝ) : ℝ[X] :=
   C ((1 / 2 : ℝ) ^ (k + 2)) * nodePolynomial k t
@@ -173,7 +173,7 @@ theorem monicNodePolynomial_monic (k : ℕ) (t : ℝ) :
 
 /-- The divided-difference denominator of the *monic* node polynomial along a
 differentiable interior root branch:
-`|p_t'(u(t))| * u' = 2 ^ (-(k+1))`, i.e. `2 / 2 ^ n` with `n = k + 1`.
+`|p_t'(u(t))| * u' = 2 ^ (-(k+1))`, i.e. `2 / 2 ^ (n+1)` with `n = k + 1`.
 Since `p_t` is monic, `|p_t'(u(t))| = ∏_{j ≠ i} |u(t) - x_j|` over the other nodes `x_j`,
 so this is exactly the identity needed for the node weights in the `ode` equation of
 `paper.tex`.  It is `abs_deriv_nodePolynomial_mul_u'_eq_two` divided by the leading

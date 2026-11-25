@@ -5,6 +5,7 @@ import SharpL1.Certificate.DerivativeBridge
 import SharpL1.JacobiSpectrum
 import SharpL1.JacobiSymmetry
 import SharpL1.JacobiContainment
+import SharpL1.JacobiOrdered
 import SharpL1.Probability.CDFOrder
 import SharpL1.Probability.ExponentialRecurrence
 import SharpL1.Probability.ScaledExponential
@@ -13,6 +14,7 @@ import SharpL1.Analysis.LowOrders
 import SharpL1.Analysis.NodeSpeed
 import SharpL1.Analysis.NodeWeights
 import SharpL1.Analysis.RootBranches
+import SharpL1.Analysis.OrderedNodeCurves
 import SharpL1.Analysis.Exterior
 import SharpL1.Analysis.CenterCriterion
 import SharpL1.Probability.SignMean
@@ -20,5 +22,8 @@ import SharpL1.Probability.WeightedExponential
 import SharpL1.Probability.WeightedComparison
 import SharpL1.Certificate.CDFSemantics
 import SharpL1.Certificate.CDFBridge
+import SharpL1.Certificate.RealEndpoints
 import SharpL1.Analysis.DividedCDF
+import SharpL1.Analysis.ErrorDividedDifference
+import SharpL1.Analysis.TruncatedPowerDeriv
 import SharpL1.Analysis.FiniteCenter

@@ -33,11 +33,19 @@ paper's cutoff at 20.
   The analytic proof lives in a separate module from the executable checker.
   `CDFBridge.lean` then proves the sign-mean enclosure from ordered coefficient
   lists bracketing the true coefficients at any positive integer scale.
+  `RealEndpoints.lean` instantiates this on the actual checked row for the core
+  coefficient list. Connecting the root's descending witness to the global
+  order and handling the three augmentations remain.
 - **Barycentric differences.** `DividedDifference.lean` proves polynomial
   coefficient reproduction and deletion after multiplication by a node's
   linear factor. `DividedCDF.lean` proves the two constant branches and the
   two-endpoint recurrence for truncated-power differences. The induction
   identifying the two families of recurrences remains open.
+  `ErrorDividedDifference.lean` proves the single and double endpoint
+  deletion formulas and `barycentric_Hcomp`, the algebraic equality of the
+  derivative's weighted divided difference with a combination of four
+  truncated-power differences. Identifying both sides with the paper's
+  derivative and sign laws still requires the surrounding analytic bridges.
 - **Coefficient comparison.** The accepted result of Gemini task 03 is
   `measure_sum_mul_le_antitone_of_expMeasure`. It allows both positive
   and negative coefficients. The two sums use the same random variables.
@@ -52,8 +60,11 @@ paper's cutoff at 20.
   root branches. `RootBranches.lean` (task 06) proves local existence,
   uniqueness, differentiability and the speed on a neighborhood. For an
   ordered interior family of full size, the simultaneous disjoint branches
-  exhaust the root multiset locally. The global ordered-node interface and
-  endpoint continuity remain open.
+  exhaust the root multiset locally. `JacobiOrdered.lean` (Luna High) defines
+  the canonical root order for every parameter. `OrderedNodeCurves.lean` identifies
+  it with the local differentiable branches in `(−1,1)` and proves the nodes
+  strictly increase and `t − u_j(t)` is monotone there. Closed-interval endpoint
+  continuity and the exact endpoint partition remain open.
   `NodeWeights.lean` (Qwen Medium, task 07) uses Chebyshev's Cassini identity
   to prove the inverse-denominator speed formula for the monic polynomial.
   The Qwen call ended by timeout after writing the source. The module passed
@@ -66,6 +77,8 @@ paper's cutoff at 20.
   from central derivative positivity, exterior monotonicity and reflection.
   `FiniteCenter.lean` assembles the interval and origin proofs into the
   conditional center theorem, with the analytic inputs explicit.
+  `TruncatedPowerDeriv.lean` proves differentiation of every positive-part
+  power with exponent at least two at its knot and away from it.
 
 ## Resume the proof
 
@@ -73,8 +86,8 @@ paper's cutoff at 20.
    ordered root families to supply the four real sign enclosures. Use
    nonempty sorted lists since `cdfExact []` is a default and the empty
    sum is zero.
-2. Identify the global ordered Jacobi roots with the local branches and
-   prove endpoint continuity. Prove the error and derivative identities, especially `dS`,
+2. Prove endpoint continuity of the ordered Jacobi roots and their exact
+   endpoint partition. Prove the error and derivative identities, especially `dS`,
    `Hderivative` and `Hcomp`. The exterior scalar lemmas are ready for those
    identities.
 3. Apply the uniform origin bound, interval positivity and the center

@@ -81,3 +81,25 @@ reliable. Send further API search and small proof tasks to the verified Luna
 workers meanwhile. Keep high-effort time for interface design, analytic review,
 and genuinely difficult proof steps. Revise assignments as production evidence
 accumulates.
+
+## Production follow-up
+
+- **Gemini through the owner's local interface.** Tasks 01–06 all produced
+  proofs that passed an independent build. Tasks 05 and 06 delivered the
+  exact-table invariant and the local inverse-function construction with
+  uniqueness and simultaneous branches. This supports further well-scoped
+  mathematical implementation through the manual workflow. The manual runs
+  did not provide comparable timing or token measurements.
+- **Qwen 3.8 Flash, Medium, Agent Harness `local`.** Task 07 used an isolated
+  worktree. It wrote `NodeWeights.lean`, including Cassini and the normalized
+  speed identity. The call hit its 780-second deadline during verification.
+  The source passed a separate lead build and its main statements passed the
+  axiom audit. The wrapper reported 96,138 input, 52,878 output and 1,328,640
+  cache-read tokens. Treat that as provider usage telemetry. Future Qwen
+  proofs should start with one narrow statement and a targeted build so
+  partial work can be accepted before the deadline.
+- **Luna High and Terra XHigh.** Luna derived and compiled strict containment
+  of all Jacobi roots and supplied the barycentric coefficient step. Terra
+  independently decomposed the Sobolev upper and lower bounds and identified
+  the Lagrange API that removes an early blocker. These outcomes support
+  using the roles as measured per task while keeping heavy builds staggered.
