@@ -46,8 +46,9 @@ structure ImportedOrder where
 def ImportedOrder.rows (order : ImportedOrder) : List Row :=
   order.first :: order.chunks.flatten
 
-private def rowChunks (rows : List Row) : List (List Row) :=
-  (List.range ((rows.length + 7) / 8)).map fun i => (rows.drop (8 * i)).take 8
+private def rowChunks (order : ℕ) (rows : List Row) : List (List Row) :=
+  let size := if 16 ≤ order then 2 else 8
+  (List.range ((rows.length + size - 1) / size)).map fun i => (rows.drop (size * i)).take size
 
 open Lean Elab Term in
 elab "certificate_order% " n:num : term => do
@@ -56,7 +57,7 @@ elab "certificate_order% " n:num : term => do
   let quoteRow := fun (row : Row) =>
     mkApp2 (mkConst ``Row.mk) (toExpr row.t) (toExpr row.brackets)
   let quoteList := fun (chunk : List Row) => Meta.mkListLit (mkConst ``Row) (chunk.map quoteRow)
-  let chunks ← (rowChunks rest).mapM (m := MetaM) quoteList
+  let chunks ← (rowChunks n.getNat rest).mapM (m := MetaM) quoteList
   let groups ← Meta.mkListLit (mkApp (mkConst ``List [.zero]) (mkConst ``Row)) chunks
   return mkApp2 (mkConst ``ImportedOrder.mk) (quoteRow first) groups
 
@@ -71,10 +72,10 @@ theorem refers to the generated `nameData` declaration. -/
 elab "certify_order " n:num " as " name:ident : command => do
   let data := mkIdentFrom name (name.getId.appendAfter "Data")
   elabCommand (← `(command|
-    set_option maxRecDepth 32768 in
+    set_option maxRecDepth 131072 in
     def $data : ImportedOrder := certificate_order% $n))
   elabCommand (← `(command|
-    set_option maxRecDepth 32768 in
+    set_option maxRecDepth 131072 in
     set_option maxHeartbeats 0 in
     theorem $name : checkOrder $n ($data).rows = true := by
       refine ImportedOrder.check $n $data (by decide +kernel) ?_
