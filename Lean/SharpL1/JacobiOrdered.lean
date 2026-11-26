@@ -16,7 +16,7 @@ the pencil parameter.
 
 namespace SharpL1
 
-private theorem sortedNodeRoots_length (k : ℕ) (t : ℝ) :
+theorem sortedNodeRoots_length (k : ℕ) (t : ℝ) :
     ((nodePolynomial k t).roots.sort).length = k + 2 := by
   simp [nodePolynomial_card_roots]
 

@@ -1,6 +1,7 @@
 module
 
 public import SharpL1.Certificate.Checker
+public meta import SharpL1.Certificate.Checker
 public import Lean.Elab.Term
 
 public section

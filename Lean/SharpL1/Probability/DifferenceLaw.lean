@@ -130,7 +130,7 @@ theorem exp_difference_law {a b : ℝ} (ha : 0 < a) (hb : 0 < b) :
   letI : IsProbabilityMeasure ν := expMeasure_probability (one_div_pos.mpr hb)
   have hmeas : Measurable (fun p : ℝ × ℝ => p.2 - p.1) := measurable_snd.sub measurable_fst
   letI : IsProbabilityMeasure ((μ.prod ν).map (fun p : ℝ × ℝ => p.2 - p.1)) :=
-    isProbabilityMeasure_map hmeas.aemeasurable
+    ⟨by rw [Measure.map_apply hmeas MeasurableSet.univ, Set.preimage_univ, measure_univ]⟩
   apply Measure.ext_of_Iic
   intro x
   simp only [Measure.map_apply hmeas measurableSet_Iic, Measure.add_apply,
