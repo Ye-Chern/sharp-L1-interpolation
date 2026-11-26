@@ -102,3 +102,15 @@ private theorem firstRowSigns :
 #print axioms SharpL1.Analysis.weightedCdfZero_eq_barycentric_truncatedPower_of_nodup
 #print axioms SharpL1.Analysis.lawSignMean_weightedExpSum_eq_barycentric_truncatedPower
 #print axioms SharpL1.Analysis.lawSignMean_Hcomp_of_nodes
+#print axioms SharpL1.chebyshevGrid_reflect
+#print axioms SharpL1.chebyshevGrid_strictMono
+#print axioms SharpL1.orderedNode_neg
+#print axioms SharpL1.orderedNode_neg_one
+#print axioms SharpL1.orderedNode_one
+#print axioms SharpL1.orderedNode_zero
+#print axioms SharpL1.continuous_orderedNode
+#print axioms SharpL1.hasDerivAt_orderedNode_neg
+#print axioms SharpL1.orderedNode_strictMonoOn_Icc
+#print axioms SharpL1.orderedNode_bijOn_Icc
+#print axioms SharpL1.orderedNode_coefficient_monotoneOn_Icc
+#print axioms SharpL1.orderedNode_last_gt_half
