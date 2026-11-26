@@ -322,15 +322,31 @@ theorem eventually_hasStrictDerivAt_localRootBranch (k : ℕ) {t y : ℝ}
   have hsymm_eq : e.symm (s, 0) = (s, localRootBranch k t y ht hy.le hroot s) := by
     have h1 : (e.symm (s, 0)).1 = s := congr_arg Prod.fst hsright
     exact Prod.ext h1 rfl
-  have hf_s : HasStrictFDerivAt e
+  have hf_s : HasStrictFDerivAt (nodeMap k)
       ((lowerTriangularEquiv (nodePolynomialDerivT k s (localRootBranch k t y ht hy.le hroot s))
         ((derivative (nodePolynomial k s)).eval (localRootBranch k t y ht hy.le hroot s))
         (derivative_nodePolynomial_ne_zero_of_root k hsabs huabs.le hsroot) :
         (ℝ × ℝ) ≃L[ℝ] (ℝ × ℝ)) : (ℝ × ℝ) →L[ℝ] (ℝ × ℝ))
-      (e.symm (s, 0)) := by
-    rw [hsymm_eq]
-    exact hasStrictFDerivAt_nodeMap_equiv k hsabs huabs.le hsroot
-  have hinv_s := e.hasStrictFDerivAt_symm hstgt hf_s
+      (s, localRootBranch k t y ht hy.le hroot s) :=
+    hasStrictFDerivAt_nodeMap_equiv k hsabs huabs.le hsroot
+  have hleft_inv : ∀ᶠ p in nhds (s, localRootBranch k t y ht hy.le hroot s),
+      e.symm (nodeMap k p) = p := by
+    have hsrc : (s, localRootBranch k t y ht hy.le hroot s) ∈ e.source := by
+      rw [← hsymm_eq]
+      exact e.map_target hstgt
+    filter_upwards [e.open_source.mem_nhds hsrc] with p hp
+    have hleft := e.left_inv hp
+    simpa only [e, HasStrictFDerivAt.toOpenPartialHomeomorph_coe] using hleft
+  have hnode_s : nodeMap k (s, localRootBranch k t y ht hy.le hroot s) = (s, 0) := by
+    simp [nodeMap, hsroot]
+  have hinv_s' := hf_s.to_local_left_inverse hleft_inv
+  have hinv_s : HasStrictFDerivAt e.symm
+      (((lowerTriangularEquiv (nodePolynomialDerivT k s (localRootBranch k t y ht hy.le hroot s))
+        ((derivative (nodePolynomial k s)).eval (localRootBranch k t y ht hy.le hroot s))
+        (derivative_nodePolynomial_ne_zero_of_root k hsabs huabs.le hsroot)).symm :
+          (ℝ × ℝ) ≃L[ℝ] (ℝ × ℝ)) : (ℝ × ℝ) →L[ℝ] (ℝ × ℝ))
+      (s, 0) := by
+    rwa [hnode_s] at hinv_s'
   have hslice_s : HasStrictFDerivAt (fun r : ℝ => (r, (0 : ℝ)))
       ((ContinuousLinearMap.id ℝ ℝ).prod (0 : ℝ →L[ℝ] ℝ)) s :=
     (hasStrictFDerivAt_id s).prodMk (hasStrictFDerivAt_const (0 : ℝ) s)
