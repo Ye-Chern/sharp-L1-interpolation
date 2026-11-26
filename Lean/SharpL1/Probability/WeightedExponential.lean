@@ -18,7 +18,7 @@ open MeasureTheory
 
 instance (c : ℝ) : IsProbabilityMeasure (weightedExp c) := by
   letI : IsProbabilityMeasure (ProbabilityTheory.expMeasure 1) := expMeasure_probability zero_lt_one
-  exact Measure.isProbabilityMeasure_map (measurable_const.mul measurable_id).aemeasurable
+  exact isProbabilityMeasure_map (measurable_const.mul measurable_id).aemeasurable
 
 /-- The law of the sum of independent rate-one exponentials with the listed
 coefficients. The empty sum is a point mass at zero. -/

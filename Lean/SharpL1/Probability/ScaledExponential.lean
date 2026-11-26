@@ -21,7 +21,7 @@ theorem expMeasure_one_map_mul {a : ℝ} (ha : 0 < a) :
   letI : IsProbabilityMeasure μ := expMeasure_probability zero_lt_one
   letI : IsProbabilityMeasure ν := expMeasure_probability (one_div_pos.mpr ha)
   letI : IsProbabilityMeasure (μ.map (fun x : ℝ => a * x)) :=
-    Measure.isProbabilityMeasure_map hmeas.aemeasurable
+    isProbabilityMeasure_map hmeas.aemeasurable
   change μ.map (fun x : ℝ => a * x) = ν
   apply Measure.ext_of_Iic
   intro t

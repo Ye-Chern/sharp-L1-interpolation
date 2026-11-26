@@ -18,7 +18,7 @@ theorem jacobi_eigenvector_eq_zero_of_head_eq_zero (k : ℕ) (t μ : ℝ)
   have h : ∀ m : ℕ, ∀ hm : m < k + 2, v ⟨m, hm⟩ = 0 := by
     intro m
     induction m using Nat.strong_induction_on with
-    | h m ih =>
+    | ind m ih =>
       intro hm
       cases m with
       | zero => simpa using h0

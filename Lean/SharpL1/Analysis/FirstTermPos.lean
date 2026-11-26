@@ -191,7 +191,7 @@ private theorem gaussian_sq_half_eq_expMeasure :
   let g1 := ProbabilityTheory.gaussianReal 0 1
   have hmap_meas : Measurable (fun p : ℝ × ℝ => (p.1 ^ 2 + p.2 ^ 2) / 2) := by fun_prop
   haveI : IsProbabilityMeasure ((g1.prod g1).map (fun p : ℝ × ℝ => (p.1 ^ 2 + p.2 ^ 2) / 2)) :=
-    Measure.isProbabilityMeasure_map hmap_meas.aemeasurable
+    ⟨by rw [Measure.map_apply hmap_meas MeasurableSet.univ, Set.preimage_univ, measure_univ]⟩
   haveI : IsProbabilityMeasure (ProbabilityTheory.expMeasure 1) :=
     Probability.expMeasure_probability zero_lt_one
   apply Measure.ext_of_Iic

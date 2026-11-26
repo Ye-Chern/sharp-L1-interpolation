@@ -56,14 +56,14 @@ theorem hasDerivAt_six_mul_e₂ (t : ℝ) :
   rw [hfn]
   have h8 : (0 : ℝ) < 8 + t ^ 2 := by positivity
   have hpoly : HasDerivAt (fun x : ℝ => 2 + 7 * x ^ 2) (14 * t) t :=
-    (((hasDerivAt_pow 2 t).const_mul 7).const_add 2).congr_deriv (by simp; ring)
+    (HasDerivAt.const_add 2 (HasDerivAt.const_mul 7 (hasDerivAt_pow 2 t))).congr_deriv (by simp; ring)
   have hinner : HasDerivAt (fun x : ℝ => 8 + x ^ 2) (2 * t) t :=
-    ((hasDerivAt_pow 2 t).const_add 8).congr_deriv (by simp)
+    (HasDerivAt.const_add 8 (hasDerivAt_pow 2 t)).congr_deriv (by simp)
   have hsqrt : HasDerivAt (fun x : ℝ => Real.sqrt (8 + x ^ 2))
       (2 * t / (2 * Real.sqrt (8 + t ^ 2))) t :=
     hinner.sqrt h8.ne'
-  have hfull := (((hpoly.mul hsqrt).sub_const 2).sub ((hasDerivAt_pow 2 t).const_mul 24)).sub
-    (hasDerivAt_pow 3 t)
+  have hfull := (((HasDerivAt.mul hpoly hsqrt).sub_const 2).sub
+    (HasDerivAt.const_mul 24 (hasDerivAt_pow 2 t))).sub (hasDerivAt_pow 3 t)
   refine hfull.congr_deriv ?_
   have hsqrt_ne : Real.sqrt (8 + t ^ 2) ≠ 0 := (Real.sqrt_pos.mpr h8).ne'
   simp only [Nat.cast_ofNat, Nat.reduceSub, pow_one]

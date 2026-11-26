@@ -51,7 +51,7 @@ theorem orderedNode_coefficient_monotoneOn (k : ℕ) (i : Fin (k + 2)) :
   have hd (t : ℝ) (ht : t ∈ Ioo (-1 : ℝ) 1) :
       HasDerivAt (fun x => x - orderedNode k x i)
         (1 - 2 * (1 - orderedNode k t i ^ 2) / speedDenominator (k + 1) t (orderedNode k t i)) t :=
-    (hasDerivAt_id t).sub (hasDerivAt_orderedNode k (abs_lt.mpr ht) i)
+    HasDerivAt.sub (hasDerivAt_id t) (hasDerivAt_orderedNode k (abs_lt.mpr ht) i)
   apply monotoneOn_of_deriv_nonneg (convex_Ioo _ _)
   · intro t ht
     exact (hd t ht).continuousAt.continuousWithinAt

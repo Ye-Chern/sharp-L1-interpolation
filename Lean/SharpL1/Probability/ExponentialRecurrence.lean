@@ -25,7 +25,7 @@ theorem exp_difference_conv {a b : ℝ} (ha : 0 < a) (hb : 0 < b)
   letI : IsProbabilityMeasure (ProbabilityTheory.expMeasure (1 / b)) :=
     expMeasure_probability (one_div_pos.mpr hb)
   letI : IsProbabilityMeasure ((ProbabilityTheory.expMeasure (1 / a)).map (fun y : ℝ => -y)) :=
-    Measure.isProbabilityMeasure_map measurable_neg.aemeasurable
+    isProbabilityMeasure_map measurable_neg.aemeasurable
   dsimp only
   rw [exp_difference_law ha hb, Measure.add_conv, Measure.conv_smul_left, Measure.conv_smul_left]
 

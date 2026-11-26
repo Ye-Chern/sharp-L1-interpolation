@@ -15,13 +15,13 @@ checker, and the checker proofs have no oracle for arithmetic validity.
 
 namespace SharpL1.Certificate
 
-private def certificateText : String := include_str "../../../certificates/brackets.csv"
+private meta def certificateText : String := include_str "../../../certificates/brackets.csv"
 
-private def bracketPairs : List ℤ → List (ℤ × ℤ)
+private meta def bracketPairs : List ℤ → List (ℤ × ℤ)
   | lo :: hi :: rest => (lo, hi) :: bracketPairs rest
   | _ => []
 
-private def parseFields (row : String) : Except String (ℕ × Row) := do
+private meta def parseFields (row : String) : Except String (ℕ × Row) := do
   let fields ← (row.splitOn ",").mapM fun field =>
     match field.trimAscii.toString.toInt? with
     | some value => .ok value
@@ -33,7 +33,7 @@ private def parseFields (row : String) : Except String (ℕ × Row) := do
     else throw "invalid order or row length"
   | _ => throw "expected order and parameter"
 
-private def selectRows (order : ℕ) : Except String (List Row) := do
+private meta def selectRows (order : ℕ) : Except String (List Row) := do
   let all ← (certificateText.splitOn "\n").filterMapM fun line => do
     if line.trimAscii.isEmpty then return none
     let (n, row) ← parseFields line
@@ -50,7 +50,7 @@ structure ImportedOrder where
 @[expose] def ImportedOrder.rows (order : ImportedOrder) : List Row :=
   order.first :: order.chunks.flatten
 
-private def rowChunks (order : ℕ) (rows : List Row) : List (List Row) :=
+private meta def rowChunks (order : ℕ) (rows : List Row) : List (List Row) :=
   let size := if 16 ≤ order then 2 else 8
   (List.range ((rows.length + size - 1) / size)).map fun i => (rows.drop (size * i)).take size
 
