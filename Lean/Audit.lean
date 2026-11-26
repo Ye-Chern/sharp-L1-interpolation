@@ -119,3 +119,13 @@ private theorem firstRowSigns :
 #print axioms SharpL1.Analysis.pairQuadForm_pencil_law
 #print axioms SharpL1.Analysis.firstTerm_lawSignMean_pos
 #print axioms SharpL1.Analysis.firstTerm_weightedCdfZero_pos
+#print axioms SharpL1.Analysis.hasDerivAt_explicitError
+#print axioms SharpL1.Analysis.hasDerivAt_explicitErrorAt
+#print axioms SharpL1.Analysis.hasDerivAt_HCurve
+#print axioms SharpL1.Analysis.continuous_explicitErrorCurve
+#print axioms SharpL1.Analysis.explicitErrorCurve_neg
+#print axioms SharpL1.Analysis.explicitErrorCurve_zero
+#print axioms SharpL1.Analysis.explicitErrorDerivCurve_neg_of_Ico_half_one
+#print axioms SharpL1.Analysis.explicitErrorCurve_strictAntiOn_Icc_half_one
+#print axioms SharpL1.Analysis.neg_explicitErrorDerivAt_eq_lawSignMean
+#print axioms SharpL1.Analysis.deriv_HCurve_eq_lawSignMean
