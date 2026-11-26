@@ -257,7 +257,7 @@ private theorem derivative_monicNodePolynomial_eval_sign (k : ℕ) (t : ℝ) (j 
   let u := orderedNode k t
   have hder : derivative (monicNodePolynomial k t) =
       ∑ i : Fin (k + 2), ∏ l ∈ Finset.univ.erase i, (X - C (u l)) := by
-    rw [monicNodePolynomial_eq_prod, Polynomial.derivative_prod_finset]
+    rw [monicNodePolynomial_eq_prod_aux, Polynomial.derivative_prod_finset]
     refine Finset.sum_congr rfl fun i _ => ?_
     simp [u, derivative_sub, derivative_X, derivative_C]
   have heval : (derivative (monicNodePolynomial k t)).eval (u j) =
@@ -380,7 +380,7 @@ private theorem augmentedNodePoly_eq_prod (k : ℕ) {t : ℝ} (ht : |t| < 1) :
     linarith [(hbd j).1]
   rw [augmentedNodes, Finset.prod_insert hneg1, Finset.prod_insert hpos1,
     Finset.prod_image (fun a _ b _ hab => (orderedNode_strictMono k t).injective hab),
-    ← monicNodePolynomial_eq_prod, augmentedNodePoly]
+    ← monicNodePolynomial_eq_prod_aux, augmentedNodePoly]
   simp only [map_neg, map_one]
   ring
 

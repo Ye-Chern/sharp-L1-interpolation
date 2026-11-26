@@ -140,3 +140,9 @@ private theorem firstRowSigns :
 #print axioms SharpL1.Analysis.SobolevW1.taylor_formula
 #print axioms SharpL1.Analysis.SobolevW1.deriv_sub_movingOperator_eq
 #print axioms SharpL1.Analysis.SobolevW1.L1_deriv_sub_movingOperator_le
+#print axioms SharpL1.Analysis.explicitErrorDerivAt_neg_of_chordDelta_pos
+#print axioms SharpL1.Analysis.explicitErrorDerivCurve_neg_of_chordDelta_pos
+#print axioms SharpL1.Analysis.explicitErrorCurve_strictAntiOn_of_chordDelta_pos
+#print axioms SharpL1.Analysis.explicitErrorCurve_unique_max_of_chordDelta_pos
+#print axioms SharpL1.Analysis.HCurve_strictMonoOn_of_chordDelta_pos
+#print axioms SharpL1.Analysis.HCurve_unique_min_of_chordDelta_pos
