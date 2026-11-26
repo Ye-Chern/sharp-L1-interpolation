@@ -85,14 +85,14 @@ theorem SharpL1.theorem_sharp_L1_interpolation_full (k : ℕ) {a b : ℝ} (hab :
     have hroots : (SharpL1.nodePolynomial k t).roots = (Finset.univ.image (u t)).val :=
       Polynomial.roots_eq_of_natDegree_le_card_of_ne_zero hS hcard
         (SharpL1.nodePolynomial_ne_zero k t)
-    exact SharpL1.orderedNode_eq_of_strictMono_of_roots k t (u t) (hmono t) hroots
+    exact (SharpL1.orderedNode_eq_of_strictMono_of_roots k t (u t) (hmono t) hroots).symm
   refine ⟨⟨SharpL1.orderedNode k,
       ⟨fun t => SharpL1.orderedNode_strictMono k t,
        fun t j => SharpL1.orderedNode_eval_eq_zero k t j⟩,
       fun u ⟨hmono, hroot⟩ => hu_unique u hmono hroot⟩,
     ?_, ?_, hopt, fun f hf => heq hf⟩
   · intro u hmono hroot
-    subst (hu_unique u hmono hroot)
+    rcases hu_unique u hmono hroot with rfl
     intro E
     have hE_eq : E = SharpL1.Analysis.explicitErrorCurve (k + 1) := by
       funext t
