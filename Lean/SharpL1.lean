@@ -35,3 +35,4 @@ import SharpL1.Analysis.ChordIntegral
 import SharpL1.Analysis.FirstTermPos
 import SharpL1.Analysis.ExplicitError
 import SharpL1.Analysis.MovingOperator
+import SharpL1.Analysis.ChordBoundsN4

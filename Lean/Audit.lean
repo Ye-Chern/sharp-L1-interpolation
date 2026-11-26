@@ -146,3 +146,7 @@ private theorem firstRowSigns :
 #print axioms SharpL1.Analysis.explicitErrorCurve_unique_max_of_chordDelta_pos
 #print axioms SharpL1.Analysis.HCurve_strictMonoOn_of_chordDelta_pos
 #print axioms SharpL1.Analysis.HCurve_unique_min_of_chordDelta_pos
+#print axioms SharpL1.Analysis.chordDelta_eq_chordDeltaIntegral
+#print axioms SharpL1.Analysis.chordDelta_pos_of_ge_four
+#print axioms SharpL1.Analysis.chordDeltaIntegral_pos_of_ge_four
+#print axioms SharpL1.Analysis.rem_lt_main_of_ge_four
