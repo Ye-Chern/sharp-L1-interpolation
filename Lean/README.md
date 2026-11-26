@@ -11,10 +11,10 @@ lake build
 lake env lean Audit.lean
 ```
 
-`Audit.lean` prints the kernel dependencies of the Phase A theorems. The Lean CI
-job also audits declarations against the standard axiom allowlist. The separate
-certificate CI job runs the Python checkers. See the [Phase A map](../notes/phase-a.md)
-for the statement reached by each layer.
+`Audit.lean` prints the axiom dependencies of the main theorems, including
+`SharpL1.Analysis.theorem_sharp_L1_interpolation_full`. The Lean CI job also
+audits declarations against the standard axiom allowlist. See the
+[formalization map](../FORMALIZATION.md) for the current theorem and its proof modules.
 
 ## Parallel work
 
@@ -37,7 +37,7 @@ RAM and warm-build timings. The initial Windows host had 16 logical CPUs,
 15.7 GiB installed RAM and about 3.3 GiB free. Use `LEAN_NUM_THREADS=2` for
 constrained local builds and delegate full clean validation to CI when useful.
 
-## Full-order certificate builds
+## Historical bracket certificate builds
 
 The arithmetic certificates are an optional Lean library, separate from the
 usual theorem-development build. Run `lake build SharpL1Data.Order03` from

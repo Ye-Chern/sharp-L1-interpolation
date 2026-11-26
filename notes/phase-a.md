@@ -1,5 +1,7 @@
 # Phase A proof dependencies and status
 
+> Historical v0.2 planning note. See the [current proof and verification map](../FORMALIZATION.md) for the all-order theorem from PR #7.
+
 Baseline: paper v0.2, commit `7b6380e`. The target remains the all-order computer-assisted proof with the analytic cutoff at 20. [Issue #4](https://github.com/Ye-Chern/sharp-L1-interpolation/issues/4) remains deferred.
 
 The [continuation report](phase-a-continuation.md) tracks the compiled CDF, partition, and Jacobi lemmas.

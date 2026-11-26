@@ -1,14 +1,20 @@
 # Lean 形式化接续入口
 
+当前证明见[新稿](../../chebyshev_L1_complete.tex)、[形式化总览](../../FORMALIZATION.md)和 [Lean 主定理](../../Lean/SharpL1/Analysis/MainTheorem.lean)。PR #7 交付了全阶中心最大值与锐 $L^1$ 插值不等式的形式化。现行证明对 $n\ge4$ 使用垂直弦估计，三阶使用内核检验的求积证书。
+
+## 2026-11-25 历史交接
+
+以下顺序记录旧稿 v0.2 的工作安排。接手现行主定理时，从上面的形式化总览进入。
+
 目标是 `paper.tex` v0.2 的字典序锐常数定理，沿用统一解析门槛 `n ≥ 20`。先看当前分支的 [阶段记录](../phase-b.md)、[形式化总览](../../FORMALIZATION.md)和 [差商推导](../finite-algebraic-bridge.md)。正式结果以实际编译和公理审计为准。
 
-## 接手时先核对
+### 当时的工作状态
 
 1. 主仓库在 `D:/work/sharp-L1-interpolation`。整理结果的分支是 `research/analysis-bridges`，GitHub [草稿 PR #6](https://github.com/Ye-Chern/sharp-L1-interpolation/pull/6)。先核对分支的最新提交和工作区状态。工作区中可能有尚未提交的产物。
 2. 05、06、07 已在主工作区独立编译。继续使用它们的实际结论。06 覆盖局部唯一性和全体有序根的局部延拓，闭区间端点连续性仍待证明。07 已证明首一多项式的导数绝对值乘节点速度等于 `2^(−n)`。
 3. 原始 CSV 的 `n=3,…,19` 全部已由 Lean 内核验收。日常验证只需构建修改过的模块和审计。完整证书的重跑可交 GitHub Actions，已有验收记录。[证书运行](https://github.com/Ye-Chern/sharp-L1-interpolation/actions/runs/45636804324)
 
-## 派发顺序
+### 当时的派发顺序
 
 下列是默认顺序，可并行的条目仍需按本机资源安排。每次只派发卡中一个有明确退出条件的小步，验收后再继续。
 
@@ -18,7 +24,7 @@
 4. [13 大阶估计](13-uniform-orders.md) 用 08、09、11、12 的定义和恒等式。先派迹常数，振幅、反演和数值余量逐个推进。合并低阶、有限阶和大阶后，证明全阶中心最大值和中心的余弦和。
 5. [14 锐 Sobolev 不等式](14-sharp-sobolev.md) 的低层积分类引理可提前做。完整不等式及锐性最后接到全阶中心定理。
 
-## 运行与验收
+### 当时的运行与验收方式
 
 用最新的已验收提交建立任务分支和独立 worktree。共享已固定版本的 Mathlib `Lean/.lake/packages`，每个工作树保留独立 `Lean/.lake/build`。在 [`Lean/README.md`](../../Lean/README.md) 有当前缓存说明。从一个 Lean 进程开始，根据空闲内存和耗时增加并行。不要让执行者覆盖 Gemini 工作区、改共享缓存或者发布到 GitHub。需要上下游变更时先验收并接收上游提交，再从新提交分派。
 

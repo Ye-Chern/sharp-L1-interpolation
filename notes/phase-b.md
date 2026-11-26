@@ -1,5 +1,7 @@
 # Analytic bridge progress, 2026-11-25
 
+> Historical checkpoint before PR #7. See the [current proof and verification map](../FORMALIZATION.md) for the all-order theorem.
+
 This branch is based on the certificate PR #5. The proof still follows the
 paper's cutoff at 20.
 
