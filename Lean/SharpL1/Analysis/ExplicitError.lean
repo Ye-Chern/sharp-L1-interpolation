@@ -345,7 +345,7 @@ private theorem nodePolynomial_eval_neg_one (k : ℕ) (t : ℝ) :
   simp only [pow_succ]
   ring
 
-private noncomputable def augmentedNodes (k : ℕ) (t : ℝ) : Finset ℝ :=
+noncomputable def augmentedNodes (k : ℕ) (t : ℝ) : Finset ℝ :=
   insert (-1 : ℝ) (insert (1 : ℝ) (Finset.univ.image (orderedNode k t)))
 
 private theorem augmentedNodes_card (k : ℕ) {t : ℝ} (ht : |t| < 1) :
