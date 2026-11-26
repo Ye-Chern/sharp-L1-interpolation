@@ -150,3 +150,12 @@ private theorem firstRowSigns :
 #print axioms SharpL1.Analysis.chordDelta_pos_of_ge_four
 #print axioms SharpL1.Analysis.chordDeltaIntegral_pos_of_ge_four
 #print axioms SharpL1.Analysis.rem_lt_main_of_ge_four
+#print axioms SharpL1.Analysis.sharp_sobolev_unit_le
+#print axioms SharpL1.Analysis.sharp_sobolev_Icc_le
+#print axioms SharpL1.Analysis.sharp_sobolev_contDiffOn_Icc_le
+#print axioms SharpL1.Analysis.sharp_firstConstant_Icc_le
+#print axioms SharpL1.Analysis.sharp_secondConstant_unit_le
+#print axioms SharpL1.Analysis.sharp_centerBestConstant_unit_le
+#print axioms SharpL1.Analysis.sharp_secondConstant_Icc_le
+#print axioms SharpL1.Analysis.sharp_sobolev_unit_eq_iff_of_continuous_top
+#print axioms SharpL1.Analysis.sharp_sobolev_contDiffOn_Icc_eq_iff
