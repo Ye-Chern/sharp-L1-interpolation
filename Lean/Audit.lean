@@ -165,3 +165,14 @@ private theorem firstRowSigns :
 #print axioms SharpL1.Analysis.n3_block0_certified
 #print axioms SharpL1.Analysis.n3_block4_certified
 #print axioms SharpL1.Analysis.chordDelta_three_pos
+#print axioms SharpL1.Analysis.explicitErrorDerivAt_neg_all_orders
+#print axioms SharpL1.Analysis.explicitErrorDerivCurve_neg_all_orders
+#print axioms SharpL1.Analysis.explicitErrorCurve_strictAntiOn_Icc_zero_one
+#print axioms SharpL1.Analysis.explicitErrorCurve_zero_eq_centerBestConstant
+#print axioms SharpL1.Analysis.explicitErrorCurve_unique_global_max_zero
+#print axioms SharpL1.Analysis.explicitErrorCurve_le_centerBestConstant
+#print axioms SharpL1.Analysis.sharp_L1_interpolation_W1
+#print axioms SharpL1.Analysis.sharp_L1_interpolation_contDiffOn
+#print axioms SharpL1.Analysis.sharp_L1_interpolation_constants_optimal
+#print axioms SharpL1.Analysis.sharp_L1_interpolation_contDiffOn_eq_iff
+#print axioms SharpL1.Analysis.theorem_sharp_L1_interpolation_full

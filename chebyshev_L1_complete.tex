@@ -1,0 +1,556 @@
+\documentclass[UTF8,fontset=windows,a4paper,11pt]{ctexart}
+\usepackage{amsmath,amssymb,amsthm,booktabs}
+\usepackage[margin=2.6cm]{geometry}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\G}{\mathcal{G}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\RePart}{\operatorname{Re}}
+\newcommand{\ImPart}{\operatorname{Im}}
+\newcommand{\Lone}[1]{\lVert #1\rVert_1}
+
+\newtheorem{claim}{结论}
+\newtheorem{theorem}{定理}
+\pagestyle{plain}
+
+\begin{document}
+\begin{center}
+    \Large 从二次多项式到任意阶：高阶 $L^1$ 插值不等式与中心最大值\\[6pt]
+    \normalsize Lijails\quad \&\quad Gemini（整理与续写）\\[2pt]
+    11 月 26 日
+\end{center}
+
+\medskip
+\noindent\textit{阅读导引。} 这篇小笔记接续二阶情形的《从二次多项式出发：一个 $L^1$ 插值不等式》，把整件事从头到尾顺畅地讲到任意阶 $n\ge 1$，并彻底完成中心最大值猜想的全阶证明。为了读起来一气呵成，正文只沿着主线推进，公式尽量轻盈；把更强的旁支结果（跨阶广义 Gauss 求积、中心值的无抵消积分与 $1/\sqrt{\pi n}$ 渐近、局部极限定理）以及 $n=3$ 的区间算术升级放到文末附录，方便有兴趣时随时翻看。
+
+\section{出发点：从二阶走向任意阶}
+
+先回到我们最熟悉的区间 $I=[-1,1]$，用 $\Lone{g}=\int_{-1}^{1}|g(t)|\,dt$ 表示 $[-1,1]$ 上的 $L^1$ 范数。在二阶笔记里，我们证明了锐不等式
+\begin{equation}
+    \Lone{F''}\le 8\Lone{F}+\frac{2\sqrt{2}-1}{3}\Lone{F'''},
+    \label{eq:n2}
+\end{equation}
+并且看到两件很奇妙的事：第一常数 $8$ 是由二次多项式 $x^2-\frac14$ 逼出来的；固定它之后，为了逼近 $F''$ 而造出的三点移动算子 $T$，其误差函数 $E(t)$ 恰在区间正中心 $t=0$ 取唯一最大值，从而给出了第二常数 $\frac{2\sqrt{2}-1}{3}$。
+
+一个自然的问题立刻浮出来：如果把二阶导换成任意 $n$ 阶导（$n\ge 1$），寻找最小的第一常数 $A_n$，再在 $A_n$ 固定时寻找最小的第二常数 $B_n$，使
+\begin{equation}
+    \Lone{F^{(n)}}\le A_n\Lone{F}+B_n\Lone{F^{(n+1)}}
+    \qquad \bigl(F\in W^{n+1,1}(I)\bigr),
+    \label{eq:main}
+\end{equation}
+这两个最佳常数究竟是什么？尤其是，最难逼近的那一次高阶跳跃，是不是\textbf{对所有阶数 $n$} 都依然落在区间正中心 $t=0$？
+
+我们要沿着和二阶完全一样的节奏来回答这个问题：先看没有 $(n+1)$ 阶导的情形，把极值多项式和 $A_n$ 找出来；再把取等结构拆成移动节点算子 $T_n$，导出误差函数 $E_n(t)$ 并证明 $B_n=\max E_n$；最后通过一个出人意料的复分析近路，证明 $E_n$ 在 $[0,1]$ 上严格递减，从而对\textbf{一切} $n\ge 1$ 一举确定 $B_n=E_n(0)$。
+
+\section{没有 $(n+1)$ 阶导的时候：Chebyshev 多项式}
+\label{sec:poly}
+
+令 $F^{(n+1)}\equiv 0$，即 $F$ 是次数不超过 $n$ 的多项式。此时 \eqref{eq:main} 退化为
+\[
+    \Lone{P^{(n)}}\le A_n\Lone{P}\qquad (\deg P\le n).
+\]
+左边只看 $P$ 的最高次项 $a_n y^n$（$\Lone{P^{(n)}}=2n!|a_n|$），右边却混着所有低次项。和二阶时一样，我们想找一个只取 $\pm 1$ 的符号函数 $s_n(y)$，把所有低于 $n$ 次的项全消掉：
+\[
+    \int_{-1}^{1} s_n(y)y^k\,dy = 0 \qquad (0\le k<n).
+\]
+
+在二阶时，$s_2$ 是 $x^2-\frac14$ 的符号函数；放到一般阶，答案正是\textbf{第二类 Chebyshev 多项式} $U_n$（定义为 $U_n(\cos\theta)=\frac{\sin((n+1)\theta)}{\sin\theta}$）的符号函数！原因一眼就能看穿：作换元 $y=\cos\theta$，积分变成
+\[
+    \int_0^\pi \sgn\sin\bigl((n+1)\theta\bigr)\cdot \cos^k\theta\,\sin\theta\,d\theta.
+\]
+这里 $\sgn\sin((n+1)\theta)$ 只含 $(n+1)$ 的奇数倍正弦频率，而 $\cos^k\theta\,\sin\theta$ 展开成正弦和后最高频率只有 $k+1$。只要 $k<n$，频率根本碰不到一起，积分自然全是零。
+
+记首一多项式 $Q_n:=2^{-n}U_n$，$s_n:=\sgn Q_n$。同样用三角换元可以直接算得 $\Lone{Q_n}=2^{1-n}$。于是对任意 $n$ 次多项式 $P(y)=a_n y^n+\dots+a_0$，
+\[
+    \Lone{P^{(n)}} = 2n!|a_n| = 2^n n!\left|\int_{-1}^{1}s_n(y)P(y)\,dy\right|
+    \le 2^n n!\Lone{P}.
+\]
+取 $P=Q_n$ 时每一步都取等；反之，要取等就必须让 $P$ 在 $Q_n$ 的全部 $n$ 个变号点处为零，所以非零取等多项式只能是 $Q_n$ 的常数倍。这样第一最佳常数就彻底锁定了：
+
+\begin{claim}[第一最佳常数]
+    \label{clm:An}
+    对所有 $n\ge 1$，\eqref{eq:main} 的第一最佳常数是 $A_n=2^n n!$，且多项式空间的取等函数恰为 $\lambda U_n$（$\lambda\in\R$）。
+\end{claim}
+
+\section{移动节点与 Jacobi 矩阵：从三个点到 $n+1$ 个点}
+\label{sec:matrix}
+
+有了极值多项式 $Q_n=2^{-n}U_n$，接下来完全照搬二阶时的启发。$U_n$ 的 $n$ 个零点连同两个端点记作
+\[
+    r_j = -\cos\frac{j\pi}{n+1}\qquad (j=0,1,\dots,n+1),
+\]
+它们把 $[-1,1]$ 切成 $n+1$ 段 $[r_j,r_{j+1}]$，符号 $s_n$ 在上面交替取 $\varepsilon_j=(-1)^{n-j}$。我们满怀希望地寻找 $n+1$ 个递增双射 $u_j:[-1,1]\to[r_j,r_{j+1}]$，构造移动节点算子
+\begin{equation}
+    T_n F(x) = 2^n n!\sum_{j=0}^{n}\varepsilon_j u_j'(x)F\bigl(u_j(x)\bigr).
+    \label{eq:Tn}
+\end{equation}
+只要这些 $u_j$ 确实单调铺满各自的小区间，三角不等式加逐段换元立刻保证
+\begin{equation}
+    \Lone{T_n F} \le 2^n n!\Lone{F} = A_n\Lone{F}.
+    \label{eq:Tn-bound}
+\end{equation}
+
+要让 $T_n$ 精准逼近 $n$ 阶导数，只需令 $T_n P=P^{(n)}$ 对所有 $\deg P\le n$ 成立，也就是要求
+\[
+    \sum_{j=0}^{n}\varepsilon_j u_j' u_j^k = 0\quad (k<n),
+    \qquad
+    \sum_{j=0}^{n}\varepsilon_j u_j' u_j^n = 2^{-n}.
+\]
+对比 Lagrange 插值的最高次系数，立即可解出每个节点的“运动速度”：
+\begin{equation}
+    u_j'(x) = \frac{2^{-n}}{\prod_{i\neq j}|u_j(x)-u_i(x)|},
+    \qquad
+    T_n F(x) = n!\,F[u_0(x),\dots,u_n(x)].
+    \label{eq:ode}
+\end{equation}
+这就是说，$T_n F(x)$ 不过是 $F$ 在移动节点 $u_0(x),\dots,u_n(x)$ 上的 $n$ 阶差商乘以 $n!$。
+
+二阶时我们是把三个方程积出来硬解二次方程的；到了任意阶，硬解方程组就不现实了。但一个非常漂亮的线性代数结构把整件事一口气解决了——考虑 $(n+1)\times(n+1)$ 实对称三对角 \textbf{Jacobi 矩阵}：
+\begin{equation}
+    J_n(x) = \frac12
+    \begin{pmatrix}
+        x & 1 & & & \\
+        1 & 0 & 1 & & \\
+        & 1 & \ddots & \ddots & \\
+        & & \ddots & 0 & 1 \\
+        & & & 1 & x
+    \end{pmatrix}.
+    \label{eq:Jn}
+\end{equation}
+（顺手核对一下 $n=2$：$3\times 3$ 矩阵 $\frac12\left(\begin{smallmatrix}x&1&0\\1&0&1\\0&1&x\end{smallmatrix}\right)$ 的特征值正是 $\frac{x-\sqrt{x^2+8}}{4},\,\frac{x}{2},\,\frac{x+\sqrt{x^2+8}}{4}$——一字不差，就是二阶笔记里算出的 $u,v,w$！）
+
+为什么 $J_n(x)$ 的特征值恰好就是我们要找的移动节点？看三条性质就够了：
+\begin{enumerate}
+    \item \textbf{精确特征多项式。} 按行展开行列式递推，首一特征多项式是
+    \begin{equation}
+        p_x(y) := \det\bigl(yI-J_n(x)\bigr)
+        = 2^{-n-1}\bigl(U_{n+1}(y)-2xU_n(y)+x^2U_{n-1}(y)\bigr).
+        \label{eq:charpoly}
+    \end{equation}
+    代入 $x=-1,0,1$ 立刻看到 $p_{-1}=2^{-n}(y+1)U_n$、$p_0=2^{-n-1}U_{n+1}$、$p_1=2^{-n}(y-1)U_n$，端点条件和中心节点位置全自动满足！
+    \item \textbf{自动满足微分方程 \eqref{eq:ode}。} 设 $v_j$ 是对应特征值 $u_j(x)$ 的单位特征向量。矩阵关于反对角线对称，所以 $|v_{j,0}|=|v_{j,n}|$。由特征值一阶微扰公式，
+    \[
+        u_j'(x) = v_j^* J_n'(x) v_j = \frac12\bigl(|v_{j,0}|^2+|v_{j,n}|^2\bigr) = |v_{j,0}|^2 > 0.
+    \]
+    另一方面，伴随矩阵 $\operatorname{adj}(u_j I-J_n(x))=p_x'(u_j)v_j v_j^*$ 的右上角元素恰好是次对角线之积 $2^{-n}$，取绝对值即得 $|p_x'(u_j)|\,|v_{j,0}|^2=2^{-n}$，正是 \eqref{eq:ode}！因此特征值的全局存在性、严格单调性和端点条件全部一笔证完。
+    \item \textbf{对称性与显式速度公式。} 对 $J_n(x)$ 同时做反对角反射和交错符号共轭，可知 $J_n(-x)$ 酉相似于 $-J_n(x)$，因而 $u_j(-x)=-u_{n-j}(x)$，$u_j'(-x)=u_{n-j}'(x)$。另外对 \eqref{eq:charpoly} 隐式求导（或用三角形式），还可以把速度直接写成节点自身的有理函数：
+    \begin{equation}
+        u_j'(x) = \frac{2\bigl(1-u_j(x)^2\bigr)}{L_x\bigl(u_j(x)\bigr)},
+        \qquad
+        L_x(y) := n+2 - 2(n+1)xy + nx^2.
+        \label{eq:speed}
+    \end{equation}
+\end{enumerate}
+
+矩阵 $J_n(x)$ 不仅帮我们省掉了高阶 ODE 的麻烦，它还藏着后面击破中心最大值猜想的终极钥匙——精确特征多项式 \eqref{eq:charpoly}。
+
+\section{误差函数 $E_n(t)$ 与第二常数的锐性}
+\label{sec:sharp}
+
+和二阶一样，用从左端点 $-1$ 出发的 Taylor 积分余项：定义截断幂 $h_t(y):=\frac{1}{n!}(y-t)_+^n$，利用 $T_n$ 在次数 $\le n$ 的多项式上精确，得到
+\[
+    F^{(n)}(x)-T_n F(x) = \int_{-1}^{1}\bigl(\mathbf{1}_{\{x>t\}}-T_n h_t(x)\bigr)F^{(n+1)}(t)\,dt.
+\]
+记误差函数
+\[
+    E_n(t) := \int_{-1}^{1}\bigl|\mathbf{1}_{\{x>t\}}-T_n h_t(x)\bigr|\,dx,
+\]
+则 $\Lone{F^{(n)}-T_n F}\le\bigl(\max_{t\in I}E_n(t)\bigr)\Lone{F^{(n+1)}}$。
+
+二阶时我们用凸函数去掉了绝对值；到了 $n$ 阶，差商的 \textbf{Hermite--Genocchi 公式}接过了这一棒：
+\[
+    T_n F(x) = n!\,F[u_0(x),\dots,u_n(x)]
+    = \E\left[F^{(n)}\!\left(\sum_{j=0}^{n}\lambda_j u_j(x)\right)\right],
+\]
+其中 $(\lambda_0,\dots,\lambda_n)$ 在标准 $n$ 维单纯形上均匀分布。因为 $h_t^{(n)}(y)=\mathbf{1}_{\{y>t\}}\in[0,1]$，所以对任意 $x,t$ 都有
+\[
+    0\le T_n h_t(x)\le 1.
+\]
+绝对值再次干净地脱掉！分段积分并对 \eqref{eq:Tn} 逐项换元，内部端点的交错贡献全部抵消，得到显式公式：
+\begin{equation}
+    E_n(t) = 1 - t - \frac{2^n}{n+1}(1-t)^{n+1}
+    + \frac{2^{n+1}}{n+1}\sum_{j=0}^{n}\varepsilon_j\bigl(u_j(t)-t\bigr)_+^{n+1}.
+    \label{eq:En}
+\end{equation}
+由节点的反对称性 $u_j(-x)=-u_{n-j}(x)$，容易验证 $T_n h_t(x)+T_n h_{-t}(-x)=1$，所以 $E_n$ 是偶函数：$E_n(-t)=E_n(t)$。特别地在中心 $t=0$，节点就是 $U_{n+1}$ 的零点 $-\cos\frac{(j+1)\pi}{n+2}$，代入即得中心候选值
+\begin{equation}
+    b_n := E_n(0)
+    = 1 - \frac{2^n}{n+1} + \frac{2^{n+1}}{n+1}\sum_{k=1}^{\lfloor(n+1)/2\rfloor}(-1)^{k-1}\cos^{n+1}\frac{k\pi}{n+2}.
+    \label{eq:bn}
+\end{equation}
+
+在去求 $\max E_n$ 之前，先确认一件事：$\max E_n$ 真的就是第二最佳常数 $B_n$，没有浪费吗？
+
+\begin{claim}[任意阶第二常数的锐性]
+    \label{clm:sharp}
+    固定 $A_n=2^n n!$ 后，\eqref{eq:main} 的第二最佳常数严格等于 $B_n=\max_{t\in I}E_n(t)$。
+\end{claim}
+
+证明的直觉和二阶笔记第 7 节一模一样，只是写起来反而更统一！固定任意内点 $t\in(-1,1)$，取 $P_t$ 为 $h_t$ 在 $u_0(t),\dots,u_n(t)$ 上的 $n$ 次插值多项式，令 $G_t:=h_t-P_t$。由插值余项公式，
+\[
+    G_t(y) = h_t[u_0(t),\dots,u_n(t),y]\prod_{j=0}^{n}\bigl(y-u_j(t)\bigr).
+\]
+因为 $D^{n+1}h_t=\delta_t\ge 0$，前面的差商因子非负；于是 $G_t$ 恰好只在节点 $u_j(t)$ 处变号。顺着 $u_j$ 的单调性看：当 $x>t$ 时，全部 $\varepsilon_j G_t(u_j(x))\ge 0$；当 $x<t$ 时，全部 $\le 0$。也就是说，$T_n G_t$ 内部毫无抵消（$\Lone{T_n G_t}=A_n\Lone{G_t}$），而且 $T_n G_t$、$G_t^{(n)}$ 与 $(D^n-T_n)G_t$ 在 $x>t$ 处同正、在 $x<t$ 处同负，所有三角不等式同时取等，正好给出 $\Lone{G_t^{(n)}}-A_n\Lone{G_t}=E_n(t)$！再用紧支撑光滑核把 $G_t$ 卷积光滑化，就证明了 $B_n\ge E_n(t)$。
+
+这样一来，整个高阶插值常数问题就彻底浓缩成一句话：
+\begin{center}
+    \emph{对一切 $n\ge 1$，证明 $E_n(t)$ 在 $t=0$ 取得唯一全局最大值（事实上，在 $[0,1]$ 上严格递减）。}
+\end{center}
+
+\section{攻克单调性：先清外围，再把内区翻译成高斯二次型}
+\label{sec:setup}
+
+记 $H_n(t):=1-E_n(t)$，我们的目标是证明对一切 $t\in(0,1)$ 都有 $H_n'(t)>0$。如果直接拿 \eqref{eq:En} 求导：
+\begin{equation}
+    E_n'(t) = -1 + 2^n(1-t)^n - 2^{n+1}\sum_{j=0}^{n}\varepsilon_j\bigl(u_j(t)-t\bigr)_+^n\bigl(1-u_j'(t)\bigr),
+    \label{eq:En-prime}
+\end{equation}
+会立刻发现一个非常爽的分界点——$t=\frac12$！
+
+\subsection*{外侧区间 $t\in[1/2,1)$：几行搞定所有阶数}
+
+固定 $t\in(0,1)$，把速度公式 \eqref{eq:speed} 写成函数 $v(y)=\frac{2(1-y^2)}{L_t(y)}$。求导可知 $v'(y)$ 的符号与 $-q(y)$ 相同，其中 $q(y)=yL_t(y)-(n+1)t(1-y^2)$。直接检查：
+\[
+    q(t)=t(1-t^2)>0, \qquad
+    q'(y)=n+2+nt^2-2(n+1)ty \ge q'(1)=(1-t)\bigl(n(1-t)+2\bigr)>0.
+\]
+所以 $v(y)$ 在 $[t,1]$ 上严格递减！由此立刻白捡一个不等式：对所有 $y\in[t,1]$，
+\[
+    v(y)\le v(t)=\frac{2(1-t^2)}{(n+2)(1-t^2)}=\frac{2}{n+2}<1.
+\]
+这就说明函数 $g(y):=(y-t)_+^n(1-v(y))$ 在 $[t,1]$ 上非负且严格递增。把 \eqref{eq:En-prime} 里的交错和 $\sum_{j=0}^n \varepsilon_j g(u_j(t))$ 从最大节点 $u_n$ 开始两两配对：
+\[
+    \bigl(g(u_n)-g(u_{n-1})\bigr)+\bigl(g(u_{n-2})-g(u_{n-3})\bigr)+\dots \ge 0.
+\]
+于是立刻得到 $E_n'(t)\le -1+[2(1-t)]^n$。只要 $t\in(1/2,1)$，右端已经严格小于 $0$！至于边界点 $t=1/2$：$n=1$ 直接算得 $E_1'(1/2)=-1/2<0$；$n\ge 2$ 时最大节点满足 $u_n(1/2)>u_n(-1)=\cos\frac{\pi}{n+1}\ge\frac12$，顶对贡献 $g(u_n(1/2))-g(u_{n-1}(1/2))>0$，不等号同样严格。
+
+\begin{claim}[外区间严格单调]
+    \label{clm:outer}
+    对所有整数 $n\ge 1$ 和所有 $t\in[1/2,1)$，均有 $E_n'(t)<0$。
+\end{claim}
+
+\subsection*{内侧区间 $t\in(0,1/2]$：为什么不能直接硬算交错和？}
+
+当 $t<1/2$ 时，$[2(1-t)]^n$ 会指数爆炸，和式 $\sum_j\varepsilon_j g(u_j(t))$ 里正负项剧烈抵消，直接硬估几乎没有希望。
+
+转机在于把交错和改写成\textbf{加了两个端点的差商}，再翻译成复高斯二次型。记 $n+3$ 个节点 $\boldsymbol{z}_t=(-1,u_0(t),\dots,u_n(t),1)$ 以及 $P_t^*(y)=(y^2-1)p_t(y)$。对照 \eqref{eq:ode} 和 \eqref{eq:speed}，不难验证一个结构恒等式：
+\[
+    (-1)^{n+1}\delta_{-1}+2\sum_{j=0}^{n}\varepsilon_j\delta_{u_j(t)}-\delta_1
+    = -2^{-n}\sum_{z\in\boldsymbol{z}_t}\frac{L_t(z)}{(P_t^*)'(z)}\delta_z.
+\]
+右边的系数恰好是 $n+3$ 个节点上的差商权！把 \eqref{eq:En-prime} 里的 $L_t(y)-2(1-y^2)$ 围绕 $y=t$ 展开为 $n(1-t^2)-2(n-1)t(y-t)+2(y-t)^2$，交错和就整体合拢成三个差商。再把它们用单纯形上的随机变量翻译成\textbf{复高斯二次型}（复高斯向量的方向与模长平方独立，后者服从 Gamma 分布）：取标准复高斯向量 $g\in\C^{n+1}$ 和两个独立的标准指数变量 $e_+,e_-\sim\mathrm{Exp}(1)$，定义
+\[
+    Q_t^0 := g^*\bigl(tI-J_n(t)\bigr)g,
+    \qquad
+    Q_t := Q_t^0 + (t+1)e_+ + (t-1)e_-,
+\]
+记 $\rho_t$ 为 $Q_t$ 的概率密度，$\G(Q):=\E\sgn Q$，那么 \eqref{eq:En-prime} 摇身一变成了
+\begin{equation}
+    H_n'(t) = \G(Q_t) + 2(n-1)t\rho_t(0) - n(1-t^2)\rho_t'(0).
+    \label{eq:Hprime-gauss}
+\end{equation}
+
+现在做一个极其顺手的变形：若 $Y=X+ae$（$e\sim\mathrm{Exp}(1)$ 独立），分部积分立刻有 $\rho_X=\rho_Y+a\rho_Y'$ 及 $\G(X)=\G(Y)-2a\rho_Y(0)$。把这条恒等式连续用两次（分别剥掉 $(t-1)e_-$ 和 $(t+1)e_+$），就能把 \eqref{eq:Hprime-gauss} 拆成两半：
+\begin{equation}
+    H_n'(t)
+    = \frac12\bigl\{\G(Q_t^0+(t+1)e_+)+\G(Q_t^0+(t-1)e_-)\bigr\}
+    + \frac{n}{2}\Delta_n(t),
+    \label{eq:comp}
+\end{equation}
+其中第二项的核心是
+\begin{equation}
+    \Delta_n(t) := \G(Q_t)-\G(Q_t^0) = 4t\rho_t(0)-2(1-t^2)\rho_t'(0).
+    \label{eq:delta-def}
+\end{equation}
+
+先顺手把 \eqref{eq:comp} 的第一项彻底收掉！记 $D_n^0=\operatorname{diag}(\frac12,1,\dots,1,\frac12)$，则 $tI-J_n(t)=tD_n^0-J_n(0)$。令 $A:=g^*D_n^0 g>0$ 与 $Z:=g^*J_n(0)g$，并取单个独立标准指数变量 $e\sim\mathrm{Exp}(1)$：
+\begin{itemize}
+    \item 第一项里的 $Q_t^0+(t+1)e_+$ 同分布于 $(e-Z)+t(A+e)$；
+    \item 引入交错符号对角阵 $S=\operatorname{diag}(1,-1,1,-1,\dots,(-1)^n)$，有 $SJ_n(0)S=-J_n(0)$、$SD_n^0 S=D_n^0$ 且 $Sg\overset{d}{=}g$，于是 $(A,-Z)\overset{d}{=}(A,Z)$。因此 $Q_t^0+(t-1)e_-$ 同分布于 $(Z-e)+t(A+e)$！
+\end{itemize}
+记 $X=t(A+e)>0$ 与 $Y=e-Z$，这两项恰好是 $X+Y$ 与 $X-Y$。因为 $X>0$ 几乎必然，当 $|Y|<X$ 时两数同正、符号和为 $2$；当 $|Y|>X$ 时两数异号、符号和为 $0$（而 $|Y|=X$ 概率为零）。取期望立得精确概率公式：
+
+\begin{claim}[第一项的严格正性]
+    \label{clm:first-term}
+    对所有 $n\ge 1$ 与 $t>0$，
+    \[
+        \frac12\bigl\{\G(Q_t^0+(t+1)e_+)+\G(Q_t^0+(t-1)e_-)\bigr\}
+        = \Prob\bigl(|e-Z|<t(A+e)\bigr) > 0.
+    \]
+\end{claim}
+
+严格大于 $0$ 只需一个显式见证点：取 $g_0=(1,1,0,\dots,0)^T$ 与 $e_0=1$，则 $Z_0=g_0^*J_n(0)g_0=1$，故 $|e_0-Z_0|=0<t(A_0+e_0)$；由连续性它在 $(g_0,e_0)$ 附近的非空开集上成立，因而具有正概率。
+
+这样一来，为了证明全部内区间 $t\in(0,1/2]$ 上的 $H_n'(t)>0$，我们只需要攻克最后一座堡垒：\textbf{证明 $\Delta_n(t)>0$}！
+
+\section{全篇的转折点：精确特征函数与垂直弦积分}
+\label{sec:chord}
+
+先前的思路是把 $Q_t$ 当成一个普通的 $(n+3)$ 维二次型，用迹展开和局部极限定理硬做，结果在中心邻域撞上了高达 $10^{40}$ 的常数门槛。但只要回头看一眼第~\ref{sec:matrix}~节，就会发现 $Q_t$ 根本不是一般的随机矩阵——它的特征函数其实可以\textbf{一字不差地算成闭式有理函数}！
+
+记 $Q_t=g^*(tD_n-M_n)g$，对 $s=i\xi$（$\xi\in\R\setminus\{0\}$），其特征函数为
+\[
+    \Phi_{n,t}(\xi) = \E[e^{i\xi Q_t}]
+    = \Bigl[\bigl(1-s(t+1)\bigr)\bigl(1-s(t-1)\bigr)\det\bigl(I_{n+1}-s(tI-J_n(t))\bigr)\Bigr]^{-1}.
+\]
+把 $-s$ 提出来并令 $y:=t-1/s=t+i/\xi\in\C\setminus[-1,1]$，上式分母就是 $(-s)^{n+3}(y^2-1)p_t(y)$。现在作经典的 \textbf{Joukowsky 变换}
+\[
+    y = \frac{u+u^{-1}}{2}, \qquad u\in\D\setminus\{0\},
+\]
+记 $w=u^{-1}$。代入 $U_m(y)=\frac{w^{m+1}-w^{-m-1}}{w-w^{-1}}$，\eqref{eq:charpoly} 里的三项奇迹般地并成两个完全平方的差：
+\[
+    U_{n+1}(y)-2tU_n(y)+t^2U_{n-1}(y)
+    = \frac{w^n(w-t)^2 - w^{-n}(w^{-1}-t)^2}{w-w^{-1}}.
+\]
+同时由 $-s=(y-t)^{-1}$ 得
+\begin{equation}
+    s = \frac{-2u}{1-2tu+u^2},
+    \qquad
+    \frac{ds}{du} = \frac{-2(1-u^2)}{(1-2tu+u^2)^2}.
+    \label{eq:s-u}
+\end{equation}
+把所有因子乘到一起，全部 $2$ 和 $u$ 的幂次精确约成 $1$，得到精确特征函数：
+\begin{equation}
+    \Phi_{n,t}(\xi)
+    = \frac{(1-2tu+u^2)^{n+3}}{(1-u^2)\bigl[(1-tu)^2 - u^{2n+2}(u-t)^2\bigr]}.
+    \label{eq:phi-exact}
+\end{equation}
+不妨停下来感受一下这个式子：分母里的 $(1-tu)^2$ 是无限维半直线矩阵的极限，$-u^{2n+2}(u-t)^2$ 则是有限维矩阵从另一端传回来的边界反射项。有限阶与无限阶之差，在单位圆盘内部其实是\textbf{指数小}的！
+
+现在把 \eqref{eq:phi-exact} 代进 $\Delta_n(t)$ 的 Fourier 反演公式：
+\[
+    \Delta_n(t) = 4t\rho_t(0)-2(1-t^2)\rho_t'(0)
+    = \frac{1}{2\pi i}\int_{-i\infty}^{i\infty}\bigl(4t+2(1-t^2)s\bigr)\Phi_{n,t}(s/i)\,ds.
+\]
+（即便 $t$ 恰为节点与对角线的交点，$tI-J_n(t)$ 至多有一个零特征值，仍有 $\Phi_{n,t}(\xi)=O(|\xi|^{-(n+2)})$，对所有 $n\ge 1$ 都有 $\xi\Phi_{n,t}\in L^1(\R)$。）
+
+一作换元 \eqref{eq:s-u}，四个好消息接连发生：
+\begin{enumerate}
+    \item $\Phi_{n,t}$ 分母的 $(1-u^2)$ 与 $\frac{ds}{du}$ 分子的 $(1-u^2)$ 精确抵消；
+    \item 线性因子 $4t+2(1-t^2)s=\frac{4(t-u)(1-tu)}{1-2tu+u^2}$ 在 $u=0$ 处完全没有极点；
+    \item 引入 Blaschke 因子 $\varphi_t(u):=\frac{u-t}{1-tu}$，它是单位圆盘 $\D$ 的自同构，所以在 $\D$ 内恒有 $|u^{2n+2}\varphi_t(u)^2|<1$——被积函数在开单位圆盘 $\D$ 内\textbf{全纯无极点}！而在两端点 $u_\pm=t\pm ia$（$a:=\sqrt{1-t^2}$）处，分母在单位圆上只有一阶零点，恰好被分子的 $n$ 阶零点因子 $(1-2tu+u^2)^n$ 压平，故为有界可去奇点；
+    \item 既然 $\D$ 内全纯，就可以用 Cauchy 定理把原路径拉直成连接 $u_+$ 与 $u_-$ 的\textbf{垂直弦} $u=t+iv$（$v\in[-a,a]$）。在这条弦上，
+    \[
+        1-2t(t+iv)+(t+iv)^2 = a^2-v^2 \ge 0,
+    \]
+    虚部竟然完全消失了！
+\end{enumerate}
+
+利用关于实轴的共轭对称性，我们立刻得到整篇文章的引擎：
+
+\begin{claim}[$\Delta_n(t)$ 的垂直弦积分]
+    \label{clm:chord}
+    对任意 $n\ge 1$ 与 $t\in(0,1)$，记 $a=\sqrt{1-t^2}$ 与 $\varphi_t(u)=\frac{u-t}{1-tu}$，则
+    \begin{equation}
+        \Delta_n(t)
+        = \frac{8}{\pi}\int_0^a (a^2-v^2)^n\,
+          \RePart\!\left(\frac{-\varphi_t(u)}{1-u^{2n+2}\varphi_t(u)^2}\right)_{u=t+iv}dv.
+        \label{eq:delta-chord}
+    \end{equation}
+\end{claim}
+
+\section{主项与尾项的较量：一口气证明所有 $n\ge 4$}
+\label{sec:n4}
+
+现在把 \eqref{eq:delta-chord} 中的反射项记作 $z:=u^{2n+2}\varphi_t(u)^2$，拆成主项与尾项：
+\[
+    \frac{-\varphi_t(u)}{1-z} = -\varphi_t(u) + \frac{-\varphi_t(u)\,z}{1-z}.
+\]
+在垂直弦 $u=t+iv$ 上，记 $D:=|1-tu|^2=a^4+t^2v^2$ 与 $x:=|u|^2=t^2+v^2$，则 $a^2-v^2=1-x$，且
+\[
+    -\varphi_t(u) = \frac{-iv}{a^2-itv} = \frac{tv^2-ia^2v}{D} =: \alpha+i\beta.
+\]
+
+看一眼两边的量级，心里就已经有底了：
+\begin{itemize}
+    \item 主项实部 $\alpha=\frac{tv^2}{D}>0$ 处处严格为正，带着权重 $(a^2-v^2)^n$，在 $t\in(0,1/2]$ 上量级约为 $(1-t^2)^n\ge(3/4)^n$；
+    \item 尾项里不难验证 $|\varphi_t(u)|^2=\frac{v^2}{D}\le x$（因为 $x-\frac{x-t^2}{1-(2-x)t^2}=\frac{t^2(1-x)^2}{D}\ge 0$），所以 $|z|\le x^{n+2}$，与 $(1-x)^n$ 相乘被压在 $4^{-n}$ 的量级！
+\end{itemize}
+
+不过动笔放缩时要躲开一个坑：主项在 $t\to 0^+$ 时是 $O(t)$，如果粗暴地用 $|\varphi_t|\frac{|z|}{1-|z|}$ 去控制尾项实部，就会把 $t$ 因子扔掉，导致 $t\to 0$ 时比值发散。真实情况是：$t=0$ 时 $u=iv$ 和 $\varphi_0(iv)=iv$ 都是纯虚数，$z=(iv)^{2n+4}$ 是纯实数，所以尾项在 $t=0$ 处的实部其实自动抵消为零！
+
+为了保住这个 $t$ 因子，只需先取实部再放缩：由 $\frac{z}{1-z}=\frac{z-|z|^2}{|1-z|^2}$ 得
+\[
+    \left|\RePart\!\left((\alpha+i\beta)\frac{z}{1-z}\right)\right|
+    \le \alpha\frac{|z|}{1-|z|} + |\beta|\frac{|\ImPart z|}{(1-|z|)^2}.
+\]
+第一项的 $\alpha$ 自带 $t$；第二项里，分别写出 $\arg(u)=\frac\pi2-\theta_1$（$\theta_1=\arctan\frac{t}{v}$）与 $\arg(\varphi_t(u))=\frac\pi2+\theta_2$（$\theta_2=\arctan\frac{tv}{a^2}$），相乘后所有 $\frac\pi2$ 凑成 $\pi$ 的整数倍：
+\[
+    \arg(z) = (n+2)\pi + \psi,
+    \qquad
+    \psi := 2\theta_2-(2n+2)\theta_1.
+\]
+两角异号，且由 $\arctan y<y$ 和 $v\le a\implies \frac{v}{a^2}\le\frac{1}{v}$，立得 $|\psi|<\frac{(2n+2)t}{v}$。于是 $|\ImPart z|=|z||\sin\psi|<\frac{(2n+2)t}{v}|z|$，乘以 $|\beta|=\frac{a^2v}{D}$ 正好消去 $v$ 并提走公因子 $t$！
+
+去掉公因子 $\frac{8t}{\pi}$，我们就得到在\textbf{整个} $t\in(0,1/2]$ 上一致成立的比较式 $\frac{\pi}{8t}\Delta_n(t)\ge M_n(t)-R_n(t)$，下面各用两步就能把两边都写成闭式 Beta 函数：
+
+\begin{enumerate}
+    \item \textbf{主项闭式下界（Jensen 不等式）。} 作换元 $v=aw$ 得 $M_n(t)=a^{2n+1}\int_0^1\frac{(1-w^2)^n w^2}{a^2+t^2w^2}\,dw$。以 $(1-w^2)^n w^2\,dw$ 为概率权，$w^2$ 的期望为 $\frac{3}{2n+5}$；对凸函数 $\lambda\mapsto\lambda^{-1}$ 用 Jensen 不等式，并注意到结果关于 $t^2$ 严格递减，故在 $t=1/2$ 处取最小：
+    \[
+        M_n(t) \ge M_{\mathrm{lb}}(n)
+        := \frac{2n+5}{3(n+3)}\left(\frac34\right)^{n+1/2}B\!\left(\frac32,n+1\right).
+    \]
+    \item \textbf{尾项闭式上界（两步 AM--GM）。} 在 $R_n(t)$ 中换元 $x=t^2+v^2$（$v\,dv=\frac12 dx$）并把下限放宽至 $0$。对一切 $t^2\le\frac14$，有 $D\ge\frac{2+x}{4}$、$\frac{a^2}{D^2}\le\frac{12}{(2+x)^2}$ 及 $1-|z|\ge(1-x)S_{n+1}(x)$（其中 $S_{n+1}(x)=\sum_{k=0}^{n+1}x^k$）。再利用初等 AM--GM（$3^2=9>8=2^3\Rightarrow 3^{2/3}>2$）：
+    \[
+        (2+x)S_{n+1}(x) \ge (2+x)(1+x+x^2+x^3)
+        = 3x+\Bigl(\frac43+3x^2\Bigr)+\Bigl(\frac13+\frac13+3x^3\Bigr)+x^4 > 9x
+    \]
+    （对一切 $n\ge 2$ 成立），立即得到
+    \[
+        R_n(t) < T_1(n)+T_2(n)
+        := \frac29 B\!\left(n,n+\frac52\right)
+         + \frac{4(n+1)}{27}B\!\left(n-1,n+\frac12\right).
+    \]
+\end{enumerate}
+
+记 $A_k(n):=T_k(n)/M_{\mathrm{lb}}(n)$（$k=1,2$），其中的 $\sqrt\pi$ 全部消去。算一下基准阶 $n=4$：
+\[
+    A_1(4)+A_2(4) = \frac{4039168\sqrt3}{9183213} \approx 0.76183 < 1
+\]
+（严格余量 $>0.238$，精确平方为 $\frac{16314878132224}{28110467001123}<1$）。而且由 Beta 函数递推，当 $n$ 增 $1$ 时，$A_1(n+1)/A_1(n)$ 与 $A_2(n+1)/A_2(n)$ 都是显式有理函数，把 $n=m+4$ 代入即可验证两者对一切 $n\ge 4$ 都严格小于 $\frac12$（渐近趋向 $\frac13$，展开式见附录 B）。于是对\textbf{所有整数 $n\ge 4$} 和所有 $t\in(0,1/2]$，
+\[
+    \frac{R_n(t)}{M_n(t)} \le 2^{-(n-4)}\bigl(A_1(4)+A_2(4)\bigr) < 0.76183\cdot 2^{-(n-4)} < 1.
+\]
+结合结论~\ref{clm:first-term} 与结论~\ref{clm:outer}，所有 $n\ge 4$ 的严格单调性 $E_n'(t)<0$（$t\in(0,1)$）已经全部证完！
+
+\section{低阶收尾与全阶主定理}
+\label{sec:finish}
+
+剩下的只有前三阶 $n=1,2,3$：
+\begin{itemize}
+    \item \textbf{$n=1$：} $E_1(t)=\frac{1-t^2}{2}$，显然 $E_1'(t)=-t<0$。
+    \item \textbf{$n=2$：} 回到二阶笔记的公式 $6E_2(t)=(2+7t^2)\sqrt{8+t^2}-2-24t^2-t^3$，求导有 $6E_2'(t)=\frac{3t}{\sqrt{8+t^2}}\bigl(7t^2+38-(t+16)\sqrt{8+t^2}\bigr)$。平方作差得 $4(t+1)(151-87t+20t^2-12t^3)$，在 $(0,1)$ 上恒大于 $52>0$，故 $E_2'(t)<0$。
+    \item \textbf{$n=3$：} 在 $[0,1/2]$ 上记 $C_\pm=3\pm 13t+17t^2\pm 15t^3$、$r_\pm=\sqrt{5\pm 2t+t^2}$，展开 \eqref{eq:En} 得 $E_3(t)=\frac{C_+r_++C_-r_-}{8}-1-12t^2-2t^4$。利用平方根凹性及 Taylor 余项，纯代数即可证得 $E_3(t)-E_3(0)\le -\frac{11}{32}t^2<0$（结合结论~\ref{clm:outer} 已足以纯解析证明 $B_3=E_3(0)$）。若希望对 $n=3$ 也得到更强的严格单调性 $E_3'(t)<0$，只需把 $(0,1/2]$ 分成 $5$ 段做紧区间上的严格区间算术认证，即可同样证得 $\Delta_3(t)>0$（详见附录 B）。
+\end{itemize}
+
+全部拼图至此严丝合缝。顺便一提，正如二阶笔记结尾那样，一旦知道 $E_n(t)$ 在 $[-1,1]$ 上\textbf{仅在 $t=0$ 取最大值}，连 $C^{n+1}$ 类中的全部精确取等函数也自动出炉：若 $F\in C^{n+1}(I)$ 使 \eqref{eq:main} 取等，则必有 $\int_{-1}^{1}E_n(t)|F^{(n+1)}(t)|\,dt=E_n(0)\Lone{F^{(n+1)}}$，这强迫连续函数 $F^{(n+1)}\equiv 0$，回到第~\ref{sec:poly}~节的唯一极值多项式 $U_n$！把区间换回任意长度 $L=b-a$，就得到完整的主定理：
+
+\begin{theorem}[任意阶锐 $L^1$ 插值不等式与中心最大值]
+    \label{thm:full}
+    对每个整数 $n\ge 1$，误差函数 $E_n(t)$ 在 $[0,1]$ 上严格递减（$E_n'(t)<0$ 对一切 $t\in(0,1)$ 成立），故在 $[-1,1]$ 上于 $t=0$ 取得唯一全局最大值。因此，对任意区间 $[a,b]$（长 $L=b-a$）与 $f\in W^{n+1,1}([a,b])$，成立锐不等式
+    \[
+        \lVert f^{(n)}\rVert_{L^1([a,b])}
+        \le 4^n n!\,L^{-n}\lVert f\rVert_{L^1([a,b])}
+          + \frac{L}{2}B_n\lVert f^{(n+1)}\rVert_{L^1([a,b])},
+    \]
+    其中两最佳常数均不能再小，且 $B_n$ 严格等于中心值 \eqref{eq:bn}：
+    \[
+        B_n = E_n(0)
+        = 1 - \frac{2^n}{n+1} + \frac{2^{n+1}}{n+1}\sum_{k=1}^{\lfloor(n+1)/2\rfloor}(-1)^{k-1}\cos^{n+1}\frac{k\pi}{n+2}.
+    \]
+    此外，在 $C^{n+1}([a,b])$ 中该不等式取等当且仅当 $f(x)=\lambda U_n\bigl(\frac{2x-a-b}{b-a}\bigr)$（$\lambda\in\R$）。
+\end{theorem}
+
+\section{回头看与仍然敞开的问题}
+
+从二阶笔记里那个小小的 $x^2-\frac14$ 出发，到任意阶的 Chebyshev 多项式 $U_n$、Jacobi 矩阵 $J_n(x)$，再到复高斯二次型和单位圆盘里的垂直弦积分，整条线索像一条连贯的山路：先前用渐近方法卡在 $10^{40}$ 的门槛，并不是因为低阶藏着什么奇怪的反常，而是因为我们还没有看到特征函数在 Joukowsky 坐标下那副清爽的本来面目。一旦把路径拉到垂直弦 $u=t+iv$ 上，振荡消失了，$(3/4)^n$ 与 $(1/4)^n$ 的指数差距浮出了水面，连 $t\to 0$ 的抵消也一目了然，整个证明反倒比局部极限定理短得多、也初等得多。
+
+当然，还有一些更有意思、但并非定理~\ref{thm:full} 所需的更强性质依然敞开着，留作之后继续探索的好题目：
+\begin{itemize}
+    \item $E_n$ 是否在整个开区间 $(-1,1)$ 上严格凹（即 $E_n''(t)<0$）？目前只知道它在原点 $t=0$ 处严格凹（见附录 A）以及在 $t=O(n^{-1/2})$ 邻域内渐近严格凹。
+    \item 最佳常数序列 $B_n=E_n(0)$ 是否关于 $n$ 严格递增？（渐近式 $1-B_n\sim(\pi n)^{-1/2}$ 说明它在高阶是递增的，但全阶严格递增尚未证明。）
+    \item 密度比较不等式 $\Delta_n(t)>0$（等价于 $-\frac{f_t'(t)}{f_t(t)}<\frac{2(n+1)t}{1-t^2}$）我们已对 $n\ge 3$ 在 $(0,1/2]$ 上证完，它是否对外区间 $t\in(1/2,1)$ 以及 $n=1,2$ 也同样成立？
+\end{itemize}
+
+\appendix
+
+\section{延伸结构：广义 Gauss 求积、中心渐近与局部高斯轮廓}
+
+本附录收录三条与主定理并行的优美结构，它们不参与定理~\ref{thm:full} 的证明，但能帮我们从更高处看清这族算子的全貌。
+
+\subsection{跨阶交错与广义 Gauss 求积}
+
+在 \eqref{eq:charpoly} 中令 $y=\cos\theta$，并记 Blaschke 相位 $\phi_x(\theta)=\arg\frac{e^{i\theta}-x}{1-xe^{i\theta}}$（从 $0$ 严格增至 $\pi$），则 $u_{n,j}(x)$ 对应的角度满足相位方程 $(n+1)\theta+\phi_x(\theta)=k\pi$（$k=1,\dots,n+1$）。阶数 $n$ 增加 $1$ 时，左边多出一项 $\theta\in(0,\pi)$，因此相邻两阶的节点严格交错：
+\[
+    u_{n+1,j}(x) < u_{n,j}(x) < u_{n+1,j+1}(x).
+\]
+更妙的是，把有限矩阵 $J_n(x)$ 放进无限半直线 Jacobi 矩阵（只在第 $0$ 个对角元取 $x/2$、其余对角元全为零）里看：从第 $0$ 个坐标出发、长度不超过 $2n$ 的闭合路径永远碰不到有限矩阵的右端对角元，因此它们的各阶矩完全一致！对半直线算子求 Stieltjes 变换即得\textbf{广义 Gauss 求积公式}：
+\[
+    \sum_{j=0}^{n} u_j'(x)P\bigl(u_j(x)\bigr)
+    = \int_{-1}^{1} P(y)\,\frac{2\sqrt{1-y^2}}{\pi(1-2xy+x^2)}\,dy
+    \qquad (\deg P\le 2n).
+\]
+当 $x=0$ 时末端扰动消失，精度多出一阶（$\deg P\le 2n+1$），恰好退化为经典的 Chebyshev--Gauss 求积。换句话说，所有阶数的移动节点，其实是同一个 $x$-依赖谱测度的交错离散化。
+
+\subsection{中心值 $B_n=E_n(0)$ 的无抵消积分与渐近展开}
+
+虽然 \eqref{eq:bn} 给出了 $B_n$ 的显式和，但高阶时各项带有 $2^{n+1}$ 因子，数值计算容易严重抵消。对交错采样和做一次 Poisson 求和并结合 Gamma 反射公式，可以得到无抵消的精确积分表示：
+\[
+    1 - B_n = \frac{n+2}{\pi(n+1)}\int_0^1 \frac{s^{-1/2}(1-s)^{n+1}}{1-(-s)^{n+2}}\,ds.
+\]
+这里分母的 $(-s)^{n+2}$ 与 $(1-s)^{n+1}$ 相乘满足 $s(1-s)\le\frac14$，替换成 $1$ 的误差只有 $O(4^{-n})$——这正是正文垂直弦积分里 $4^{-n}$ 反射尾项在 $t=0$ 处的特例！由此立得高精度渐近展开：
+\[
+    1 - B_n = \frac{4^{n+2}}{\pi(n+1)\binom{2n+4}{n+2}} + O(4^{-n})
+    = \frac{1}{\sqrt{\pi n}}\left(1+\frac{1}{8n}+O(n^{-2})\right).
+\]
+下表列出若干阶数的精确值与数值（现在均已确证为真正的最佳常数 $B_n$）：
+\begin{center}
+\begin{tabular}{rll@{\qquad}rll}
+\toprule
+$n$ & $B_n$ 精确式 & 数值 & $n$ & $B_n$ 精确式 & 数值\\
+\midrule
+1 & $1/2$ & $0.500000000$ & 5 & & $0.746758277$ \\
+2 & $(2\sqrt2-1)/3$ & $0.609475708$ & 10 & & $0.820466444$ \\
+3 & $3\sqrt5/4-1$ & $0.677050983$ & 20 & & $0.873268528$ \\
+4 & $(9\sqrt3-12)/5$ & $0.717691454$ & 100 & & $0.943514627$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{中心处的严格局部凹性与高斯缩放轮廓}
+
+利用类似的 Poisson 求和可以逐阶证明对所有 $n\ge 1$ 都有 $E_n''(0)<0$（原点始终是严格局部最大值）。若在 $t=r/\sqrt{n}$ 尺度上观察，中心极限定理（对应 $R_{n,r}=Q_{r/\sqrt{n}}/\sqrt{n}\Rightarrow N(r,\frac12)$）揭示了误差函数在中心邻域的普适极限轮廓：在任意紧区间上一致地有
+\begin{align*}
+    \sqrt{n}\,H_n(r/\sqrt{n}) &\longrightarrow r\operatorname{erf}(r)+\pi^{-1/2}e^{-r^2},\\
+    H_n'(r/\sqrt{n}) &\longrightarrow \operatorname{erf}(r),\\
+    n^{-1/2}H_n''(r/\sqrt{n}) &\longrightarrow 2\pi^{-1/2}e^{-r^2}.
+\end{align*}
+极限 $\sqrt{n}\,H_n(r/\sqrt{n})\to \E|r-Z|$（$Z\sim N(0,\frac12)$）非常直观地解释了为什么 $H_n$ 在原点附近呈现抛物线状的极小值。
+
+\section{技术补遗：$n\ge 4$ 单调多项式与 $n=3$ 的区间算术认证}
+
+为了保证全篇零盲区，本附录记下正文省略的两项核验细节。所有不等式与区间认证都已封装在独立脚本 \texttt{certify\_chebyshev\_L1.py} 中，数秒即可复现。
+
+\subsection{$n\ge 4$ 单调性的全正系数多项式}
+
+由 Beta 函数递推公式，相邻比值 $r_k(n)=A_k(n+1)/A_k(n)$ 为
+\begin{align*}
+    r_1(n) &= \frac{4n(n+4)(2n+5)^3}{3(n+1)(n+3)(2n+7)(4n+5)(4n+7)},\\
+    r_2(n) &= \frac{4(n+2)(n-1)(n+4)(2n+1)(2n+5)^2}{3(n+1)^2(n+3)(2n+7)(4n-1)(4n+1)}.
+\end{align*}
+代入 $n=m+4$（$m\ge 0$），验证 $r_k(n)<\frac12$ 只需展开分母减去两倍分子：
+\begin{align*}
+    \mathrm{den}_1-2\,\mathrm{num}_1 &= 32m^5+912m^4+10354m^3+58855m^2+168954m+198293 > 0,\\
+    \mathrm{den}_2-2\,\mathrm{num}_2 &= 32m^6+912m^5+10458m^4+61765m^3+199569m^2+342243m+255933 > 0.
+\end{align*}
+全部系数严格为正，因此对一切 $n\ge 4$ 恒有 $r_1(n)<\frac12$ 且 $r_2(n)<\frac12$。
+
+\subsection{$n=3$ 严格单调性 $E_3'(t)<0$ 的区间算术认证}
+
+在 $n=3$ 时，正文里对整个 $[0,1/2]$ 一步到位的粗放缩略大于 $1$。将 $[0,1/2]$ 细分为 $5$ 段 $[t_0,t_1]$（记 $s_i=t_i^2$），在每段上保留精确下限 $x\ge s_0$ 以及关于 $s$ 单调的更紧估计 $\frac{v^2}{D}\le\phi_{2,\max}(x):=\frac{x-s_0}{1-(2-x)s_0}$ 与
+\[
+    1-|z| \ge (1-x)S_{\mathrm{eff}}(x),
+    \qquad
+    S_{\mathrm{eff}}(x) := 1+x+x^2+x^3+x^4\frac{1-s_0}{1-(2-x)s_0},
+\]
+得到紧区间 $[s_0,1]$ 上光滑有界函数的 $1\text{D}$ 上界积分 $R_{\mathrm{ub}}(3;t_0,t_1)$（无截断误差、无尾项），与主项下界 $M_{\mathrm{lb}}(3;t_1)=\frac{176}{315}\frac{(1-s_1)^{7/2}}{11-8s_1}$ 比较。经 \texttt{mpmath.iv}（40 位精度，每段 $128$ 等分严格区间 Riemann 和）认证结果如下：
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+子区间 $[t_0,t_1]$ & $R_{\mathrm{ub}}$ 严格上界 & $M_{\mathrm{lb}}$ 严格下界 & 比值上界（严格余量）\\
+\midrule
+$[0,\,1/4]$      & $0.018843402$ & $0.042453381$ & $\le 0.4438610$ ($>0.5561$)\\
+$[1/4,\,7/20]$   & $0.019933669$ & $0.035293874$ & $\le 0.5647912$ ($>0.4352$)\\
+$[7/20,\,21/50]$ & $0.020955782$ & $0.029542350$ & $\le 0.7093472$ ($>0.2906$)\\
+$[21/50,\,23/50]$& $0.021203253$ & $0.026121386$ & $\le 0.8117200$ ($>0.1882$)\\
+$[23/50,\,1/2]$  & $0.022212407$ & $0.022681618$ & $\le 0.9793132$ ($>0.0206$)\\
+\bottomrule
+\end{tabular}
+\end{center}
+五段全部严格小于 $1$，因而 $\Delta_3(t)>0$ 对所有 $t\in(0,1/2]$ 成立，从而 $E_3'(t)<0$ 对全部 $t\in(0,1)$ 成立。
+
+\end{document}
