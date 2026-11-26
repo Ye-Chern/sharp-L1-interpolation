@@ -114,3 +114,5 @@ private theorem firstRowSigns :
 #print axioms SharpL1.orderedNode_bijOn_Icc
 #print axioms SharpL1.orderedNode_coefficient_monotoneOn_Icc
 #print axioms SharpL1.orderedNode_last_gt_half
+#print axioms SharpL1.Analysis.barycentricDelta_eq_chordDelta
+#print axioms SharpL1.Analysis.lawSignMean_diff_eq_chordDelta
