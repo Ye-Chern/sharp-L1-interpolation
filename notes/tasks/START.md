@@ -1,6 +1,8 @@
+> **Historical Archive Notice:** The task cards in `notes/tasks/` belong to the superseded v0.2 formalization phase (which used a threshold at $n \ge 20$ and interval-arithmetic bracket certificates for $3 \le n \le 19$) and are preserved solely for historical reference. They do **not** describe the final verified proof in [`paper.tex`](../../paper.tex) and [`Lean/SharpL1/Analysis/MainTheorem.lean`](../../Lean/SharpL1/Analysis/MainTheorem.lean), where orders $n \ge 4$ use the analytic vertical-chord estimate and order $n = 3$ uses five kernel-checked fixed-point quadrature blocks (`by decide`).
+
 # Lean 形式化接续入口
 
-当前证明见[新稿](../../chebyshev_L1_complete.tex)、[形式化总览](../../FORMALIZATION.md)和 [Lean 主定理](../../Lean/SharpL1/Analysis/MainTheorem.lean)。PR #7 交付了全阶中心最大值与锐 $L^1$ 插值不等式的形式化。现行证明对 $n\ge4$ 使用垂直弦估计，三阶使用内核检验的求积证书。
+当前证明见[英文终稿](../../paper.tex)、[中文完备稿存档](../chebyshev_L1_complete_zh.tex)、[形式化总览](../../FORMALIZATION.md)和 [Lean 主定理](../../Lean/SharpL1/Analysis/MainTheorem.lean)。PR #7 交付了全阶中心最大值与锐 $L^1$ 插值不等式的形式化。现行证明对 $n\ge4$ 使用垂直弦估计，三阶使用内核检验的求积证书。
 
 ## 2026-11-25 历史交接
 

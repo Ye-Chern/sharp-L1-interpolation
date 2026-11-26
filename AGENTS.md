@@ -1,9 +1,17 @@
-# Research agent guidance
+# Research Agent Guidance
 
-Read [the current manuscript](chebyshev_L1_complete.tex), [README](README.md), and [the formalization map](FORMALIZATION.md) before changing the mathematics. The Lean entry point for Theorem 1 is `SharpL1.Analysis.theorem_sharp_L1_interpolation_full` in [`MainTheorem.lean`](Lean/SharpL1/Analysis/MainTheorem.lean).
+Read [`paper.tex`](paper.tex), [`README.md`](README.md), and [`FORMALIZATION.md`](FORMALIZATION.md) before changing the mathematics or formalization. The Lean entry point for Theorem 1 is `SharpL1.Analysis.theorem_sharp_L1_interpolation_full` in [`Lean/SharpL1/Analysis/MainTheorem.lean`](Lean/SharpL1/Analysis/MainTheorem.lean), audited in [`Lean/Audit.lean`](Lean/Audit.lean).
 
-For center maximality, orders 1 and 2 use explicit formulas. Order 3 uses the five kernel-checked quadrature blocks in `LowOrderMono.lean`. Orders at least 4 use the analytic vertical-chord estimate in `ChordBoundsN4.lean`. The Sobolev theorem uses the one-dimensional integral representation in `MovingOperator.lean`. Record which statement and hypotheses each change affects.
+## Proof Architecture & Formalization Scope
 
-From `Lean/`, run `lake build` and `lake env lean Audit.lean` to verify proof changes. Keep the manuscript, definitions, statements, and audit synchronized. Inspect the axioms of new main results, report exactly what was checked, and record accepted evidence and open assumptions in the relevant issue or pull request. Keep project build output separate between worktrees. The maintainer decides novelty, attribution, licensing, and publication.
+- **Center maximality**: orders $n = 1, 2$ use explicit closed-form formulas; order $n = 3$ uses the five kernel-checked fixed-point quadrature blocks (`by decide`) in `Lean/SharpL1/Analysis/LowOrderMono.lean`; orders $n \ge 4$ use the analytic vertical-chord estimate in `Lean/SharpL1/Analysis/ChordBoundsN4.lean`.
+- **Sobolev theorem (`SobolevW1`)**: `Lean/SharpL1/Analysis/MovingOperator.lean` formalizes the one-dimensional Sobolev space $W^{n+1,1}[-1,1]$ via continuous derivatives through order $n$, integrable $(n+1)$-th derivative, and adjacent Fundamental Theorem of Calculus identities.
+- **Verification**: from `Lean/`, run `lake build` and `lake env lean Audit.lean` to verify proof changes (never run concurrent `lake build` across processes sharing `.lake/build`; keep build output isolated across worktrees). Inspect `#print axioms` for new top-level theorems, verify only the standard Lean axioms `[propext, Classical.choice, Quot.sound]` appear, and report exactly what was checked.
 
-[`paper.tex`](paper.tex), the older bracket certificates, the [Phase A](notes/phase-a.md) and [Phase B](notes/phase-b.md) notes, and the [task cards](notes/tasks/START.md) record the historical v0.2 proof route with cutoff 20. Use the current manuscript and formalization map for follow-up work on Theorem 1.
+## Maintenance & Repository Hygiene
+
+- Keep the manuscript (`paper.tex` / `paper.pdf`), Lean statements, `FORMALIZATION.md`, `README.md`, and `Lean/Audit.lean` synchronized whenever statements or assumptions change.
+- **Preserve historical records**: keep historical drafts (`notes/origin-second-order-zh.tex`, `notes/working-note-v0.1.tex`, `notes/paper-v0.2-zh.tex`, `notes/chebyshev_L1_complete_zh.tex`), superseded `certificates/`, `notes/phase-a.md`, `notes/phase-b.md`, and archived `notes/tasks/` clearly separated from final verified artifacts; do not delete them or silently overwrite history.
+- **No external copyrighted PDFs**: never copy copyrighted reference PDFs or full external articles into the repository.
+- **No secrets**: never commit tokens, credentials, or local machine paths into tracked files.
+- **Authority**: the human maintainer decides scientific novelty claims, formal authorship, attribution, licensing, and publication.

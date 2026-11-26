@@ -23,7 +23,6 @@
 \newcommand{\ImPart}{\operatorname{Im}}
 \newcommand{\adj}{\operatorname{adj}}
 \newcommand{\diag}{\operatorname{diag}}
-\newcommand{\erf}{\operatorname{erf}}
 \newcommand{\Lone}[1]{\lVert #1\rVert_1}
 \urlstyle{tt}
 \renewcommand{\UrlFont}{\ttfamily\small}
@@ -33,9 +32,9 @@
 \newcommand{\code}[1]{\nolinkurl{#1}}
 
 \newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{proposition}{Proposition}[section]
 \newtheorem{lemma}[proposition]{Lemma}
-\newtheorem{corollary}[proposition]{Corollary}
 \theoremstyle{remark}
 \newtheorem{remark}[proposition]{Remark}
 
@@ -43,8 +42,8 @@
 \pagestyle{plain}
 \emergencystretch=1.5em
 
-\title{From Quadratic Polynomials to Arbitrary Order:\\
-Sharp $L^1$ Interpolation Inequalities and the Center Maximum}
+\title{Sharp Second Constants in $L^1$ Landau--Kolmogorov Inequalities\\
+on a Finite Interval}
 \author{Lijails, GPT 6.2 Astra, GPT 6.2 Sol, Gemini 4 Neon, and Gemini 4 Hydrogen}
 \date{}
 
@@ -52,48 +51,82 @@ Sharp $L^1$ Interpolation Inequalities and the Center Maximum}
 \maketitle
 
 \begin{abstract}
-For every integer $n \ge 1$ and every compact interval $[a,b]$ of length $L = b - a > 0$, we determine the sharp pair of constants in the $L^1$ Sobolev interpolation inequality
+For every integer $n \ge 1$ and every compact interval $[a,b]$ of length $L = b - a > 0$, we determine the lexicographically sharp pair of constants in the additive all-$L^1$ Landau--Kolmogorov inequality
 \[
     \lVert f^{(n)}\rVert_{L^1([a,b])}
     \le 4^n n!\,L^{-n}\lVert f\rVert_{L^1([a,b])}
       + \frac{L}{2}B_n\lVert f^{(n+1)}\rVert_{L^1([a,b])}
-    \qquad \bigl(f \in W^{n+1,1}([a,b])\bigr),
+    \qquad \bigl(f \in W^{n+1,1}([a,b])\bigr).
 \]
-where the first constant is minimal across all valid inequalities and $B_n$ is minimal once the first constant is fixed. On the reference interval $I=[-1,1]$, the first best constant $A_n = 2^n n!$ is governed by the second-kind Chebyshev polynomial $U_n$, and a moving-node operator $T_n$ driven by the eigenvalues of a symmetric tridiagonal Jacobi matrix $J_n(x)$ reduces the second best constant to $B_n = \max_{t \in [-1,1]} E_n(t)$ for an explicit even error profile $E_n$.
-
-Our main analytic contribution is an unconditional proof for every $n \ge 1$ that $E_n$ is strictly decreasing on $[0,1]$, hence attains its unique global maximum at the center $t=0$ with exact value
+While the minimal first constant $4^n n!\,L^{-n}$ (governed by the second-kind Chebyshev polynomial $U_n$) and the existence of a finite optimal second constant are known from the finite-interval theory of Burenkov and Babenko--Kofanov--Pichugov, we establish an exact all-$n$ formula for the sharp second constant:
 \[
-    B_n = E_n(0)
+    B_n
     = 1 - \frac{2^n}{n+1}
       + \frac{2^{n+1}}{n+1}\sum_{k=1}^{\lfloor(n+1)/2\rfloor}(-1)^{k-1}\cos^{n+1}\frac{k\pi}{n+2}.
 \]
-After clearing the exterior interval $[1/2,1)$ directly from node-speed monotonicity, we express $-E_n'(t)$ on $(0,1/2]$ through a complex Gaussian quadratic form whose characteristic function collapses in Joukowsky coordinates to a closed rational function. Deforming the Fourier inversion contour onto the vertical chord $u = t + iv$ eliminates oscillation, exposes an exponential $(3/4)^n$ versus $(1/4)^n$ separation between the half-line main term and the finite-boundary reflection tail, and resolves all orders $n \ge 4$ via closed-form Beta bounds; orders $n=1,2$ follow from elementary algebra and $n=3$ from a five-subinterval rigorous bound. As a byproduct of the unique center maximum, equality in $C^{n+1}([a,b])$ holds if and only if $f$ is a scalar multiple of the rescaled Chebyshev polynomial $U_n$.
+In particular, for $n = 1$ on $[0,1]$, the second constant improves from $1/2$ to the sharp value $1/4$, resolving---to the best of our knowledge---the $L^1$ case of an open problem posed by Burenkov~(1980).
 
-The entire proof of Theorem~\ref{thm:full} has been formally verified in Lean~4 / Mathlib with zero \code{sorry}, zero \code{native_decide}, and only the standard Lean axioms (\code{propext}, \code{Classical.choice}, \code{Quot.sound}).
+On the reference interval $I = [-1,1]$, we construct an $(n+1)$-point moving-node divided-difference operator $T_n$ driven by the eigenvalues of a symmetric tridiagonal Jacobi matrix $J_n(x)$, disintegrating Burenkov's rank-one functional while preserving $\lVert T_n\rVert_{L^1 \to L^1} = A_n := 2^n n!$. This reduces the sharp second constant to $B_n = \max_{t \in [-1,1]} E_n(t)$ for an explicit even error profile $E_n$. We prove unconditionally for every $n \ge 1$ that $E_n$ is strictly decreasing on $[0,1]$ and attains its unique global maximum at $t = 0$. After clearing $t \in [1/2,1)$ directly from node-speed monotonicity, we represent $-E_n'(t)$ on $(0,1/2]$ via a complex Gaussian quadratic form whose characteristic function simplifies in Joukowsky coordinates to a closed rational function. Deforming the inversion contour onto the vertical chord $u = t + iv$ eliminates oscillation, exposes a $(3/4)^n$ versus $(1/4)^n$ separation between the half-line main term and the finite-boundary reflection tail, and resolves all orders $n \ge 4$ via closed-form Beta bounds; orders $n = 1, 2$ are elementary and $n = 3$ is certified on five compact subintervals. As consequences, we characterize equality in $C^{n+1}([a,b])$ (scalar multiples of rescaled $U_n$), note the exact center relation $B_n = 1 - A_n E_n(W_1^{n+1})_1$ with Boyanov--Kofanov polynomial $L^1$-approximation, and solve Stechkin's optimal operator approximation problem at the minimal admissible norm $N = A_n$.
+
+The complete proof of Theorem~\ref{thm:full} has been formally verified in Lean~4 / Mathlib with zero \code{sorry}, zero \code{native_decide}, and only the standard Lean axioms (\code{propext}, \code{Classical.choice}, \code{Quot.sound}).
 \end{abstract}
 
-\section{Introduction: From Second Order to Arbitrary Order}
+\section{Introduction}
 \label{sec:intro}
 
-Start on the reference interval $I = [-1,1]$, writing $\Lone{g} := \int_{-1}^{1} |g(t)|\,dt$ for the $L^1(I)$ norm. In the second-order case $n = 2$, one encounters the sharp inequality
-\begin{equation}
-    \Lone{F''} \le 8\Lone{F} + \frac{2\sqrt{2}-1}{3}\Lone{F'''}
-    \qquad \bigl(F \in W^{3,1}(I)\bigr),
-    \label{eq:n2}
-\end{equation}
-accompanied by two striking phenomena. First, the leading constant $8$ is forced already on quadratic polynomials by the monic Chebyshev polynomial $x^2 - \frac14$. Second, once the constant $8$ is locked in, constructing a three-point moving-node approximation $T$ to $F''$ produces an error profile $E(t)$ whose unique global maximum on $[-1,1]$ sits right at the midpoint $t = 0$, yielding the exact second constant $\frac{2\sqrt{2}-1}{3}$.
+\subsection{Finite-interval Landau--Kolmogorov inequalities and historical context}
+\label{sec:history}
 
-A natural question immediately arises. Replace $F''$ by an arbitrary derivative $F^{(n)}$ ($n \ge 1$), and seek first the smallest possible constant $A_n$, and then---with $A_n$ fixed---the smallest possible constant $B_n$ such that
+Starting with Landau~\cite{Landau1913} and Kolmogorov~\cite{Kolmogorov1939}, sharp inequalities bounding an intermediate derivative of a function in terms of the function itself and a higher derivative have formed a central theme of approximation theory and analysis (see~\cite{BKKP2003,Shadrin2014} for surveys). On a finite interval $[a,b]$ of length $L = b - a > 0$, the additive form of the inequality for adjacent highest orders in the all-$L^1$ metric reads
 \begin{equation}
-    \Lone{F^{(n)}} \le A_n\Lone{F} + B_n\Lone{F^{(n+1)}}
-    \qquad \bigl(F \in W^{n+1,1}(I)\bigr).
+    \lVert f^{(n)}\rVert_{L^1([a,b])}
+    \le A\,\lVert f\rVert_{L^1([a,b])} + B\,\lVert f^{(n+1)}\rVert_{L^1([a,b])}
+    \qquad \bigl(f \in W^{n+1,1}([a,b])\bigr).
+    \label{eq:general-ab}
+\end{equation}
+By affine scaling,~\eqref{eq:general-ab} reduces to the reference interval $I := [-1,1]$, where we write $\Lone{g} := \int_{-1}^{1}|g(t)|\,dt$ and seek the \emph{lexicographically sharp} pair $(A_n, B_n)$: first minimize $A$ over all pairs $(A, B)$ for which
+\begin{equation}
+    \Lone{F^{(n)}} \le A\,\Lone{F} + B\,\Lone{F^{(n+1)}}
+    \qquad \bigl(F \in W^{n+1,1}(I)\bigr)
     \label{eq:main}
 \end{equation}
-What are the exact optimal constants $A_n$ and $B_n$? Above all, does the worst-case jump of $F^{(n)}$ remain at the midpoint $t = 0$ for \emph{every} order $n \ge 1$?
+holds, and then, with $A = A_n$ fixed at its minimum, minimize $B$. On $[a,b]$ of length $L = b - a$, the corresponding optimal constants are $A_n([a,b]) = (L/2)^{-n}A_n = 4^n n!\,L^{-n}$ and $B_n([a,b]) = \frac{L}{2}B_n$. Because much of the Russian and Ukrainian literature normalizes the interval to $[0,1]$ and indexes the highest derivative as $n_{\mathrm{Bur}} = n + 1$, it is helpful to keep the conversion visible at $n = 1$ ($n_{\mathrm{Bur}} = 2$):
+\[
+    \text{on } [-1,1]:\ (A_1, B_1) = \Bigl(2,\, \frac12\Bigr),
+    \qquad
+    \text{on } [0,1]:\ \bigl(A_1([0,1]),\, B_1([0,1])\bigr) = \Bigl(4,\, \frac14\Bigr).
+\]
 
-We answer all of these questions affirmatively and unconditionally.
+A substantial general theory for finite-interval additive inequalities is already established:
+\begin{itemize}[leftmargin=1.8em]
+    \item \textbf{Minimal first constant and existence of $B_n$.}
+    Burenkov~\cite[Theorem, p.~23; \S4$^\circ$, p.~26]{Burenkov1980} determined the exact minimal first constant in the all-$L^p$ adjacent-order case on $(0,1)$, evaluating $p = 1$ via the monic second-kind Chebyshev polynomial $Q_n = 2^{-n}U_n$ to obtain $A_n([0,1]) = 4^n n!$. Burenkov~\cite[Theorem~1]{Burenkov1986} extended this to distinct exponents $(p,q,r)$, and Babenko--Kofanov--Pichugov~\cite{BKP1997}, Kofanov~\cite[\S4.3, Theorem~4.3.2]{Kofanov2002}, and Babenko--Korneichuk--Kofanov--Pichugov~\cite[\S4.6, Theorem~4.6.2]{BKKP2003} established the general equivalence between minimal first constants and polynomial Markov--Nikolskii constants, together with the finiteness of the optimal second constant $B^*(A^*)$ (see also Rafalson~\cite{Rafalson2004} for $L^2$-orthogonal first-constant estimates, and Skorokhodov~\cite{Skorokhodov2019,Skorokhodov2022} and Babenko--Skorokhodov~\cite{BabenkoSkorokhodov2012} for modern surveys, Taikov-case solutions, and Orlicz-space variants).
+    \item \textbf{Burenkov's 1980 open problem and general bounds.}
+    For $n = 1$ ($n_{\mathrm{Bur}} = 2$) on $(0,1)$, Burenkov~\cite[\S10$^\circ$, eqs.~(24)--(25), pp.~26--27]{Burenkov1980} proved the explicit inequalities
+    \[
+        \lVert f'\rVert_{L^1(0,1)} \le 4\lVert f\rVert_{L^1(0,1)} + \frac12\lVert f''\rVert_{L^1(0,1)},
+        \qquad
+        \lVert f'\rVert_{L^2(0,1)} \le 2\sqrt{3}\lVert f\rVert_{L^2(0,1)} + \sqrt{\frac{6}{35}}\lVert f''\rVert_{L^2(0,1)},
+    \]
+    and stated explicitly immediately below~(25) that the sharpness of the constants multiplying $\lVert f''\rVert$ in both inequalities remained open (without conjecturing $1/4$ for the $L^1$ case). In his note added in proof~\cite[p.~29]{Burenkov1980} (developed further in~\cite[Theorem~2]{Burenkov1986}), Burenkov recorded the general bounds $1/12 \le B(n+1, p) \le 1/2$ and the lower asymptotic bound $\varliminf_{n\to\infty} B(n+1, p) \ge 1/4$ on $(0,1)$ (printed with plain $\lim$ in~\cite[p.~29]{Burenkov1980} and with $\varliminf$ in~\cite[Theorem~2(5), eq.~(17)]{Burenkov1986}).
+    \item \textbf{Distinctness from related problems.}
+    Burenkov's follow-up~\cite[Theorem~2(1), p.~41]{Burenkov1986} constructs a rank-one, constant-valued approximating functional whose remainder attains $L^1(0,1) \to L^1(0,1)$ norm $1/2$ ($1$ on $[-1,1]$) for every $n$ (Remark~\ref{rem:burenkov-op}); his exact second-constant theorems~\cite[Theorem~2(7), Theorem~4]{Burenkov1986} address the $(p, \infty, 1)$ metric rather than all-$L^1$. Boyanov~\cite[\S3]{Boyanov1975} and Kofanov~\cite[Theorems~3 and~5]{Kofanov1984} compute the best $L^1$ polynomial approximation error $E_n(W_1^{n+1})_1 = |s_{n,n+1}(0)|$, which turns out to be linked to our center constant by $B_n = 1 - A_n E_n(W_1^{n+1})_1$, yet polynomial approximation neither produces our operator $T_n$ nor yields our upper bound (Remark~\ref{rem:burenkov-kofanov}). Likewise, Skorokhodov~\cite[Theorem~5.6.6, p.~293]{Skorokhodov2018} obtains all-$L^1$ constants only on the strictly restricted cone of $r$-multiply monotone/nonnegative functions on $[0,1]$ (giving $A_{\min} = 2, B(2) = 1/4$, and $B(4) = 1/8$ at $n = 1$), not on the unconstrained Sobolev space $W^{2,1}([0,1])$, and Guo--Liu--Xu~\cite{GuoLiuXu2024} study optimal $L^1$ function recovery at Chebyshev nodes rather than derivative-inequality second constants.
+\end{itemize}
 
-\begin{theorem}[Sharp $L^1$ interpolation inequality and center maximum]
+\subsection{Main results and contribution boundary}
+\label{sec:results}
+
+Throughout, on a compact interval $[a,b]$ ($a < b$), we use the standard one-dimensional characterization of $W^{m,1}([a,b])$: a function $f$ belongs to $W^{m,1}([a,b])$ if and only if there exist functions $f^{(0)}, f^{(1)}, \dots, f^{(m-1)} \in C([a,b])$ with $f^{(0)} = f$ on $[a,b]$ and $f^{(m)} \in L^1([a,b])$ satisfying the iterated Fundamental Theorem of Calculus
+\begin{equation}
+    f^{(j)}(x) - f^{(j)}(a) = \int_a^x f^{(j+1)}(t)\,dt
+    \qquad (0 \le j < m,\ x \in [a,b]).
+    \label{eq:W1-char}
+\end{equation}
+Every element of the distributional Sobolev space $W^{m,1}(a,b)$ has a unique representative satisfying~\eqref{eq:W1-char}, and~\eqref{eq:W1-char} is the exact definition formalized as \code{SobolevW1} in our Lean~4 development (Section~\ref{sec:lean}).
+
+Our main theorem gives the exact all-$n$ sharp second constant, proves the strict monotonicity and unique center maximality of the underlying moving-node error profile $E_n$, and characterizes equality in $C^{n+1}([a,b])$.
+
+\begin{theorem}[Sharp all-$L^1$ Landau--Kolmogorov inequality and center maximum]
     \label{thm:full}
     Let $n \ge 1$ be an integer, and let $E_n : [-1,1] \to \R$ be the moving-node error profile defined in~\eqref{eq:En-def} and explicitly evaluated in~\eqref{eq:En}.
     \begin{enumerate}[label=\textup{(\roman*)}]
@@ -105,7 +138,7 @@ We answer all of these questions affirmatively and unconditionally.
               + \frac{2^{n+1}}{n+1}\sum_{k=1}^{\lfloor(n+1)/2\rfloor}(-1)^{k-1}\cos^{n+1}\frac{k\pi}{n+2}.
             \label{eq:bn-thm}
         \end{equation}
-        \item \textbf{Sharp $W^{n+1,1}$ inequality on arbitrary intervals.}
+        \item \textbf{Sharp $W^{n+1,1}$ inequality on arbitrary finite intervals.}
         For every compact interval $[a,b]$ of length $L = b - a > 0$ and every $f \in W^{n+1,1}([a,b])$,
         \begin{equation}
             \lVert f^{(n)}\rVert_{L^1([a,b])}
@@ -114,7 +147,7 @@ We answer all of these questions affirmatively and unconditionally.
             \label{eq:full-ab}
         \end{equation}
         \item \textbf{Optimality of both constants.}
-        Even when restricted to $f \in C^\infty([a,b])$, the first constant $4^n n!\,L^{-n}$ cannot be replaced by any smaller constant (regardless of the second constant); once the first constant is fixed at $4^n n!\,L^{-n}$, the second constant $\frac{L}{2}B_n$ cannot be replaced by any smaller constant.
+        Even when restricted to $f \in C^\infty([a,b])$, the first constant $4^n n!\,L^{-n}$ cannot be reduced (regardless of the second constant); once the first constant is fixed at $4^n n!\,L^{-n}$, the second constant $\frac{L}{2}B_n$ cannot be reduced.
         \item \textbf{Exact $C^{n+1}$ equality characterization.}
         For $f \in C^{n+1}([a,b])$, equality holds in~\eqref{eq:full-ab} if and only if there exists $\lambda \in \R$ such that
         \[
@@ -125,15 +158,63 @@ We answer all of these questions affirmatively and unconditionally.
     \end{enumerate}
 \end{theorem}
 
-The proof follows the same transparent rhythm as the second-order prototype, punctuated by one decisive complex-analytic turn:
+For small orders $n = 1, 2, 3, 4$, formula~\eqref{eq:bn-thm} evaluates to the closed algebraic values in Table~\ref{tab:small-n}. In particular, on $[0,1]$ at $n = 1$, Theorem~\ref{thm:full} yields $\lVert f'\rVert_{L^1(0,1)} \le 4\lVert f\rVert_{L^1(0,1)} + \frac14\lVert f''\rVert_{L^1(0,1)}$, improving Burenkov's $1/2$ in~\cite[eq.~(24)]{Burenkov1980} to the sharp value $1/4$. Across all $n \ge 1$, the rescaled constants $B_n([0,1]) = \frac12 B_n$ lie in $[1/4, 1/2)$, inside Burenkov's general bracket $[1/12, 1/2]$ from~\cite[p.~29]{Burenkov1980}.
+
+\begin{table}[htbp]
+\centering
+\caption{Exact optimal second constants for $n = 1, 2, 3, 4$ on $[-1,1]$ ($B_n$) and on $[0,1]$ ($B_n/2$).}
+\label{tab:small-n}
+\small
+\begin{tabular}{rlll}
+\toprule
+$n$ & Exact $B_n$ on $[-1,1]$ & Numerical $B_n$ & Numerical $B_n / 2$ on $[0,1]$ \\
+\midrule
+$1$ & $1/2$ & $0.500000000$ & $0.250000000$ \\
+$2$ & $(2\sqrt{2} - 1)/3$ & $0.609475708$ & $0.304737854$ \\
+$3$ & $3\sqrt{5}/4 - 1$ & $0.677050983$ & $0.338525492$ \\
+$4$ & $(9\sqrt{3} - 12)/5$ & $0.717691454$ & $0.358845727$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Contribution boundary.}
+We separate established prior results from our contributions clearly: the minimal first constant $A_n$ (Proposition~\ref{prop:An}) and the existence of a finite second constant are known~\cite{Burenkov1980,BKP1997,Kofanov2002,BKKP2003}. To the best of our knowledge, however, no prior work determines the exact all-$L^1$ second constant $B_n$ (even at $n = 1$): Theorem~\ref{thm:full} resolves the $L^1$ half of Burenkov's 1980 open problem (while the $L^2$ inequality~\cite[eq.~(25)]{Burenkov1980} remains open), introduces the Jacobi moving-node operator $T_n$, proves the all-$n$ center maximum of $E_n$, characterizes $C^{n+1}$ extremizers, and provides a complete Lean~4 formalization of Theorem~\ref{thm:full}.
+
+As an immediate consequence of the moving-node construction and Theorem~\ref{thm:full}, we also solve Stechkin's optimal operator approximation problem~\cite{Stechkin1967} (see also~\cite[Proposition~2]{Skorokhodov2019}) for $D^n$ on $L^1(I)$ at the minimal admissible operator norm $N = A_n$.
+
+\begin{corollary}[Stechkin's problem at the minimal norm $N = A_n$]
+    \label{cor:stechkin}
+    Let $n \ge 1$, let $\mathcal{W}_n := \{f \in W^{n+1,1}(I) : \Lone{f^{(n+1)}} \le 1\}$, and for $N \ge 0$ define
+    \[
+        \mathcal{E}_N :=
+        \inf_{\substack{S : L^1(I) \to L^1(I)\ \text{\textup{bounded linear}} \\ \lVert S\rVert_{L^1 \to L^1} \le N}}
+        \sup_{f \in \mathcal{W}_n} \Lone{D^n f - Sf}.
+    \]
+    Then $\mathcal{E}_{A_n} = B_n$, and the infimum is attained by the bounded linear extension of the moving-node operator $T_n$ to $L^1(I)$.
+\end{corollary}
+
+We stop at the minimal admissible norm $N = A_n$ (determining $\mathcal{E}_N$ for $N > A_n$ is left open). As documented in Section~\ref{sec:lean}, all four quantitative ingredients entering Corollary~\ref{cor:stechkin} are verified in Lean~4, while the short $L^1$-quotient extension deduction itself is given in prose in Section~\ref{sec:finish}.
+
+\subsection{Discovery narrative and roadmap}
+\label{sec:roadmap}
+
+Although Section~\ref{sec:history} places Theorem~\ref{thm:full} within the finite-interval Landau--Kolmogorov tradition, this work did \emph{not} originate from Burenkov~\cite{Burenkov1980}. It began independently from the elementary second-order inequality
+\begin{equation}
+    \Lone{F''} \le 8\Lone{F} + \frac{2\sqrt{2} - 1}{3}\Lone{F'''}
+    \qquad \bigl(F \in W^{3,1}(I)\bigr),
+    \label{eq:n2}
+\end{equation}
+where the constant $8$ is forced by the quadratic polynomial $x^2 - \frac14$ and a three-point moving-node approximation $T$ to $F''$ yields an error profile peaking uniquely at $t = 0$. Extending that construction from $n = 2$ to arbitrary $n \ge 1$ led organically to $U_n$, the tridiagonal Jacobi matrix $J_n(x)$, the complex Gaussian decomposition, and the Joukowsky vertical-chord integral. Only after the all-$n$ proof and its Lean~4 formalization were complete did a systematic literature audit uncover the connection to Burenkov's 1980 open problem and the Boyanov--Kofanov center identity.
+
+We retain that natural narrative arc as the organizational backbone of the proof:
 \begin{itemize}[leftmargin=1.8em]
-    \item In Section~\ref{sec:poly}, setting $F^{(n+1)} \equiv 0$ isolates the polynomial inequality, identifies the extremal polynomial $Q_n = 2^{-n}U_n$, and fixes $A_n = 2^n n!$.
-    \item In Section~\ref{sec:matrix}, the sign intervals of $U_n$ motivate an $(n+1)$-point moving-node operator $T_n$, whose node trajectories are realized globally as the eigenvalues of a symmetric tridiagonal Jacobi matrix $J_n(x)$.
-    \item In Section~\ref{sec:sharp}, Taylor's integral remainder expresses $F^{(n)} - T_n F$ against the error profile $E_n(t)$, while a sign-aligned spline $G_t = h_t - P_t$ and smooth mollification prove that $B_n = \max_{t \in I} E_n(t)$ is sharp.
-    \item In Section~\ref{sec:setup}, direct differentiation immediately disposes of the exterior region $t \in [1/2,1)$. On the interior $t \in (0,1/2]$, where the raw alternating sum suffers exponential cancellation, rewriting $-E_n'(t)$ as a complex Gaussian quadratic form splits it into a strictly positive symmetry term plus $\frac{n}{2}\Delta_n(t)$.
-    \item In Section~\ref{sec:chord}, the characteristic function of the quadratic form simplifies in Joukowsky coordinates to a closed rational function, allowing Cauchy contour deformation onto the vertical chord $u = t + iv$. Oscillation vanishes on this chord.
-    \item In Sections~\ref{sec:n4} and~\ref{sec:finish}, separating real and imaginary parts preserves the vanishing factor $t$ as $t \to 0^+$, revealing a $(3/4)^n$ main term against a $(1/4)^n$ reflection tail that settles all $n \ge 4$ uniformly; orders $n = 1, 2$ are elementary, $n = 3$ is certified on five compact subintervals, and Theorem~\ref{thm:full} follows.
-    \item Section~\ref{sec:lean} documents the complete Lean~4 formalization and gives an exact module-by-module dictionary, while Section~\ref{sec:open} reflects on the proof and records open questions. Appendices~\ref{app:extensions} and~\ref{app:tech} present expository structural complements (generalized Gauss quadrature, a cancellation-free integral and $1/\sqrt{\pi n}$ asymptotics for $B_n$, and the Gaussian scaling profile) alongside the technical polynomial and $n = 3$ certification details.
+    \item Section~\ref{sec:poly} recalls the polynomial regime ($F^{(n+1)} \equiv 0$), giving a self-contained proof of $A_n = 2^n n!$ and polynomial extremizer uniqueness ($\lambda U_n$).
+    \item Section~\ref{sec:matrix} constructs the moving-node operator $T_n$ via the eigenvalues of $J_n(x)$ (with the rational speed formula carefully restricted to $|x| < 1$) and compares $T_n$ with Burenkov's rank-one operator~\cite{Burenkov1986}.
+    \item Section~\ref{sec:sharp} derives the error profile $E_n(t)$, proves sharpness of $B_n = \max_t E_n(t)$ via the sign-aligned spline $G_t = h_t - P_t$ and smooth mollification, and explains the exact Boyanov--Kofanov identity at $t = 0$.
+    \item Section~\ref{sec:setup} clears the exterior $[1/2, 1)$ via node-speed monotonicity and decomposes $-E_n'(t)$ on $(0, 1/2]$ into a strictly positive symmetry term plus $\frac{n}{2}\Delta_n(t)$.
+    \item Section~\ref{sec:chord} computes the exact rational characteristic function of the associated Gaussian quadratic form in Joukowsky coordinates and deforms the contour to the vertical chord $u = t + iv$, eliminating oscillation.
+    \item Sections~\ref{sec:n4} and~\ref{sec:finish} resolve $\Delta_n(t) > 0$ for all $n \ge 4$ via real-part separation and closed-form Beta bounds, complete the low orders $n = 1, 2, 3$, and prove Theorem~\ref{thm:full} and Corollary~\ref{cor:stechkin}.
+    \item Section~\ref{sec:lean} documents the complete Lean~4 / Mathlib formalization, its exact scope boundary, and its module-by-module dictionary. Appendix~\ref{app:tech} supplies the two proof-essential technical verifications ($n \ge 4$ positive-coefficient polynomials and $n = 3$ five-block certification). Supplementary non-essential observations (generalized Gauss quadrature, cross-order interlacing, center asymptotics, local Gaussian profile, and open problems) are kept separately in \code{notes/structural-observations.md}.
 \end{itemize}
 
 \section{Without the \texorpdfstring{$(n+1)$}{(n+1)}-st Derivative: Chebyshev Polynomials}
@@ -144,20 +225,20 @@ Set $F^{(n+1)} \equiv 0$, so that $F = P$ is a polynomial of degree at most $n$.
     \Lone{P^{(n)}} \le A_n \Lone{P} \qquad (\deg P \le n).
     \label{eq:poly-ineq}
 \end{equation}
-The left-hand side sees only the leading coefficient $a_n$ of $P(y) = a_n y^n + \dots + a_0$, namely $\Lone{P^{(n)}} = 2n!|a_n|$, whereas the right-hand side mixes in all lower-degree terms. Just as in the quadratic case, we seek a $\pm 1$-valued sign function $s_n(y)$ on $[-1,1]$ that annihilates every monomial of degree strictly less than $n$:
+The left-hand side sees only the leading coefficient $a_n$ of $P(y) = a_n y^n + \dots + a_0$, namely $\Lone{P^{(n)}} = 2n!|a_n|$, whereas the right-hand side mixes in all lower-degree terms. To isolate $a_n$, we use a $\pm 1$-valued sign function $s_n$ on $[-1,1]$ orthogonal to all lower-degree monomials:
 \begin{equation}
     \int_{-1}^{1} s_n(y)\,y^k\,dy = 0 \qquad (0 \le k < n).
     \label{eq:sn-ortho}
 \end{equation}
 
-For $n = 2$, $s_2$ was the sign of $x^2 - \frac14$. For general $n \ge 1$, the answer is the sign of the \emph{Chebyshev polynomial of the second kind} $U_n$, characterized on $[-1,1]$ by $U_n(\cos\theta) = \frac{\sin((n+1)\theta)}{\sin\theta}$. The reason is immediate under the substitution $y = \cos\theta$:
+For $n = 2$, $s_2$ is the sign of $x^2 - \frac14$. For general $n \ge 1$, the classical extremal polynomial is the \emph{Chebyshev polynomial of the second kind} $U_n$, characterized on $[-1,1]$ by $U_n(\cos\theta) = \frac{\sin((n+1)\theta)}{\sin\theta}$ (see~\cite[\S4$^\circ$]{Burenkov1980} and~\cite{Pinkus1989}). Under the substitution $y = \cos\theta$,
 \[
     \int_{-1}^{1} \sgn\bigl(U_n(y)\bigr)\,y^k\,dy
     = \int_0^\pi \sgn\sin\bigl((n+1)\theta\bigr)\cdot \cos^k\theta\,\sin\theta\,d\theta.
 \]
-The square wave $\sgn\sin((n+1)\theta)$ contains only odd multiples of the frequency $n+1$ in its sine expansion (equivalently, shifting $\theta \mapsto \theta + \frac{\pi}{n+1}$ negates it, or testing directly against $\sin(m\theta)$ for $1 \le m \le n$ gives zero by elementary cancellation across the $n+1$ equal subintervals of $[0,\pi]$). Meanwhile, $\cos^k\theta\,\sin\theta$ is a linear combination of $\sin(m\theta)$ with $1 \le m \le k+1$. Whenever $k < n$, the frequencies never meet, so~\eqref{eq:sn-ortho} holds identically.
+Here $\sgn\sin((n+1)\theta)$ contains only odd multiples of frequency $n+1$ in its sine expansion (equivalently, its integral against $\sin(m\theta)$ vanishes for every $1 \le m \le n$ by cancellation across the $n+1$ equal subintervals of $[0,\pi]$), whereas $\cos^k\theta\,\sin\theta$ is a linear combination of $\sin(m\theta)$ with $1 \le m \le k+1$. Whenever $k < n$, the frequencies never collide and~\eqref{eq:sn-ortho} holds.
 
-Define the monic rescaling $Q_n := 2^{-n} U_n$ and its sign function $s_n := \sgn Q_n$. The same trigonometric substitution computes the exact $L^1$ norm:
+Define the monic rescaling $Q_n := 2^{-n} U_n$ and its sign function $s_n := \sgn Q_n$. The same substitution computes
 \[
     \Lone{Q_n}
     = 2^{-n}\int_0^\pi \bigl|\sin\bigl((n+1)\theta\bigr)\bigr|\,d\theta
@@ -165,7 +246,7 @@ Define the monic rescaling $Q_n := 2^{-n} U_n$ and its sign function $s_n := \sg
     = 2^{1-n}.
 \]
 
-\begin{proposition}[First best constant]
+\begin{proposition}[First best constant and polynomial extremizers~{\cite[\S4$^\circ$]{Burenkov1980}}]
     \label{prop:An}
     For every integer $n \ge 1$ and every polynomial $P$ of degree at most $n$,
     \[
@@ -183,23 +264,24 @@ Write $P(y) = a_n Q_n(y) + R(y)$ with $\deg R < n$. By~\eqref{eq:sn-ortho}, $\in
     \le 2^n n!\int_{-1}^{1} |P(y)|\,dy
     = 2^n n!\,\Lone{P}.
 \]
-Taking $P = \lambda U_n$ makes $s_n(y)P(y)$ have constant sign almost everywhere, so equality holds. Conversely, if equality holds for a nonzero polynomial $P$ of degree at most $n$, then $|P(y)| - \sigma s_n(y)P(y) = 0$ almost everywhere for some $\sigma \in \{-1, 1\}$. Since $P$ is continuous and $s_n$ changes sign at each of the $n$ interior zeros $r_1 < \dots < r_n$ of $U_n$, $P$ must vanish at all $n$ zeros of $U_n$. Because $\deg P \le n$, it follows that $P = \lambda U_n$ for some $\lambda \in \R$. Finally, evaluating~\eqref{eq:main} on $F = Q_n$ (for which $Q_n^{(n+1)} \equiv 0$) yields $A \ge \Lone{Q_n^{(n)}}/\Lone{Q_n} = 2^n n!$.
+Taking $P = \lambda U_n$ makes $s_n(y)P(y)$ have constant sign almost everywhere, giving equality. Conversely, if equality holds for a nonzero polynomial $P$ with $\deg P \le n$, then $|P(y)| = \sigma s_n(y)P(y)$ almost everywhere for some $\sigma \in \{-1, 1\}$. Since $P$ is continuous and $s_n$ changes sign at each of the $n$ interior zeros of $U_n$, $P$ must vanish at all $n$ zeros of $U_n$, forcing $P = \lambda U_n$. Evaluating~\eqref{eq:main} on $F = Q_n$ (for which $Q_n^{(n+1)} \equiv 0$) yields $A \ge \Lone{Q_n^{(n)}}/\Lone{Q_n} = 2^n n!$.
 \end{proof}
 
 \section{Moving Nodes and Jacobi Matrices: From Three Points to \texorpdfstring{$n+1$}{n+1} Points}
 \label{sec:matrix}
 
-Armed with the extremal polynomial $Q_n = 2^{-n}U_n$, we follow the second-order blueprint. List the $n$ zeros of $U_n$ together with the endpoints $\pm 1$ in increasing order:
+List the $n$ zeros of $U_n$ together with the endpoints $\pm 1$ in increasing order:
 \begin{equation}
     r_j := -\cos\frac{j\pi}{n+1} \qquad (j = 0, 1, \dots, n+1).
     \label{eq:rj}
 \end{equation}
-They partition $[-1,1]$ into $n+1$ subintervals $[r_j, r_{j+1}]$ on which $s_n$ takes the alternating signs $\varepsilon_j := (-1)^{n-j}$. Our goal is to construct $n+1$ strictly increasing smooth bijections $u_j : [-1,1] \to [r_j, r_{j+1}]$ ($j = 0, \dots, n$) and define the \emph{moving-node operator}
+They partition $[-1,1]$ into $n+1$ subintervals $[r_j, r_{j+1}]$ on which $s_n$ takes the alternating signs $\varepsilon_j := (-1)^{n-j}$. To approximate $F^{(n)}(x)$ locally while respecting the $L^1$ norm bound $A_n = 2^n n!$, we look for $n+1$ strictly increasing continuous bijections $u_j : [-1,1] \to [r_j, r_{j+1}]$ ($j = 0, \dots, n$), smooth on $(-1,1)$, and form the \emph{moving-node operator}
 \begin{equation}
-    T_n F(x) := 2^n n!\sum_{j=0}^{n} \varepsilon_j\, u_j'(x)\, F\bigl(u_j(x)\bigr).
+    T_n F(x) := 2^n n!\sum_{j=0}^{n} \varepsilon_j\, u_j'(x)\, F\bigl(u_j(x)\bigr)
+    \qquad \bigl(x \in (-1,1)\bigr).
     \label{eq:Tn}
 \end{equation}
-Regardless of the specific choice of strictly increasing bijections $u_j : [-1,1] \to [r_j, r_{j+1}]$, the triangle inequality and piecewise change of variables $y = u_j(x)$ immediately give the sharp $L^1$ contraction bound
+For any such family of bijections and any $F \in L^1(I)$, the triangle inequality and piecewise change of variables $y = u_j(x)$ on $(-1,1) \to (r_j, r_{j+1})$ immediately give the sharp $L^1$ contraction bound
 \begin{equation}
     \Lone{T_n F}
     \le 2^n n!\sum_{j=0}^{n}\int_{-1}^{1} u_j'(x)\bigl|F(u_j(x))\bigr|\,dx
@@ -208,22 +290,22 @@ Regardless of the specific choice of strictly increasing bijections $u_j : [-1,1
     \label{eq:Tn-bound}
 \end{equation}
 
-To make $T_n$ reproduce $F^{(n)}$ on polynomials of degree at most $n$, we demand $T_n P = P^{(n)}$ for all $\deg P \le n$, which is equivalent to the moment system
+Requiring polynomial exactness $T_n P = P^{(n)}$ for all $\deg P \le n$ is equivalent to the Vandermonde moment system
 \[
     \sum_{j=0}^{n} \varepsilon_j\, u_j'(x)\, u_j(x)^k = 0 \quad (0 \le k < n),
     \qquad
     \sum_{j=0}^{n} \varepsilon_j\, u_j'(x)\, u_j(x)^n = 2^{-n}.
 \]
-Because the Vandermonde system on $n+1$ distinct ordered nodes $u_0(x) < \dots < u_n(x)$ has a unique solution---namely the barycentric weights of Lagrange interpolation---solving for the node velocities yields
+Because the $n+1$ nodes $u_0(x) < \dots < u_n(x)$ are distinct, this system has a unique solution—the barycentric weights of Lagrange interpolation—which forces
 \begin{equation}
     u_j'(x) = \frac{2^{-n}}{\prod_{i \neq j} |u_j(x) - u_i(x)|},
     \qquad
     T_n F(x) = n!\, F\bigl[u_0(x), \dots, u_n(x)\bigr],
     \label{eq:ode}
 \end{equation}
-where $F[y_0, \dots, y_n] = \sum_{j=0}^n \frac{F(y_j)}{\prod_{i \neq j}(y_j - y_i)}$ denotes the $n$-th divided difference. In short, $T_n F(x)$ is simply $n!$ times the $n$-th divided difference of $F$ along the moving nodes $u_0(x), \dots, u_n(x)$.
+where $F[y_0, \dots, y_n] = \sum_{j=0}^n \frac{F(y_j)}{\prod_{i \neq j}(y_j - y_i)}$ denotes the $n$-th divided difference. Thus $T_n F(x)$ is $n!$ times the $n$-th divided difference of $F$ along the moving nodes $u_0(x), \dots, u_n(x)$.
 
-In the second-order case $n = 2$, one could integrate the three ODEs directly and solve a quadratic equation. For arbitrary $n$, integrating~\eqref{eq:ode} by hand looks daunting---until a remarkably clean linear-algebraic object resolves everything at once. Consider the $(n+1) \times (n+1)$ real symmetric tridiagonal \emph{Jacobi matrix}
+Instead of integrating the $n$-dimensional ODE~\eqref{eq:ode} directly, consider the $(n+1) \times (n+1)$ real symmetric tridiagonal \emph{Jacobi matrix}
 \begin{equation}
     J_n(x) := \frac12
     \begin{pmatrix}
@@ -235,66 +317,86 @@ In the second-order case $n = 2$, one could integrate the three ODEs directly an
     \end{pmatrix}.
     \label{eq:Jn}
 \end{equation}
-As an immediate sanity check at $n = 2$, the $3 \times 3$ matrix $\frac12\bigl(\begin{smallmatrix} x & 1 & 0 \\ 1 & 0 & 1 \\ 0 & 1 & x \end{smallmatrix}\bigr)$ has eigenvalues $\frac{x - \sqrt{x^2+8}}{4}$, $\frac{x}{2}$, and $\frac{x + \sqrt{x^2+8}}{4}$---word for word the three moving nodes of~\eqref{eq:n2}.
+At $n = 2$, the $3 \times 3$ matrix $\frac12\bigl(\begin{smallmatrix} x & 1 & 0 \\ 1 & 0 & 1 \\ 0 & 1 & x \end{smallmatrix}\bigr)$ has eigenvalues $\frac{x - \sqrt{x^2+8}}{4}$, $\frac{x}{2}$, and $\frac{x + \sqrt{x^2+8}}{4}$—precisely the three moving nodes of~\eqref{eq:n2}.
 
 \begin{proposition}[Jacobi realization of the moving nodes]
     \label{prop:jacobi}
     For every integer $n \ge 1$ and every $x \in \R$, let $u_0(x) < u_1(x) < \dots < u_n(x)$ be the eigenvalues of $J_n(x)$ in increasing order. Then:
     \begin{enumerate}[label=\textup{(\roman*)}]
-        \item \textbf{Characteristic polynomial and boundary values.}
-        The monic characteristic polynomial of $J_n(x)$ is
+        \item \textbf{Characteristic polynomial, continuity, and boundary values.}
+        For every $x \in \R$, the monic characteristic polynomial of $J_n(x)$ is
         \begin{equation}
             p_x(y) := \det\bigl(yI - J_n(x)\bigr)
             = 2^{-n-1}\bigl(U_{n+1}(y) - 2xU_n(y) + x^2 U_{n-1}(y)\bigr).
             \label{eq:charpoly}
         \end{equation}
-        In particular, $p_{-1}(y) = 2^{-n}(y+1)U_n(y)$, $p_0(y) = 2^{-n-1}U_{n+1}(y)$, and $p_1(y) = 2^{-n}(y-1)U_n(y)$, so $u_j(-1) = r_j$, $u_j(0) = -\cos\frac{(j+1)\pi}{n+2}$, and $u_j(1) = r_{j+1}$ for every $j = 0, \dots, n$.
-        \item \textbf{Automatic solution of the ODE.}
-        Each $u_j$ is real-analytic on $\R$, strictly increasing, and satisfies~\eqref{eq:ode}. In particular, $u_j$ maps $[-1,1]$ bijectively onto $[r_j, r_{j+1}]$ and $u_j(x) \in (-1,1)$ for all $x \in (-1,1)$.
-        \item \textbf{Reflection symmetry and rational speed formula.}
-        For every $x \in \R$ and $j \in \{0, \dots, n\}$,
+        Each map $x \mapsto u_j(x)$ is continuous on $\R$ (in fact real-analytic, since all eigenvalues of $J_n(x)$ are simple), and at $x = -1, 0, 1$ one has $p_{-1}(y) = 2^{-n}(y+1)U_n(y)$, $p_0(y) = 2^{-n-1}U_{n+1}(y)$, and $p_1(y) = 2^{-n}(y-1)U_n(y)$, giving the exact endpoint and center values
         \[
-            u_j(-x) = -u_{n-j}(x), \qquad u_j'(-x) = u_{n-j}'(x),
-        \]
-        and the node velocity is a rational function of $x$ and $u_j(x)$:
-        \begin{equation}
-            u_j'(x) = \frac{2\bigl(1 - u_j(x)^2\bigr)}{L_x\bigl(u_j(x)\bigr)},
+            u_j(-1) = r_j,
             \qquad
-            L_x(y) := n + 2 - 2(n+1)xy + nx^2.
+            u_j(0) = -\cos\frac{(j+1)\pi}{n+2},
+            \qquad
+            u_j(1) = r_{j+1}
+            \qquad (j = 0, \dots, n).
+        \]
+        \item \textbf{ODE, strict monotonicity, and closed-interval bijections.}
+        For every $x \in \R$ and $j \in \{0, \dots, n\}$, $u_j$ satisfies~\eqref{eq:ode} with $u_j'(x) > 0$. Consequently, each $u_j$ maps $[-1,1]$ strictly increasingly and bijectively onto $[r_j, r_{j+1}]$, with $u_j(x) \in (-1,1)$ for all $|x| < 1$.
+        \item \textbf{Reflection symmetry and interior rational speed formula.}
+        For every $x \in \R$ and $j \in \{0, \dots, n\}$, $u_j(-x) = -u_{n-j}(x)$ and $u_j'(-x) = u_{n-j}'(x)$. Moreover, for every $|x| < 1$ and $j \in \{0, \dots, n\}$, the denominator
+        \[
+            L_x(y) := n + 2 - 2(n+1)xy + nx^2
+        \]
+        is strictly positive on $(-1,1)$ (so in particular $L_x(u_j(x)) > 0$), and the node velocity satisfies the rational identity
+        \begin{equation}
+            u_j'(x) = \frac{2\bigl(1 - u_j(x)^2\bigr)}{L_x\bigl(u_j(x)\bigr)}
+            \qquad \bigl(|x| < 1\bigr).
             \label{eq:speed}
         \end{equation}
     \end{enumerate}
 \end{proposition}
 
 \begin{proof}
-(i) Expanding $\det(yI - J_n(x))$ along the first and last rows expresses it in terms of the determinants $d_m(y) = 2^{-m}U_m(y)$ of the unperturbed $m \times m$ tridiagonal Toeplitz blocks with $\frac12$ on the sub- and super-diagonals:
+(i) Expanding $\det(yI - J_n(x))$ along the first and last rows expresses it via the unperturbed Toeplitz determinants $d_m(y) = 2^{-m}U_m(y)$:
 \[
     \det\bigl(yI - J_n(x)\bigr)
     = \Bigl(y - \frac{x}{2}\Bigr)^2 d_{n-1}(y)
       - \frac12\Bigl(y - \frac{x}{2}\Bigr)d_{n-2}(y)
       + \frac{1}{16} d_{n-3}(y)
 \]
-(with the obvious small-$n$ conventions $d_0 = 1$, $d_{-1} = 0$, $U_{-1} = 0$). Using the Chebyshev recurrence $2yU_m(y) = U_{m+1}(y) + U_{m-1}(y)$ simplifies this immediately to~\eqref{eq:charpoly}. Evaluating at $x = -1, 0, 1$ via $U_{n+1}(y) \pm 2U_n(y) + U_{n-1}(y) = 2(y \pm 1)U_n(y)$ gives the stated factorizations and boundary nodes.
+(with $d_0 = 1$, $d_{-1} = 0$, $U_{-1} = 0$). Applying $2yU_m(y) = U_{m+1}(y) + U_{m-1}(y)$ yields~\eqref{eq:charpoly}. Because $J_n(x)$ is symmetric tridiagonal with strictly positive off-diagonal entries $\frac12$, its eigenvalues are simple for every $x \in \R$, hence real-analytic and continuous in $x$. Evaluating~\eqref{eq:charpoly} at $x = -1, 0, 1$ using $U_{n+1}(y) \pm 2U_n(y) + U_{n-1}(y) = 2(y \pm 1)U_n(y)$ gives the stated boundary and center values.
 
-(ii) Because $J_n(x)$ is symmetric tridiagonal with strictly positive off-diagonal entries $\frac12$, all of its eigenvalues are simple, hence real-analytic in $x$. Let $v_j = (v_{j,0}, \dots, v_{j,n})^T$ be a unit eigenvector for $u_j(x)$. Since $J_n(x)$ is centrosymmetric (invariant under reversing coordinate order), $v_j$ is either symmetric or skew-symmetric, so $|v_{j,0}| = |v_{j,n}|$. By first-order eigenvalue perturbation (Hellmann--Feynman),
+(ii) Let $v_j = (v_{j,0}, \dots, v_{j,n})^T$ be a unit eigenvector for $u_j(x)$. Since $J_n(x)$ is centrosymmetric (invariant under reversing coordinate order), $v_j$ is either symmetric or skew-symmetric, so $|v_{j,0}| = |v_{j,n}|$. By first-order eigenvalue perturbation (Hellmann--Feynman),
 \[
     u_j'(x) = v_j^T J_n'(x) v_j = \frac12\bigl(v_{j,0}^2 + v_{j,n}^2\bigr) = v_{j,0}^2 > 0.
 \]
-On the other hand, the rank-one adjugate identity $\adj(u_j I - J_n(x)) = p_x'(u_j)\, v_j v_j^T$ has top-right entry equal to the product of the $n$ off-diagonal entries of $J_n(x)$, namely $2^{-n}$ up to sign. Comparing magnitudes gives $|p_x'(u_j)|\,|v_{j,0} v_{j,n}| = 2^{-n}$, i.e.\ $|p_x'(u_j)|\,u_j'(x) = 2^{-n}$, which is~\eqref{eq:ode}. Since $u_j(-1) = r_j$ and $u_j(1) = r_{j+1}$, strict monotonicity forces $u_j([-1,1]) = [r_j, r_{j+1}]$.
+Meanwhile, the rank-one adjugate identity $\adj(u_j I - J_n(x)) = p_x'(u_j)\, v_j v_j^T$ has top-right entry equal to the product of the $n$ off-diagonal entries of $J_n(x)$, namely $2^{-n}$ up to sign. Comparing magnitudes yields $|p_x'(u_j)|\,u_j'(x) = 2^{-n}$, which is~\eqref{eq:ode}. Combining strict monotonicity with $u_j(-1) = r_j$ and $u_j(1) = r_{j+1}$ gives $u_j([-1,1]) = [r_j, r_{j+1}]$ and $u_j(x) \in (r_j, r_{j+1}) \subset (-1,1)$ for all $|x| < 1$.
 
-(iii) Conjugating $J_n(x)$ by the product of coordinate reversal and the alternating-sign matrix $S = \diag(1, -1, 1, \dots, (-1)^n)$ negates $J_n(x)$ while flipping $x \mapsto -x$, so $J_n(-x)$ is orthogonally similar to $-J_n(x)$; hence $u_j(-x) = -u_{n-j}(x)$ and $u_j'(-x) = u_{n-j}'(x)$. Finally, differentiating $p_x(u_j(x)) = 0$ gives $u_j'(x) = -\frac{\partial_x p_x(y)}{\partial_y p_x(y)}\big|_{y=u_j(x)}$. Using the standard Chebyshev derivative identity $(1-y^2)U_m'(y) = -m y U_m(y) + (m+1)U_{m-1}(y)$ together with $U_{n+1}(y) - 2xU_n(y) + x^2 U_{n-1}(y) = 0$ cancels $U_n(y)$ and $U_{n-1}(y)$ cleanly to produce~\eqref{eq:speed}.
+(iii) Conjugating $J_n(x)$ by the product of coordinate reversal and $S = \diag(1, -1, 1, \dots, (-1)^n)$ shows that $J_n(-x)$ is orthogonally similar to $-J_n(x)$, giving $u_j(-x) = -u_{n-j}(x)$ and $u_j'(-x) = u_{n-j}'(x)$. For $|x| < 1$ and $|y| < 1$, we have $L_x(y) = n(1 - x)^2 + 2(1 - xy) + 2n x(1 - y) > 0$ (equivalently $L_x(y) > n + 2 - 2(n+1)|x| + nx^2 = (1 - |x|)(n(1 - |x|) + 2) > 0$). Differentiating $p_x(u_j(x)) = 0$ gives $u_j'(x) = -\frac{\partial_x p_x(y)}{\partial_y p_x(y)}\big|_{y=u_j(x)}$, and substituting $(1-y^2)U_m'(y) = -m y U_m(y) + (m+1)U_{m-1}(y)$ together with $U_{n+1}(y) - 2xU_n(y) + x^2 U_{n-1}(y) = 0$ cancels $U_n(y)$ and $U_{n-1}(y)$ to produce~\eqref{eq:speed}. (Note that~\eqref{eq:speed} is restricted to $|x| < 1$ to avoid the $0/0$ indeterminacy when $x = \pm 1$ and $u_j(\pm 1) = \pm 1$, matching \code{hasDerivAt_orderedNode} in Lean~4.)
 \end{proof}
 
-Beyond sparing us from integrating an $n$-dimensional nonlinear ODE system, the matrix $J_n(x)$ hides the master key to the center-maximum problem: the exact characteristic polynomial~\eqref{eq:charpoly}.
+\begin{remark}[Comparison with Burenkov's rank-one operator~\cite{Burenkov1986}]
+    \label{rem:burenkov-op}
+    In Burenkov~\cite[Theorem~2(1), p.~41; eqs.~(24)--(26), p.~42]{Burenkov1986}, the decomposition $f^{(n)} = A_\omega f + B_\omega f^{(n+1)}$ approximates $f^{(n)}$ by a \emph{rank-one, constant-valued} functional independent of $x$: on $I = [-1,1]$ at $p = 1$,
+    \[
+        (A_\omega F)(x) \equiv 2^{n-1} n! \int_{-1}^{1} s_n(y) F(y)\,dy.
+    \]
+    Integrating our moving-node operator~\eqref{eq:Tn} over $x \in [-1,1]$ and substituting $y = u_j(x)$ on each subinterval $[r_j, r_{j+1}]$ yields the exact relation
+    \[
+        \frac12 \int_{-1}^{1} (T_n F)(x)\,dx
+        = 2^{n-1} n! \sum_{j=0}^{n} \varepsilon_j \int_{r_j}^{r_{j+1}} F(y)\,dy
+        = (A_\omega F)(x).
+    \]
+    Thus Burenkov's $A_\omega$ is the \emph{spatial average} of $T_n$. However, for \emph{any} constant-valued operator $S$ exact on polynomials of degree $\le n$, evaluating on $h_0(y) = \frac{1}{n!}y_+^n$ forces $S h_0 \equiv c \in [0,1]$ and hence $\Lone{D^n h_0 - S h_0} = |c| + |1-c| = 1$ (which is $1/2$ on $[0,1]$, matching Burenkov's computation $\lVert \mathcal{B}\rVert_{L^1(0,1)\to L^1(0,1)} = 1/2$ in~\cite[p.~43]{Burenkov1986}). Disintegrating $A_\omega$ into the $x$-dependent moving-node operator $T_n$ while preserving $\lVert T_n\rVert_{L^1 \to L^1} = A_n$ is strictly necessary to break below $1$ on $[-1,1]$ and achieve the sharp constant $B_n < 1$.
+\end{remark}
 
 \section{The Error Profile \texorpdfstring{$E_n(t)$}{E\_n(t)} and Sharpness of the Second Constant}
 \label{sec:sharp}
 
-Define the normalized truncated power $h_t(y) := \frac{1}{n!}(y - t)_+^n$, where $z_+ := \max(z, 0)$. For any $F \in W^{n+1,1}(I)$ (meaning $F, F', \dots, F^{(n)}$ are absolutely continuous on $[-1,1]$ with $F^{(n+1)} \in L^1(I)$), Taylor's formula with integral remainder from the left endpoint $-1$ writes
+Define the normalized truncated power $h_t(y) := \frac{1}{n!}(y - t)_+^n$, where $z_+ := \max(z, 0)$. For any $F \in W^{n+1,1}(I)$ satisfying~\eqref{eq:W1-char}, repeated integration by parts gives Taylor's formula with integral remainder from $-1$:
 \[
     F(y) = P_F(y) + \int_{-1}^{1} h_t(y)\, F^{(n+1)}(t)\,dt,
 \]
-where $\deg P_F \le n$ and $P_F^{(n)} \equiv F^{(n)}(-1)$. Applying $D^n - T_n$ and invoking polynomial exactness $T_n P_F = P_F^{(n)}$ yields the Peano representation
+where $\deg P_F \le n$ and $P_F^{(n)} \equiv F^{(n)}(-1)$. Applying $D^n - T_n$ (on $(-1,1)$) and invoking polynomial exactness $T_n P_F = P_F^{(n)}$ yields the Peano representation
 \begin{equation}
     F^{(n)}(x) - T_n F(x)
     = \int_{-1}^{1} \bigl(\mathbf{1}_{\{x > t\}} - T_n h_t(x)\bigr)\, F^{(n+1)}(t)\,dt.
@@ -311,29 +413,25 @@ where the \emph{error profile} is defined by
     \label{eq:En-def}
 \end{equation}
 
-In the second-order case, convexity removed the absolute value inside~\eqref{eq:En-def}. For general $n \ge 1$, the \emph{Hermite--Genocchi formula} for divided differences takes over:
+By the Hermite--Genocchi / Curry--Schoenberg B-spline formula~\cite{CurrySchoenberg1966} for divided differences,
 \[
     T_n F(x)
     = n!\, F\bigl[u_0(x), \dots, u_n(x)\bigr]
     = \E\!\left[F^{(n)}\!\left(\sum_{j=0}^{n}\lambda_j u_j(x)\right)\right],
 \]
-where $(\lambda_0, \dots, \lambda_n)$ is uniformly distributed on the standard $n$-simplex (for $h_t$, whose $n$-th weak derivative is $\mathbf{1}_{\{y > t\}}$, this holds by mollifying $h_t$ and passing to the limit). Because $0 \le \mathbf{1}_{\{y > t\}} \le 1$, it follows immediately that
+where $(\lambda_0, \dots, \lambda_n)$ is uniformly distributed on the standard $n$-simplex (for $h_t$, this follows by mollification or directly via the algebraic divided-difference / weighted-exponential CDF bridge formalized in \code{DividedCDFBridge.lean}). Since $0 \le \mathbf{1}_{\{y > t\}} \le 1$, we obtain
 \begin{equation}
-    0 \le T_n h_t(x) \le 1 \qquad \text{for all } x, t \in [-1,1].
+    0 \le T_n h_t(x) \le 1 \qquad \text{for all } x \in (-1,1),\ t \in [-1,1].
     \label{eq:Tn-ht-bounds}
 \end{equation}
-Thus the integrand in~\eqref{eq:En-def} is $T_n h_t(x)$ for $x \le t$ and $1 - T_n h_t(x)$ for $x > t$. Splitting the integral at $x = t$ and changing variables $y = u_j(x)$ term by term in~\eqref{eq:Tn}, all interior endpoint evaluations at $r_1, \dots, r_n$ cancel in alternating pairs, leaving the closed formula
+Hence the integrand in~\eqref{eq:En-def} equals $T_n h_t(x)$ for $x \le t$ and $1 - T_n h_t(x)$ for $x > t$. Splitting the integral at $x = t$ and substituting $y = u_j(x)$ term by term in~\eqref{eq:Tn}, all interior endpoint evaluations at $r_1, \dots, r_n$ cancel in alternating pairs, leaving the explicit formula
 \begin{equation}
     E_n(t)
     = 1 - t - \frac{2^n}{n+1}(1 - t)^{n+1}
       + \frac{2^{n+1}}{n+1}\sum_{j=0}^{n} \varepsilon_j \bigl(u_j(t) - t\bigr)_+^{n+1}.
     \label{eq:En}
 \end{equation}
-From the reflection symmetry $u_j(-x) = -u_{n-j}(x)$ and $\varepsilon_{n-j} = (-1)^n \varepsilon_j$, one checks directly that $T_n h_t(x) + T_n h_{-t}(-x) = 1$, so $E_n$ is even:
-\[
-    E_n(-t) = E_n(t) \qquad (t \in [-1,1]).
-\]
-Evaluating~\eqref{eq:En} at the center $t = 0$, where $u_j(0) = -\cos\frac{(j+1)\pi}{n+2}$ by Proposition~\ref{prop:jacobi}(i), only the strictly positive nodes ($u_j(0) > 0$) survive, yielding the exact center value
+By the reflection symmetry $u_j(-x) = -u_{n-j}(x)$ and $\varepsilon_{n-j} = (-1)^n \varepsilon_j$, we have $T_n h_t(x) + T_n h_{-t}(-x) = 1$, so $E_n$ is even: $E_n(-t) = E_n(t)$ on $[-1,1]$. Evaluating~\eqref{eq:En} at $t = 0$, where $u_j(0) = -\cos\frac{(j+1)\pi}{n+2}$ by Proposition~\ref{prop:jacobi}(i), only the strictly positive nodes survive, giving the exact center value
 \begin{equation}
     b_n := E_n(0)
     = 1 - \frac{2^n}{n+1}
@@ -341,7 +439,7 @@ Evaluating~\eqref{eq:En} at the center $t = 0$, where $u_j(0) = -\cos\frac{(j+1)
     \label{eq:bn}
 \end{equation}
 
-Before maximizing $E_n$, we verify that no slack was introduced by passing through $T_n$: the supremum of $E_n$ is genuinely the sharp second constant.
+We now show that the moving-node upper bound introduces no slack whatsoever.
 
 \begin{proposition}[Sharpness of the second constant]
     \label{prop:sharp}
@@ -350,46 +448,59 @@ Before maximizing $E_n$, we verify that no slack was introduced by passing throu
         \Lone{F^{(n)}} \le A_n\Lone{F} + B\Lone{F^{(n+1)}}
         \qquad \text{for all } F \in C^\infty([-1,1]),
     \]
-    with $A_n = 2^n n!$, then $B \ge E_n(t)$ for every $t \in [-1,1]$. In particular, with $A_n$ fixed, the optimal second constant in~\eqref{eq:main} is strictly equal to $B_n = \max_{t \in [-1,1]} E_n(t)$.
+    with $A_n = 2^n n!$, then $B \ge E_n(t)$ for every $t \in [-1,1]$. Consequently, with $A_n$ fixed, the optimal second constant in~\eqref{eq:main} equals $B_n = \max_{t \in [-1,1]} E_n(t)$.
 \end{proposition}
 
 \begin{proof}
-Fix any interior point $t \in (-1,1)$, let $P_t$ be the unique polynomial of degree at most $n$ interpolating $h_t$ at the $n+1$ distinct nodes $u_0(t) < \dots < u_n(t)$, and set $G_t := h_t - P_t$. By the Newton interpolation remainder formula,
+Fix any interior point $t \in (-1,1)$, let $P_t$ be the unique polynomial of degree at most $n$ interpolating $h_t$ at the $n+1$ distinct nodes $u_0(t) < \dots < u_n(t)$, and set $G_t := h_t - P_t$. By Newton's interpolation remainder formula,
 \[
     G_t(y) = h_t\bigl[u_0(t), \dots, u_n(t), y\bigr]\prod_{j=0}^{n}\bigl(y - u_j(t)\bigr).
 \]
-Since the $(n+1)$-st distributional derivative of $h_t$ is the positive Dirac mass $\delta_t$, the $(n+1)$-st divided difference $h_t[u_0(t), \dots, u_n(t), y]$ is nonnegative everywhere (this is verified algebraically in Lean~4 via \code{barycentric_truncatedPower_higher_nonneg}). Consequently, $G_t$ changes sign only at the $n+1$ nodes $u_0(t), \dots, u_n(t)$:
+Because the $(n+1)$-st distributional derivative of $h_t$ is the positive Dirac mass $\delta_t$, the $(n+1)$-st divided difference $h_t[u_0(t), \dots, u_n(t), y]$ is nonnegative everywhere (formalized algebraically as \code{barycentric_truncatedPower_higher_nonneg}). Hence $G_t$ changes sign only at $u_0(t), \dots, u_n(t)$:
 \begin{itemize}[leftmargin=1.8em]
-    \item For $x > t$, strict monotonicity of each $u_j$ places $u_j(x) \in (u_j(t), u_{j+1}(t))$ (with $u_{n+1}(t) := 1$), so $\prod_{i=0}^n (u_j(x) - u_i(t))$ has sign $(-1)^{n-j} = \varepsilon_j$. Hence $\varepsilon_j G_t(u_j(x)) \ge 0$ for all $j = 0, \dots, n$.
-    \item For $x < t$, $u_j(x) \in (u_{j-1}(t), u_j(t))$ (with $u_{-1}(t) := -1$), so $\varepsilon_j G_t(u_j(x)) \le 0$ for all $j = 0, \dots, n$.
+    \item For $x \in (t, 1)$, strict monotonicity of $u_j$ places $u_j(x) \in (u_j(t), u_{j+1}(t))$ (with $u_{n+1}(t) := 1$), so $\prod_{i=0}^n (u_j(x) - u_i(t))$ has sign $(-1)^{n-j} = \varepsilon_j$, giving $\varepsilon_j G_t(u_j(x)) \ge 0$ for every $j$.
+    \item For $x \in (-1, t)$, $u_j(x) \in (u_{j-1}(t), u_j(t))$ (with $u_{-1}(t) := -1$), giving $\varepsilon_j G_t(u_j(x)) \le 0$ for every $j$.
 \end{itemize}
-Therefore, in the sum defining $T_n G_t(x)$, all $n+1$ terms share the same sign: nonnegative for $x > t$ and nonpositive for $x < t$. Integrating over $[-1,1]$ incurs zero cancellation, so $\Lone{T_n G_t} = A_n \Lone{G_t}$. Moreover, because $P_t$ has degree $\le n$,
+Therefore, all $n+1$ summands of $T_n G_t(x)$ share the same sign: nonnegative on $(t,1)$ and nonpositive on $(-1,t)$. Integrating incurs zero cancellation, so $\Lone{T_n G_t} = A_n \Lone{G_t}$. Moreover, since $\deg P_t \le n$,
 \[
     G_t^{(n)}(x) - T_n G_t(x) = \mathbf{1}_{\{x > t\}} - T_n h_t(x)
 \]
-is likewise nonnegative for $x > t$ and nonpositive for $x < t$ by~\eqref{eq:Tn-ht-bounds}. Hence $T_n G_t(x)$ and $G_t^{(n)}(x) - T_n G_t(x)$ never oppose in sign, which forces exact equality in the triangle inequality $\Lone{G_t^{(n)}} = \Lone{T_n G_t} + \Lone{G_t^{(n)} - T_n G_t}$, i.e.
-\[
+is likewise nonnegative on $(t,1)$ and nonpositive on $(-1,t)$ by~\eqref{eq:Tn-ht-bounds}. Thus $T_n G_t(x)$ and $G_t^{(n)}(x) - T_n G_t(x)$ never oppose in sign, forcing exact equality $\Lone{G_t^{(n)}} = \Lone{T_n G_t} + \Lone{G_t^{(n)} - T_n G_t}$, i.e.
+\begin{equation}
     \Lone{G_t^{(n)}} - A_n\Lone{G_t} = E_n(t).
-\]
+    \label{eq:Gt-identity}
+\end{equation}
 
-To pass from the spline $G_t$ to $C^\infty([-1,1])$, pick a nonnegative bump function $\varphi \in C_c^\infty((-1,1))$ with $\int \varphi = 1$, set $\varphi_\varepsilon(s) := \varepsilon^{-1}\varphi(s/\varepsilon)$ for $0 < \varepsilon < \min(1+t, 1-t)$, and convolve $G_{t,\varepsilon} := G_t * \varphi_\varepsilon$ (extending $G_t$ naturally to $\R$ by $h_t - P_t$). Then $G_{t,\varepsilon} \in C^\infty(\R)$, its $(n+1)$-st derivative is $G_{t,\varepsilon}^{(n+1)}(y) = \varphi_\varepsilon(y - t) \ge 0$ supported inside $(-1,1)$ with $\Lone{G_{t,\varepsilon}^{(n+1)}} = 1$, and as $\varepsilon \to 0^+$ we have $G_{t,\varepsilon} \to G_t$ and $G_{t,\varepsilon}^{(n)} \to G_t^{(n)}$ in $L^1([-1,1])$. Applying the assumed $C^\infty$ inequality to $G_{t,\varepsilon}$ and letting $\varepsilon \to 0^+$ yields $B \ge E_n(t)$ for every $t \in (-1,1)$, and by continuity (or $E_n(\pm 1) = 0$) for all $t \in [-1,1]$.
+To pass from the spline $G_t$ to $C^\infty([-1,1])$, take a nonnegative bump function $\varphi \in C_c^\infty((-1,1))$ with $\int \varphi = 1$, set $\varphi_\varepsilon(s) := \varepsilon^{-1}\varphi(s/\varepsilon)$ for $0 < \varepsilon < \min(1+t, 1-t)$, and convolve $G_{t,\varepsilon} := G_t * \varphi_\varepsilon$ (extending $G_t = h_t - P_t$ to $\R$). Then $G_{t,\varepsilon} \in C^\infty(\R)$, $G_{t,\varepsilon}^{(n+1)}(y) = \varphi_\varepsilon(y - t) \ge 0$ is supported inside $(-1,1)$ with $\Lone{G_{t,\varepsilon}^{(n+1)}} = 1$, and $G_{t,\varepsilon} \to G_t$, $G_{t,\varepsilon}^{(n)} \to G_t^{(n)}$ in $L^1(I)$ as $\varepsilon \to 0^+$. Applying the assumed $C^\infty$ inequality to $G_{t,\varepsilon}$ and letting $\varepsilon \to 0^+$ yields $B \ge E_n(t)$ for all $t \in (-1,1)$, and by continuity for all $t \in [-1,1]$.
 \end{proof}
 
-The entire sharp constant problem has now distilled to a single assertion:
-\begin{quote}\centering\itshape
-    For every integer $n \ge 1$, the error profile $E_n(t)$ is strictly decreasing on $[0,1]$, hence attains its unique global maximum on $[-1,1]$ at $t = 0$.
-\end{quote}
+\begin{remark}[Exact relation to Boyanov~\cite{Boyanov1975} and Kofanov~\cite{Kofanov1984} at $t = 0$]
+    \label{rem:burenkov-kofanov}
+    Let $E_n(W_1^{n+1})_1 := \sup_{\Lone{f^{(n+1)}} \le 1} \inf_{P \in \pi_n} \Lone{f - P}$ be the best $L^1$ polynomial approximation error of the Sobolev class $W_1^{n+1}(I)$. Boyanov~\cite[\S3]{Boyanov1975} and Kofanov~\cite[Theorems~3 and~5]{Kofanov1984} proved that $E_n(W_1^{n+1})_1 = |s_{n,n+1}(0)|$, where $s_{n,n+1}$ is the $(n+1)$-st integral of $\sgn U_{n+1}$ vanishing at its Chebyshev nodes $-\cos\frac{j\pi}{n+2}$ ($j = 1, \dots, n+1$), namely
+    \[
+        |s_{n,n+1}(0)|
+        = \frac{1}{(n+1)!}\left[1 - 2\sum_{k=1}^{\lfloor(n+1)/2\rfloor}(-1)^{k-1}\cos^{n+1}\frac{k\pi}{n+2}\right].
+    \]
+    Comparing with~\eqref{eq:bn} yields the exact identity for every $n \ge 1$:
+    \[
+        B_n = E_n(0) = 1 - 2^n n!\,|s_{n,n+1}(0)| = 1 - A_n\,E_n(W_1^{n+1})_1.
+    \]
+    Conceptually, at $t = 0$ our moving nodes $u_j(0) = -\cos\frac{(j+1)\pi}{n+2}$ coincide with the Chebyshev nodes of $U_{n+1}$, so $P_0$ is the best $L^1$ polynomial approximant of $h_0$ from $\pi_n$, giving $\Lone{G_0} = |s_{n,n+1}(0)|$ while symmetry gives $\Lone{G_0^{(n)}} = 1$; thus~\eqref{eq:Gt-identity} at $t = 0$ becomes $E_n(0) = 1 - A_n E_n(W_1^{n+1})_1$.
+
+    Crucially, however, Boyanov~\cite{Boyanov1975} and Kofanov~\cite{Kofanov1984} do not imply Theorem~\ref{thm:full}: (i)~away from $t = 0$, our moving nodes $u_j(t)$ are not Chebyshev nodes and $E_n(t)$ differs completely from $1 - A_n |s_{n,n+1}(t)|$ (which even has the \emph{opposite} monotonicity, rising from $B_n$ at $t=0$ to $1$ at $t = \pm 1$); and (ii)~inserting a best polynomial approximant $P \in \pi_n$ into $\Lone{f^{(n)}} \le A_n\Lone{f} + A_n\Lone{f - P} + \Lone{f^{(n)} - P^{(n)}}$ brings $A_n E_n(W_1^{n+1})_1$ in with a \emph{plus} sign (giving $B > 1$), whereas achieving the \emph{minus} sign $1 - A_n E_n(W_1^{n+1})_1$ as an upper bound requires both the moving-node operator $T_n$ and the global center-maximum theorem $E_n(t) \le E_n(0)$ proved in Sections~\ref{sec:setup}--\ref{sec:finish}.
+\end{remark}
 
 \section{Attacking Monotonicity: Clearing the Exterior and Translating the Interior}
 \label{sec:setup}
 
-Set $H_n(t) := 1 - E_n(t)$, so that our target is $H_n'(t) > 0$ (equivalently $E_n'(t) < 0$) for all $t \in (0,1)$. Differentiating~\eqref{eq:En} (note that $(y - t)_+^{n+1}$ is $C^1$ for every $n \ge 1$, even when a node crosses the diagonal $u_j(t) = t$) yields
+Set $H_n(t) := 1 - E_n(t)$, so that our target is $H_n'(t) > 0$ (equivalently $E_n'(t) < 0$) for all $t \in (0,1)$. Differentiating~\eqref{eq:En} (since $(y - t)_+^{n+1}$ is $C^1$ for every $n \ge 1$, even when a node crosses the diagonal $u_j(t) = t$) yields
 \begin{equation}
     E_n'(t) = -1 + 2^n(1 - t)^n
-    - 2^{n+1}\sum_{j=0}^{n} \varepsilon_j \bigl(u_j(t) - t\bigr)_+^n \bigl(1 - u_j'(t)\bigr).
+    - 2^{n+1}\sum_{j=0}^{n} \varepsilon_j \bigl(u_j(t) - t\bigr)_+^n \bigl(1 - u_j'(t)\bigr)
+    \qquad \bigl(t \in (-1,1)\bigr).
     \label{eq:En-prime}
 \end{equation}
-One glance at the term $2^n(1-t)^n$ reveals a crisp dividing line at $t = \frac12$.
+The term $[2(1 - t)]^n$ immediately marks $t = \frac12$ as a natural threshold.
 
 \subsection{The exterior interval \texorpdfstring{$t \in [1/2, 1)$}{t in [1/2, 1)}: a few lines for all orders}
 \label{sec:outer}
@@ -400,7 +511,7 @@ One glance at the term $2^n(1-t)^n$ reveals a crisp dividing line at $t = \frac1
 \end{proposition}
 
 \begin{proof}
-Fix $t \in (0,1)$ and view the rational speed formula~\eqref{eq:speed} as a function of $y \in [t,1]$:
+Fix $t \in (0,1)$ and view the interior speed formula~\eqref{eq:speed} as a function of $y \in [t,1]$:
 \[
     v(y) := \frac{2(1 - y^2)}{L_t(y)}, \qquad L_t(y) = n + 2 - 2(n+1)ty + nt^2 > 0.
 \]
@@ -415,52 +526,48 @@ for all $y \in [t,1]$. Hence $v$ is strictly decreasing on $[t,1]$, and in parti
     v(y) \le v(t) = \frac{2(1 - t^2)}{(n+2)(1 - t^2)} = \frac{2}{n+2} < 1
     \qquad (y \in [t,1]).
 \]
-It follows that $g(y) := (y - t)_+^n(1 - v(y))$ is nonnegative on $[-1,1]$ and strictly increasing on $[t,1]$. Grouping the alternating sum in~\eqref{eq:En-prime} in pairs starting from the top node $u_n(t)$ (recall $\varepsilon_n = +1$),
+Thus $g(y) := (y - t)_+^n(1 - v(y))$ is nonnegative on $[-1,1]$ and strictly increasing on $[t,1]$. Grouping the alternating sum in~\eqref{eq:En-prime} in pairs starting from the top node $u_n(t)$ ($\varepsilon_n = +1$),
 \[
     \sum_{j=0}^{n} \varepsilon_j g\bigl(u_j(t)\bigr)
     = \bigl(g(u_n) - g(u_{n-1})\bigr)
     + \bigl(g(u_{n-2}) - g(u_{n-3})\bigr) + \dots \ge 0.
 \]
-Consequently $E_n'(t) \le -1 + [2(1-t)]^n$, which is already strictly negative for every $t \in (1/2, 1)$. At the boundary $t = 1/2$, direct computation for $n = 1$ gives $E_1'(1/2) = -1/2 < 0$; for $n \ge 2$, the largest node satisfies $u_n(1/2) > u_n(-1) = \cos\frac{\pi}{n+1} \ge \frac12$, so $g(u_n(1/2)) > g(u_{n-1}(1/2))$ and the top pair is strictly positive, again giving $E_n'(1/2) < 0$.
+Consequently $E_n'(t) \le -1 + [2(1-t)]^n$, which is already strictly negative for every $t \in (1/2, 1)$. At $t = 1/2$, direct computation for $n = 1$ gives $E_1'(1/2) = -1/2 < 0$; for $n \ge 2$, the top node satisfies $u_n(1/2) > u_n(-1) = \cos\frac{\pi}{n+1} \ge \frac12$, so $g(u_n(1/2)) > g(u_{n-1}(1/2))$ and the top pair is strictly positive, again giving $E_n'(1/2) < 0$.
 \end{proof}
 
 \subsection{The interior interval \texorpdfstring{$t \in (0, 1/2]$}{t in (0, 1/2]}: Gaussian quadratic-form decomposition}
 \label{sec:interior-decomp}
 
-For $t < 1/2$, the term $[2(1-t)]^n$ grows exponentially with $n$, while the alternating sum $\sum_j \varepsilon_j g(u_j(t))$ exhibits massive cancellation between positive and negative terms. Direct termwise estimation of~\eqref{eq:En-prime} is hopeless in this regime.
+For $t < 1/2$, the term $[2(1-t)]^n$ grows exponentially with $n$ while the alternating sum $\sum_j \varepsilon_j g(u_j(t))$ suffers massive cancellation; direct termwise bounding of~\eqref{eq:En-prime} fails completely.
 
-The way forward is to fold the boundary terms $-1 + 2^n(1-t)^n$ back into the sum so that the entire derivative becomes a combination of divided differences on the $n+3$ extended nodes
+The breakthrough is to fold the boundary terms $-1 + 2^n(1-t)^n$ back into the sum over the $n+3$ extended nodes
 \[
     \mathbf{z}_t := \bigl(-1,\, u_0(t),\, \dots,\, u_n(t),\, 1\bigr),
     \qquad
     P_t^*(y) := (y^2 - 1)\,p_t(y).
 \]
-Comparing~\eqref{eq:ode} and~\eqref{eq:speed}---specifically $|p_t'(u_j)|u_j' = 2^{-n}$ and $u_j' = 2(1-u_j^2)/L_t(u_j)$---together with the endpoint values $P_t^*(\pm 1)' = \pm 2p_t(\pm 1)$ gives the exact structural weight identity
+Comparing~\eqref{eq:ode} and~\eqref{eq:speed} together with $(P_t^*)'(\pm 1) = \pm 2p_t(\pm 1)$ gives the exact structural weight identity
 \begin{equation}
     (-1)^{n+1}\delta_{-1} + 2\sum_{j=0}^{n}\varepsilon_j \delta_{u_j(t)} - \delta_1
     = -2^{-n}\sum_{z \in \mathbf{z}_t} \frac{L_t(z)}{(P_t^*)'(z)}\,\delta_z.
     \label{eq:weight-id}
 \end{equation}
-Expanding the numerator $L_t(y) - 2(1 - y^2)$ around $y = t$ yields
-\[
-    L_t(y) - 2(1 - y^2) = n(1 - t^2) - 2(n - 1)t(y - t) + 2(y - t)^2,
-\]
-which collapses~\eqref{eq:En-prime} into three barycentric divided differences on $\mathbf{z}_t$ of $(y-t)_+^{n+2}$, $(y-t)_+^{n+1}$, and $(y-t)_+^{n}$.
+Expanding $L_t(y) - 2(1 - y^2) = n(1 - t^2) - 2(n - 1)t(y - t) + 2(y - t)^2$ collapses~\eqref{eq:En-prime} into three barycentric divided differences on $\mathbf{z}_t$ of $(y-t)_+^{n+2}$, $(y-t)_+^{n+1}$, and $(y-t)_+^{n}$.
 
-Now translate divided differences of truncated powers into a \emph{complex Gaussian quadratic form}. Let $g \sim \mathcal{CN}(0, I_{n+1})$ be a standard complex Gaussian vector in $\C^{n+1}$ (normalized so that $|g_0|^2, \dots, |g_n|^2$ are i.i.d.\ $\mathrm{Exp}(1)$), and let $e_+, e_- \sim \mathrm{Exp}(1)$ be independent standard exponential random variables, also independent of $g$. Define
+Now translate divided differences of truncated powers into a \emph{complex Gaussian quadratic form}. Let $g \sim \mathcal{CN}(0, I_{n+1})$ be a standard complex Gaussian vector in $\C^{n+1}$ (normalized so $|g_0|^2, \dots, |g_n|^2$ are i.i.d.\ $\mathrm{Exp}(1)$), and let $e_+, e_- \sim \mathrm{Exp}(1)$ be independent standard exponential random variables, independent of $g$. Define
 \begin{equation}
     Q_t^0 := g^*\bigl(tI - J_n(t)\bigr)g,
     \qquad
     Q_t := Q_t^0 + (t + 1)e_+ + (t - 1)e_-.
     \label{eq:Qt-def}
 \end{equation}
-In the eigenbasis of $J_n(t)$, $Q_t$ is simply the weighted exponential sum $\sum_{z \in \mathbf{z}_t} (t - z) e_z$ (with $t - (-1) = t + 1$ and $t - 1$ as the two endpoint weights). Since the direction $v = g/\|g\|$ of a complex Gaussian vector is uniform on the simplex in squared moduli and independent of the Gamma-distributed radius $\|g\|^2$, standard Peano/simplex integration expresses the cumulative distribution function and sign expectation $\G(Q) := \E[\sgn Q]$ of $Q_t$ directly in terms of barycentric divided differences of $(y - t)_+^{m}$ on $\mathbf{z}_t$. Writing $\rho_t$ for the probability density of $Q_t$,~\eqref{eq:En-prime} becomes
+In the eigenbasis of $J_n(t)$, $Q_t$ is the weighted exponential sum $\sum_{z \in \mathbf{z}_t} (t - z) e_z$. Writing $\rho_t$ for the probability density of $Q_t$ and $\G(Q) := \E[\sgn Q]$, the simplex/Gamma factorization expresses~\eqref{eq:En-prime} as
 \begin{equation}
     H_n'(t) = \G(Q_t) + 2(n - 1)t\,\rho_t(0) - n(1 - t^2)\,\rho_t'(0).
     \label{eq:Hprime-gauss}
 \end{equation}
 
-A tiny integration-by-parts identity now splits~\eqref{eq:Hprime-gauss} cleanly in two. Whenever $Y = X + ae$ with $a \neq 0$ and $e \sim \mathrm{Exp}(1)$ independent of $X$, one has $\rho_X = \rho_Y + a\rho_Y'$ and $\G(X) = \G(Y) - 2a\rho_Y(0)$. Applying this once with $a = t - 1$ (peeling off $(t-1)e_-$), once with $a = t + 1$ (peeling off $(t+1)e_+$), and once in sequence (peeling off both to reach $Q_t^0$) yields:
+Whenever $Y = X + ae$ ($a \neq 0$, $e \sim \mathrm{Exp}(1)$ independent of $X$), integration by parts yields $\rho_X = \rho_Y + a\rho_Y'$ and $\G(X) = \G(Y) - 2a\rho_Y(0)$. Applying this identity to peel off $(t - 1)e_-$ and $(t + 1)e_+$ splits~\eqref{eq:Hprime-gauss} cleanly in two:
 
 \begin{lemma}[Decomposition of $H_n'(t)$]
     \label{lem:decomp}
@@ -478,8 +585,6 @@ A tiny integration-by-parts identity now splits~\eqref{eq:Hprime-gauss} cleanly 
     \end{equation}
 \end{lemma}
 
-The first term in~\eqref{eq:comp} falls immediately to an exact symmetry argument.
-
 \begin{proposition}[Strict positivity of the first term]
     \label{prop:first-term}
     Let $D_n^0 := \diag(\frac12, 1, \dots, 1, \frac12)$, $A := g^* D_n^0 g$, $Z := g^* J_n(0) g$, and $e \sim \mathrm{Exp}(1)$ independent of $g$. Then for all $n \ge 1$ and all $t > 0$,
@@ -490,74 +595,66 @@ The first term in~\eqref{eq:comp} falls immediately to an exact symmetry argumen
 \end{proposition}
 
 \begin{proof}
-Observe that $tI - J_n(t) = tD_n^0 - J_n(0)$, so $Q_t^0 = tA - Z$. Hence $Q_t^0 + (t+1)e_+$ has the same law as $(e - Z) + t(A + e)$. For the second summand, let $S := \diag(1, -1, 1, -1, \dots, (-1)^n)$. Because $J_n(0)$ is zero on the diagonal and supported on the first off-diagonals, we have $S J_n(0) S = -J_n(0)$ and $S D_n^0 S = D_n^0$. Since $Sg \overset{d}{=} g$, it follows that $(A, -Z) \overset{d}{=} (A, Z)$, and therefore
+Since $tI - J_n(t) = tD_n^0 - J_n(0)$, we have $Q_t^0 = tA - Z$, so $Q_t^0 + (t+1)e_+ \overset{d}{=} (e - Z) + t(A + e)$. With $S := \diag(1, -1, 1, \dots, (-1)^n)$, we have $S J_n(0) S = -J_n(0)$, $S D_n^0 S = D_n^0$, and $Sg \overset{d}{=} g$, so $(A, -Z) \overset{d}{=} (A, Z)$ and therefore
 \[
     Q_t^0 + (t-1)e_-
     = tA - Z + (t-1)e_-
     \overset{d}{=} tA + Z + (t-1)e
     = (Z - e) + t(A + e).
 \]
-Set $X := t(A + e) > 0$ (almost surely) and $Y := e - Z$. Then the two terms have laws $X + Y$ and $X - Y$. Almost surely $|Y| \neq X$; when $|Y| < X$, both $X+Y$ and $X-Y$ are positive so $\sgn(X+Y)+\sgn(X-Y) = 2$, while when $|Y| > X$ they have opposite signs so the sum is $0$. Taking expectations yields $\frac12(\E\sgn(X+Y) + \E\sgn(X-Y)) = \Prob(|Y| < X)$.
-
-To see strict positivity, evaluate at the explicit point $g_0 = (1, 1, 0, \dots, 0)^T \in \C^{n+1}$ and $e_0 = 1$: then $Z_0 = g_0^* J_n(0) g_0 = 1 = e_0$, so $|e_0 - Z_0| = 0 < t(A_0 + e_0)$. By continuity of $(g, e) \mapsto |e - Z| - t(A + e)$ and strict positivity of the joint Gaussian--exponential density on $\C^{n+1} \times (0, \infty)$, the open set $\{|e - Z| < t(A + e)\}$ has strictly positive probability.
+Setting $X := t(A + e) > 0$ (almost surely) and $Y := e - Z$, the two variables have laws $X + Y$ and $X - Y$. Almost surely $|Y| \neq X$; hence $\frac12(\sgn(X+Y) + \sgn(X-Y)) = \mathbf{1}_{\{|Y| < X\}}$, and taking expectations gives $\Prob(|Y| < X)$. At the explicit witness $g_0 = (1, 1, 0, \dots, 0)^T \in \C^{n+1}$ and $e_0 = 1$, we have $Z_0 = g_0^* J_n(0) g_0 = 1 = e_0$, so $|e_0 - Z_0| = 0 < t(A_0 + e_0)$. By continuity and strict positivity of the joint Gaussian--exponential density on $\C^{n+1} \times (0, \infty)$, $\Prob(|e - Z| < t(A + e)) > 0$.
 \end{proof}
 
-By Lemma~\ref{lem:decomp} and Proposition~\ref{prop:first-term}, proving $H_n'(t) > 0$ on $(0, 1/2]$ reduces entirely to conquering one last fortress: showing that $\Delta_n(t) > 0$.
+By Lemma~\ref{lem:decomp} and Proposition~\ref{prop:first-term}, proving $H_n'(t) > 0$ on $(0, 1/2]$ reduces entirely to proving $\Delta_n(t) > 0$.
 
 \section{The Turning Point: Exact Characteristic Function and the Vertical-Chord Integral}
 \label{sec:chord}
 
-Earlier asymptotic approaches treated $Q_t$ as a generic $(n+3)$-dimensional quadratic form, combining trace expansions with local central limit theorems; near $t = 0$, that route hit a threshold around $n \sim 10^{40}$. Yet glancing back at Section~\ref{sec:matrix} reveals that $Q_t$ is far from generic: its characteristic function can be evaluated \emph{verbatim} as a closed rational function.
+Treating $Q_t$ as a generic $(n+3)$-dimensional quadratic form via trace expansions and local central limit theorems encounters enormous threshold constants near $t = 0$. Looking back at Proposition~\ref{prop:jacobi}(i), however, shows that $Q_t$ has an exact closed-form rational characteristic function.
 
 For $s = i\xi$ ($\xi \in \R \setminus \{0\}$), the Gaussian--exponential determinant formula gives
 \[
     \Phi_{n,t}(\xi) := \E\bigl[e^{i\xi Q_t}\bigr]
     = \Bigl[\bigl(1 - s(t+1)\bigr)\bigl(1 - s(t-1)\bigr)\det\bigl(I_{n+1} - s(tI - J_n(t))\bigr)\Bigr]^{-1}.
 \]
-Factor out $(-s)^{n+3}$ and set $y := t - 1/s = t + i/\xi \in \C \setminus [-1,1]$; the denominator is precisely $(-s)^{n+3}(y^2 - 1)p_t(y)$. Now apply the classical \emph{Joukowsky map}
+Factoring out $(-s)^{n+3}$ and setting $y := t - 1/s = t + i/\xi \in \C \setminus [-1,1]$ identifies the denominator as $(-s)^{n+3}(y^2 - 1)p_t(y)$. Under the \emph{Joukowsky map}
 \[
     y = \frac{u + u^{-1}}{2}, \qquad u \in \D \setminus \{0\},
 \]
-and write $w := u^{-1}$. Substituting $U_m(y) = \frac{w^{m+1} - w^{-m-1}}{w - w^{-1}}$ into~\eqref{eq:charpoly}, the three terms miraculously collapse into a difference of two squares:
+with $w := u^{-1}$, substituting $U_m(y) = \frac{w^{m+1} - w^{-m-1}}{w - w^{-1}}$ into~\eqref{eq:charpoly} collapses the three terms into a difference of two squares:
 \[
     U_{n+1}(y) - 2tU_n(y) + t^2 U_{n-1}(y)
     = \frac{w^n(w - t)^2 - w^{-n}(w^{-1} - t)^2}{w - w^{-1}}.
 \]
-At the same time, $-s = (y - t)^{-1}$ yields
+Meanwhile, $-s = (y - t)^{-1}$ yields
 \begin{equation}
     s = \frac{-2u}{1 - 2tu + u^2},
     \qquad
     \frac{ds}{du} = \frac{-2(1 - u^2)}{(1 - 2tu + u^2)^2}.
     \label{eq:s-u}
 \end{equation}
-Multiplying all factors together, every power of $2$ and $u$ cancels cleanly to produce the exact characteristic function:
+All powers of $2$ and $u$ cancel cleanly, giving the exact characteristic function
 \begin{equation}
     \Phi_{n,t}(\xi)
     = \frac{(1 - 2tu + u^2)^{n+3}}{(1 - u^2)\bigl[(1 - tu)^2 - u^{2n+2}(u - t)^2\bigr]}.
     \label{eq:phi-exact}
 \end{equation}
-Pause for a moment to appreciate the anatomy of~\eqref{eq:phi-exact}: in the denominator, $(1 - tu)^2$ is the infinite-dimensional half-line Jacobi limit, whereas $-u^{2n+2}(u - t)^2$ is the finite-dimensional boundary reflection coming back from the far end of the matrix. Inside the unit disk $\D$, the difference between finite order $n$ and the $n \to \infty$ limit is \emph{exponentially small}.
+In the denominator of~\eqref{eq:phi-exact}, $(1 - tu)^2$ is the infinite half-line Jacobi limit, whereas $-u^{2n+2}(u - t)^2$ is the boundary reflection from the far end of $J_n(t)$—exponentially small inside the unit disk $\D$.
 
-Now insert~\eqref{eq:phi-exact} into the Fourier inversion formula for $\Delta_n(t)$:
+Substituting~\eqref{eq:phi-exact} into the Fourier inversion formula for~\eqref{eq:delta-def},
 \[
     \Delta_n(t) = 4t\,\rho_t(0) - 2(1 - t^2)\rho_t'(0)
-    = \frac{1}{2\pi i}\int_{-i\infty}^{i\infty}\bigl(4t + 2(1 - t^2)s\bigr)\Phi_{n,t}(s/i)\,ds.
+    = \frac{1}{2\pi i}\int_{-i\infty}^{i\infty}\bigl(4t + 2(1 - t^2)s\bigr)\Phi_{n,t}(s/i)\,ds
 \]
-(Even if $t$ happens to equal a node $u_j(t)$, the matrix $tI - J_n(t)$ has at most one zero eigenvalue because the eigenvalues are simple, so $\Phi_{n,t}(\xi) = O(|\xi|^{-(n+2)})$ and $\xi\Phi_{n,t} \in L^1(\R)$ for all $n \ge 1$.)
-
-Changing variables via~\eqref{eq:s-u} triggers four favorable cancellations in rapid succession:
+(since the eigenvalues of $J_n(t)$ are simple, $tI - J_n(t)$ has at most one zero eigenvalue, so $\Phi_{n,t}(\xi) = O(|\xi|^{-(n+2)})$ and $\xi\Phi_{n,t} \in L^1(\R)$ for all $n \ge 1$), and changing variables via~\eqref{eq:s-u} produces four simultaneous cancellations:
 \begin{enumerate}[label=\textup{(\arabic*)}]
-    \item The factor $(1 - u^2)$ in the denominator of $\Phi_{n,t}$ cancels identically against the numerator of $ds/du$.
-    \item The linear factor simplifies to $4t + 2(1 - t^2)s = \frac{4(t - u)(1 - tu)}{1 - 2tu + u^2}$, introducing no pole at $u = 0$.
-    \item Introducing the Blaschke disk automorphism $\varphi_t(u) := \frac{u - t}{1 - tu}$, we have $|\varphi_t(u)| < 1$ and $|u| < 1$ throughout $\D$, hence $|u^{2n+2}\varphi_t(u)^2| < 1$: the integrand is \emph{holomorphic with no poles} in the open unit disk $\D$. At the two boundary endpoints $u_\pm := t \pm ia$ ($a := \sqrt{1 - t^2}$), the denominator has only a simple zero on $\partial\D$, which is crushed by the $n$-th-order zero $(1 - 2tu + u^2)^n$ in the numerator, leaving bounded removable singularities.
-    \item By Cauchy's theorem, we may deform the integration curve inside $\D$ into the straight \emph{vertical chord} $u = t + iv$ ($v \in [-a, a]$) joining $u_-$ and $u_+$. Along this chord,
-    \[
-        1 - 2t(t + iv) + (t + iv)^2 = a^2 - v^2 \ge 0:
-    \]
-    the imaginary part vanishes identically!
+    \item The factor $(1 - u^2)$ in $\Phi_{n,t}$ cancels against the numerator of $ds/du$.
+    \item $4t + 2(1 - t^2)s = \frac{4(t - u)(1 - tu)}{1 - 2tu + u^2}$ introduces no pole at $u = 0$.
+    \item With the Blaschke disk automorphism $\varphi_t(u) := \frac{u - t}{1 - tu}$, we have $|u^{2n+2}\varphi_t(u)^2| < 1$ throughout $\D$, so the integrand is holomorphic in $\D$, with bounded removable singularities at $u_\pm := t \pm ia$ ($a := \sqrt{1 - t^2}$) where the $n$-th-order numerator zero $(1 - 2tu + u^2)^n$ cancels the simple denominator zero.
+    \item By Cauchy's theorem, we deform the contour inside $\D$ onto the \emph{vertical chord} $u = t + iv$ ($v \in [-a, a]$), along which $1 - 2t(t + iv) + (t + iv)^2 = a^2 - v^2 \ge 0$ is purely real and nonnegative!
 \end{enumerate}
 
-Using conjugate symmetry across the real axis ($v \leftrightarrow -v$) yields the central analytic engine of the paper.
+Conjugate symmetry ($v \leftrightarrow -v$) then yields our main analytic representation:
 
 \begin{proposition}[Vertical-chord integral for $\Delta_n(t)$]
     \label{prop:chord}
@@ -570,59 +667,44 @@ Using conjugate symmetry across the real axis ($v \leftrightarrow -v$) yields th
     \end{equation}
 \end{proposition}
 
-\begin{remark}[Direct contour-free proof in Lean~4]
+\begin{remark}[Direct partial-fraction proof in Lean~4]
     \label{rem:chord-lean}
-    The formalization in \code{ChordIntegral.lean} proves~\eqref{eq:delta-chord} directly from the barycentric divided-difference formula for $\Delta_n(t)$ (via \code{barycentricDelta_eq_chordDelta}), bypassing Fourier inversion of probability densities altogether. Under the Joukowsky map, the vertical chord $u(v) = t + iv$ ($v \in [-a,a]$) traces a closed loop $\Gamma(v) = \frac12(u(v) + u(v)^{-1})$ winding clockwise once around $(t,1]$ and zero times around $[-1,t)$. Expanding the rational integrand in partial fractions over the $n+3$ extended nodes $\mathbf{z}_t$ reduces the entire identity to elementary single-pole integrals $\int \frac{\Gamma'(v)}{\Gamma(v) - z}\,dv$, each evaluated by an explicit \code{Complex.log} primitive and the Fundamental Theorem of Calculus.
+    The Lean~4 module \code{ChordIntegral.lean} proves~\eqref{eq:delta-chord} directly from the barycentric divided-difference formula for $\Delta_n(t)$ (\code{barycentricDelta_eq_chordDelta}), bypassing Fourier inversion of probability densities altogether. Under the Joukowsky map, the vertical chord $u(v) = t + iv$ ($v \in [-a,a]$) traces a closed loop $\Gamma(v) = \frac12(u(v) + u(v)^{-1})$ winding clockwise once around $(t,1]$ and zero times around $[-1,t)$. Expanding the rational integrand in partial fractions over the $n+3$ extended nodes $\mathbf{z}_t$ reduces the identity to single-pole integrals $\int \frac{\Gamma'(v)}{\Gamma(v) - z}\,dv$, evaluated via explicit \code{Complex.log} primitives and the Fundamental Theorem of Calculus.
 \end{remark}
 
 \section{Main Term versus Reflection Tail: All Orders \texorpdfstring{$n \ge 4$}{n >= 4} at Once}
 \label{sec:n4}
 
-Write $z := u^{2n+2}\varphi_t(u)^2$ for the reflection term in~\eqref{eq:delta-chord}, and split the integrand into a half-line main term and a reflection tail:
+Write $z := u^{2n+2}\varphi_t(u)^2$ in~\eqref{eq:delta-chord} and split into a half-line main term and a reflection tail:
 \[
     \frac{-\varphi_t(u)}{1 - z} = -\varphi_t(u) + \frac{-\varphi_t(u)\,z}{1 - z}.
 \]
-Along the vertical chord $u = t + iv$, abbreviate $D := |1 - tu|^2 = a^4 + t^2 v^2$ and $x := |u|^2 = t^2 + v^2$. Then $a^2 - v^2 = 1 - x$, and
+Along $u = t + iv$, set $D := |1 - tu|^2 = a^4 + t^2 v^2$ and $x := |u|^2 = t^2 + v^2$. Then $a^2 - v^2 = 1 - x$ and
 \[
-    -\varphi_t(u)
-    = \frac{-iv}{a^2 - itv}
-    = \frac{tv^2 - ia^2 v}{D}
-    =: \alpha + i\beta.
+    -\varphi_t(u) = \frac{-iv}{a^2 - itv} = \frac{tv^2 - ia^2 v}{D} =: \alpha + i\beta.
 \]
 
-A quick order-of-magnitude check already reveals why the proof works effortlessly:
+The exponential separation is now completely transparent:
 \begin{itemize}[leftmargin=1.8em]
-    \item The main-term real part $\alpha = \frac{tv^2}{D} > 0$ is strictly positive everywhere; weighted by $(a^2 - v^2)^n$, its integral on $t \in (0, 1/2]$ scales like $(1 - t^2)^n \ge (3/4)^n$.
-    \item For the tail, the algebraic identity
-    \[
-        x - \frac{v^2}{D}
-        = x - \frac{x - t^2}{1 - (2 - x)t^2}
-        = \frac{t^2(1 - x)^2}{D} \ge 0
-    \]
-    shows that $|\varphi_t(u)|^2 = \frac{v^2}{D} \le x$, hence $|z| \le x^{n+2}$. Weighted by $(1 - x)^n$, the product $(1 - x)^n x^{n+2}$ peaks at $4^{-n}$!
+    \item The main-term real part $\alpha = \frac{tv^2}{D} > 0$ is everywhere positive; weighted by $(a^2 - v^2)^n$, its integral for $t \in (0, 1/2]$ scales like $(1 - t^2)^n \ge (3/4)^n$.
+    \item Since $x - \frac{v^2}{D} = \frac{t^2(1 - x)^2}{D} \ge 0$, we have $|\varphi_t(u)|^2 = \frac{v^2}{D} \le x$, hence $|z| \le x^{n+2}$. Weighted by $(1 - x)^n$, the reflection tail is suppressed to $O(4^{-n})$!
 \end{itemize}
 
-One subtlety must be respected when bounding the tail: as $t \to 0^+$, the main term scales like $O(t)$. A naive bound $|\varphi_t|\frac{|z|}{1 - |z|}$ discards the factor $t$, causing the tail-to-main ratio to blow up as $t \to 0^+$. In reality, at $t = 0$ both $u = iv$ and $\varphi_0(iv) = iv$ are purely imaginary, so $z = (iv)^{2n+4}$ is purely real and $-\varphi_0(iv)\frac{z}{1-z}$ is purely imaginary---its real part vanishes identically at $t = 0$!
+One subtlety requires care as $t \to 0^+$: the main term is $O(t)$, whereas a crude modulus bound $|\varphi_t|\frac{|z|}{1-|z|}$ throws away the factor $t$ and blows up relative to the main term as $t \to 0^+$. In fact, at $t = 0$ both $u = iv$ and $\varphi_0(iv) = iv$ are purely imaginary, so $z = (iv)^{2n+4}$ is purely real and the tail's real part vanishes identically at $t = 0$.
 
-To preserve this $O(t)$ cancellation, we take the real part \emph{before} applying the triangle inequality. Writing $\frac{z}{1 - z} = \frac{z - |z|^2}{|1 - z|^2}$ gives
+To preserve this $O(t)$ factor, take the real part \emph{before} applying the triangle inequality. Writing $\frac{z}{1 - z} = \frac{z - |z|^2}{|1 - z|^2}$ yields
 \begin{equation}
     \left|\RePart\!\left((\alpha + i\beta)\frac{z}{1 - z}\right)\right|
     \le \alpha\,\frac{|z|}{1 - |z|} + |\beta|\,\frac{|\ImPart z|}{(1 - |z|)^2}.
     \label{eq:real-sep}
 \end{equation}
-The first term already carries $\alpha = \frac{tv^2}{D}$. For the second term, write $\arg u = \frac{\pi}{2} - \theta_1$ ($\theta_1 := \arctan\frac{t}{v}$) and $\arg \varphi_t(u) = \frac{\pi}{2} + \theta_2$ ($\theta_2 := \arctan\frac{tv}{a^2}$). Adding arguments turns all right angles into an integer multiple of $\pi$:
+The first term already carries $\alpha = \frac{tv^2}{D}$. For the second term, write $\arg u = \frac{\pi}{2} - \theta_1$ ($\theta_1 := \arctan\frac{t}{v}$) and $\arg \varphi_t(u) = \frac{\pi}{2} + \theta_2$ ($\theta_2 := \arctan\frac{tv}{a^2}$). Then
 \[
     \arg z = (n + 2)\pi + \psi,
     \qquad
     \psi := 2\theta_2 - (2n + 2)\theta_1.
 \]
-Since $\theta_1, \theta_2 > 0$ have opposite signs in $\psi$, and since $\arctan y < y$ for $y > 0$ while $v \le a \implies \frac{v}{a^2} \le \frac{1}{v}$, we obtain
-\[
-    |\psi| \le \max\bigl(2\theta_2, (2n+2)\theta_1\bigr) < \frac{(2n + 2)t}{v}.
-\]
-Consequently $|\ImPart z| = |z|\,|\sin\psi| < \frac{(2n+2)t}{v}|z|$. Multiplying by $|\beta| = \frac{a^2 v}{D}$ cancels the factor $v$ and extracts the common factor $t$ cleanly!
-
-Dividing~\eqref{eq:delta-chord} by $\frac{8t}{\pi}$ yields the uniform comparison
+Since $\theta_1, \theta_2 > 0$ enter with opposite signs, $\arctan y < y$ ($y > 0$), and $v \le a \implies \frac{v}{a^2} \le \frac{1}{v}$, we get $|\psi| \le \max(2\theta_2, (2n+2)\theta_1) < \frac{(2n+2)t}{v}$. Hence $|\ImPart z| = |z|\,|\sin\psi| < \frac{(2n+2)t}{v}|z|$, and multiplying by $|\beta| = \frac{a^2 v}{D}$ cancels $v$ and pulls out the factor $t$. Dividing~\eqref{eq:delta-chord} by $\frac{8t}{\pi}$ yields the uniform bound
 \begin{equation}
     \frac{\pi}{8t}\Delta_n(t) \ge M_n(t) - R_n(t)
     \qquad \bigl(t \in (0, 1/2]\bigr),
@@ -642,21 +724,17 @@ where
 \end{proposition}
 
 \begin{proof}
-We bound $M_n(t)$ from below and $R_n(t)$ from above by closed-form Beta functions.
-
-\smallskip
-\noindent\textbf{Step 1: Closed-form lower bound on $M_n(t)$.}
+\textbf{Step 1: Main-term lower bound.}
 Substituting $v = aw$ gives
 \[
     M_n(t) = a^{2n+1}\int_0^1 \frac{(1 - w^2)^n w^2}{a^2 + t^2 w^2}\,dw.
 \]
-With respect to the probability weight proportional to $(1 - w^2)^n w^2\,dw$ on $[0,1]$, whose total mass is $\frac12 B(\frac32, n+1)$, the expectation of $w^2$ is $\frac{B(5/2, n+1)}{B(3/2, n+1)} = \frac{3}{2n+5}$. Applying Jensen's inequality (equivalently Cauchy--Schwarz) to the convex function $\lambda \mapsto \lambda^{-1}$ gives
+Under the probability weight proportional to $(1 - w^2)^n w^2\,dw$ on $[0,1]$ (total mass $\frac12 B(\frac32, n+1)$), the expectation of $w^2$ is $\frac{3}{2n+5}$. Applying Jensen's inequality (equivalently Cauchy--Schwarz) to $\lambda \mapsto \lambda^{-1}$ gives
 \[
     M_n(t)
-    \ge \frac{a^{2n+1}}{a^2 + \frac{3}{2n+5}t^2}\cdot\frac12 B\!\left(\frac32, n+1\right)
-    = \frac{2n+5}{2\bigl((2n+5) - (2n+2)t^2\bigr)}\,(1 - t^2)^{n + 1/2}\,B\!\left(\frac32, n+1\right).
+    \ge \frac{2n+5}{2\bigl((2n+5) - (2n+2)t^2\bigr)}\,(1 - t^2)^{n + 1/2}\,B\!\left(\frac32, n+1\right).
 \]
-One checks directly that $(1 - s)^{n + 1/2}/((2n+5) - (2n+2)s)$ is strictly decreasing in $s = t^2 \in [0, 1/4]$ (its logarithmic derivative has numerator $-(2n+1)(2n+5) + (2n+2)(2n-1)s + 4(n+1) < 0$), so the right-hand side attains its minimum at $t = 1/2$:
+This lower bound is strictly decreasing in $t^2 \in [0, 1/4]$, hence attains its minimum at $t = 1/2$:
 \begin{equation}
     M_n(t) \ge M_{\mathrm{lb}}(n)
     := \frac{2n + 5}{3(n + 3)}\left(\frac34\right)^{n + 1/2} B\!\left(\frac32, n + 1\right).
@@ -664,23 +742,23 @@ One checks directly that $(1 - s)^{n + 1/2}/((2n+5) - (2n+2)s)$ is strictly decr
 \end{equation}
 
 \smallskip
-\noindent\textbf{Step 2: Closed-form upper bound on $R_n(t)$.}
-In $R_n(t)$, change variables to $x = t^2 + v^2$ ($dv = \frac{dx}{2v}$, with $v \le \sqrt{x}$) and extend the lower integration limit from $t^2$ down to $0$. For all $t^2 \le \frac14$ and $x \in [0,1]$, elementary algebra gives
+\noindent\textbf{Step 2: Reflection-tail upper bound.}
+In $R_n(t)$, substitute $x = t^2 + v^2$ ($dv = \frac{dx}{2v}$, $v \le \sqrt{x}$) and lower the integration limit from $t^2$ to $0$. For all $t^2 \le \frac14$ and $x \in [0,1]$,
 \[
     D = 1 - (2 - x)t^2 \ge \frac{2 + x}{4},
     \qquad
     \frac{a^2}{D^2} \le \frac{12}{(2 + x)^2},
     \qquad
-    1 - |z| \ge 1 - x^{n+2} = (1 - x)S_{n+1}(x),
+    1 - |z| \ge (1 - x)S_{n+1}(x),
 \]
-where $S_{n+1}(x) := \sum_{k=0}^{n+1} x^k$. For every $n \ge 2$ and $x > 0$, two applications of AM--GM (using $3^2 = 9 > 8 = 2^3$, so $3^{2/3} > 2$) yield
+where $S_{n+1}(x) := \sum_{k=0}^{n+1} x^k$. For all $n \ge 2$ and $x > 0$, AM--GM ($3^2 = 9 > 8 = 2^3 \implies 3^{2/3} > 2$) gives
 \[
     (2 + x)S_{n+1}(x)
     \ge (2 + x)(1 + x + x^2 + x^3)
     = 3x + \Bigl(\frac43 + 3x^2\Bigr) + \Bigl(\frac13 + \frac13 + 3x^3\Bigr) + x^4
     > 9x.
 \]
-Using $|z| \le x^{n+1}\cdot\frac{v^2}{D}$ (so that in the first term $\frac{v^2}{D}|z| \le x^{n+2}\cdot\frac{v^2}{D}$, and in the second term $v \le \sqrt{x}$ combines with $|z| = x^{n+1}\frac{v^2}{D}$ to cancel $1/v$ in $dv = \frac{dx}{2v}$ cleanly: $\frac{a^2}{D}\frac{|z|}{(1-|z|)^2}\,dv = \frac{a^2}{2D^2}\frac{x^{n+1} v}{(1-|z|)^2}\,dx \le \frac{a^2}{2D^2}\frac{x^{n+3/2}}{(1-|z|)^2}\,dx$), substituting $D \ge \frac{2+x}{4}$, $\frac{a^2}{D^2} \le \frac{12}{(2+x)^2}$, and $(2+x)S_{n+1}(x) > 9x$ gives
+Using $|z| = x^{n+1}\frac{v^2}{D} \le x^{n+2}$ and combining $v \le \sqrt{x}$ with $dv = \frac{dx}{2v}$ yields
 \begin{equation}
     R_n(t) < T_1(n) + T_2(n)
     := \frac29\, B\!\left(n,\, n + \frac52\right)
@@ -690,26 +768,15 @@ Using $|z| \le x^{n+1}\cdot\frac{v^2}{D}$ (so that in the first term $\frac{v^2}
 
 \smallskip
 \noindent\textbf{Step 3: Base case $n = 4$ and geometric decay.}
-Define the dimensionless ratios $A_k(n) := T_k(n)/M_{\mathrm{lb}}(n)$ ($k = 1, 2$); the factor $\sqrt{\pi}$ cancels identically. At $n = 4$, exact Beta evaluation gives
+Set $A_k(n) := T_k(n)/M_{\mathrm{lb}}(n)$ ($k = 1, 2$); the factor $\sqrt{\pi}$ cancels identically. At $n = 4$,
 \[
-    A_1(4) + A_2(4)
-    = \frac{4039168\sqrt{3}}{9183213}
-    \approx 0.76183 < 1
+    A_1(4) + A_2(4) = \frac{4039168\sqrt{3}}{9183213} \approx 0.76183 < 1
 \]
-(exact square $\frac{16314878132224}{28110467001123} < 1$, with strict margin $> 0.238$). By the Beta recurrence $B(p+1, q) = \frac{p}{p+q}B(p,q)$, the step ratios $r_k(n) := A_k(n+1)/A_k(n)$ are explicit rational functions of $n$ (displayed in Appendix~\ref{app:poly-n4}) whose shifted polynomials at $n = m + 4$ ($m \ge 0$) have strictly positive coefficients, proving $r_1(n) < \frac12$ and $r_2(n) < \frac12$ for all $n \ge 4$ (asymptotically both tend to $\frac13$). By induction on $n \ge 4$,
-\[
-    \frac{R_n(t)}{M_n(t)}
-    \le 2^{-(n-4)}\bigl(A_1(4) + A_2(4)\bigr)
-    < 0.76183 \cdot 2^{-(n-4)} < 1
-    \qquad \bigl(t \in (0, 1/2]\bigr),
-\]
-whence $\Delta_n(t) > 0$.
+(exact square $\frac{16314878132224}{28110467001123} < 1$, margin $> 0.238$). By the Beta recurrence, the step ratios $r_k(n) := A_k(n+1)/A_k(n)$ are explicit rational functions (Appendix~\ref{app:poly-n4}) whose shifted polynomials at $n = m + 4$ ($m \ge 0$) have strictly positive coefficients, giving $r_1(n) < \frac12$ and $r_2(n) < \frac12$ for all $n \ge 4$. By induction, $R_n(t)/M_n(t) \le 2^{-(n-4)}(A_1(4) + A_2(4)) < 1$ on $(0, 1/2]$, whence $\Delta_n(t) > 0$.
 \end{proof}
 
-\section{Low Orders (\texorpdfstring{$n = 1, 2, 3$}{n = 1, 2, 3}) and Proof of Theorem~\ref{thm:full}}
+\section{Low Orders (\texorpdfstring{$n = 1, 2, 3$}{n = 1, 2, 3}) and Proofs of Theorem~\ref{thm:full} and Corollary~\ref{cor:stechkin}}
 \label{sec:finish}
-
-Only the three lowest orders $n = 1, 2, 3$ remain.
 
 \begin{proposition}[Low-order strict monotonicity]
     \label{prop:low-orders}
@@ -717,98 +784,90 @@ Only the three lowest orders $n = 1, 2, 3$ remain.
 \end{proposition}
 
 \begin{proof}
-\textbf{Order $n = 1$.} The nodes of $J_1(t)$ are $u_0(t) = \frac{t-1}{2}$ and $u_1(t) = \frac{t+1}{2}$, giving $E_1(t) = \frac{1 - t^2}{2}$ and $E_1'(t) = -t < 0$ on $(0,1)$.
+\textbf{Order $n = 1$.} $J_1(t)$ has eigenvalues $\frac{t-1}{2}$ and $\frac{t+1}{2}$, so $E_1(t) = \frac{1 - t^2}{2}$ and $E_1'(t) = -t < 0$ on $(0,1)$.
 
 \smallskip
-\noindent\textbf{Order $n = 2$.} The eigenvalues of $J_2(t)$ are $\frac{t - \sqrt{t^2+8}}{4}$, $\frac{t}{2}$, $\frac{t + \sqrt{t^2+8}}{4}$, which yields
+\noindent\textbf{Order $n = 2$.} $J_2(t)$ has eigenvalues $\frac{t - \sqrt{t^2+8}}{4}$, $\frac{t}{2}$, $\frac{t + \sqrt{t^2+8}}{4}$, yielding
 \[
     6E_2(t) = (2 + 7t^2)\sqrt{8 + t^2} - 2 - 24t^2 - t^3,
     \qquad
     6E_2'(t) = \frac{3t}{\sqrt{8 + t^2}}\Bigl(7t^2 + 38 - (t + 16)\sqrt{8 + t^2}\Bigr).
 \]
-Comparing squares gives the polynomial identity
-\[
-    (t + 16)^2(8 + t^2) - (7t^2 + 38)^2
-    = 4(t + 1)\bigl(151 - 87t + 20t^2 - 12t^3\bigr).
-\]
-On $[0,1]$, $151 - 87t + 20t^2 - 12t^3 = (151 - 99t) + 20t^2 + 12t(1 - t^2) \ge 52 > 0$, so $E_2'(t) < 0$ on $(0,1)$.
+Since $(t + 16)^2(8 + t^2) - (7t^2 + 38)^2 = 4(t + 1)(151 - 87t + 20t^2 - 12t^3)$ and $151 - 87t + 20t^2 - 12t^3 = (151 - 99t) + 20t^2 + 12t(1 - t^2) \ge 52 > 0$ on $[0,1]$, we obtain $E_2'(t) < 0$ on $(0,1)$.
 
 \smallskip
-\noindent\textbf{Order $n = 3$.} Exterior monotonicity on $[1/2, 1)$ is already covered by Proposition~\ref{prop:outer}. On $(0, 1/2]$, we remark first that an elementary algebraic proof already gives the unique center maximum: setting $C_\pm := 3 \pm 13t + 17t^2 \pm 15t^3$ and $r_\pm := \sqrt{5 \pm 2t + t^2}$,~\eqref{eq:En} expands to
-\[
-    E_3(t) = \frac{C_+ r_+ + C_- r_-}{8} - 1 - 12t^2 - 2t^4,
-\]
-and square-root concavity / Taylor bounds yield $E_3(t) - E_3(0) \le -\frac{11}{32}t^2 < 0$ for all $t \in (0, 1/2]$ (formalized as \code{explicitError_orderedNode_three_lt_center}). To obtain the stronger strict monotonicity $E_3'(t) < 0$ on all of $(0,1)$, we split $(0, 1/2]$ into five subintervals $[t_0, t_1]$ and certify $\Delta_3(t) > 0$ on each block via a tightened one-dimensional Riemann-sum upper bound on $R_3(t)$ versus the local Jensen lower bound $M_{\mathrm{lb}}(3; t_1)$, as detailed in Appendix~\ref{app:n3}. Combining $\Delta_3(t) > 0$ with Lemma~\ref{lem:decomp} and Proposition~\ref{prop:first-term} gives $E_3'(t) < 0$ on $(0, 1/2]$ as well.
+\noindent\textbf{Order $n = 3$.} Exterior monotonicity on $[1/2, 1)$ is given by Proposition~\ref{prop:outer}. On $(0, 1/2]$, we remark that an elementary algebraic bound already yields the unique center maximum: with $C_\pm := 3 \pm 13t + 17t^2 \pm 15t^3$ and $r_\pm := \sqrt{5 \pm 2t + t^2}$,~\eqref{eq:En} expands to $E_3(t) = \frac{C_+ r_+ + C_- r_-}{8} - 1 - 12t^2 - 2t^4$, and square-root concavity gives $E_3(t) - E_3(0) \le -\frac{11}{32}t^2 < 0$ (formalized as \code{explicitError_orderedNode_three_lt_center}). To obtain full strict monotonicity $E_3'(t) < 0$ on $(0, 1/2]$, we partition $(0, 1/2]$ into five compact blocks and certify $\Delta_3(t) > 0$ on each block (Appendix~\ref{app:n3}); Lemma~\ref{lem:decomp} and Proposition~\ref{prop:first-term} then give $E_3'(t) < 0$.
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:full}]
-(i) Combining Proposition~\ref{prop:outer} (exterior $[1/2,1)$), Lemma~\ref{lem:decomp} + Proposition~\ref{prop:first-term} + Proposition~\ref{prop:n4} (interior $(0,1/2]$ for $n \ge 4$), and Proposition~\ref{prop:low-orders} ($n = 1, 2, 3$), we have $E_n'(t) < 0$ for every $n \ge 1$ and every $t \in (0,1)$. Since $E_n$ is continuous on $[0,1]$, it is strictly decreasing on $[0,1]$. By evenness $E_n(-t) = E_n(t)$, $E_n(t) < E_n(0)$ for every $t \in [-1,1] \setminus \{0\}$, and $E_n(0)$ equals~\eqref{eq:bn-thm} by~\eqref{eq:bn}.
+(i) Combining Proposition~\ref{prop:outer} (on $[1/2, 1)$), Lemma~\ref{lem:decomp} + Proposition~\ref{prop:first-term} + Proposition~\ref{prop:n4} (on $(0, 1/2]$ for $n \ge 4$), and Proposition~\ref{prop:low-orders} ($n = 1, 2, 3$) yields $E_n'(t) < 0$ for every $n \ge 1$ and $t \in (0,1)$. Continuity on $[0,1]$ implies $E_n$ is strictly decreasing on $[0,1]$, and evenness $E_n(-t) = E_n(t)$ forces $E_n(t) < E_n(0)$ for all $t \in [-1,1] \setminus \{0\}$, with $E_n(0)$ given by~\eqref{eq:bn-thm}.
 
-(ii) On $I = [-1,1]$, combining~\eqref{eq:Tn-bound},~\eqref{eq:peano}, and~(i) gives, for all $F \in W^{n+1,1}(I)$,
+(ii) On $I = [-1,1]$,~\eqref{eq:Tn-bound},~\eqref{eq:peano}, and~(i) give, for all $F \in W^{n+1,1}(I)$,
 \begin{align*}
     \Lone{F^{(n)}}
     &\le \Lone{T_n F} + \Lone{F^{(n)} - T_n F} \\
     &\le A_n\Lone{F} + \int_{-1}^{1} E_n(t)\bigl|F^{(n+1)}(t)\bigr|\,dt
      \le 2^n n!\,\Lone{F} + B_n\Lone{F^{(n+1)}}.
 \end{align*}
-For an arbitrary interval $[a,b]$ with $L = b - a > 0$ and $f \in W^{n+1,1}([a,b])$, define $F(y) := f\!\left(\frac{a+b}{2} + \frac{L}{2}y\right)$ on $[-1,1]$. By the chain rule and change of variables,
-\[
-    \Lone{F^{(m)}} = \left(\frac{L}{2}\right)^{m-1}\lVert f^{(m)}\rVert_{L^1([a,b])}
-    \qquad (0 \le m \le n+1).
-\]
-Substituting $m = 0, n, n+1$ into the unit-interval inequality and dividing by $(L/2)^{n-1}$ gives~\eqref{eq:full-ab}, since $2^n n!\,(L/2)^{-n} = 4^n n!\,L^{-n}$.
+For $[a,b]$ of length $L = b - a > 0$ and $f \in W^{n+1,1}([a,b])$, setting $F(y) := f(\frac{a+b}{2} + \frac{L}{2}y)$ gives $\Lone{F^{(m)}} = (L/2)^{m-1}\lVert f^{(m)}\rVert_{L^1([a,b])}$ ($0 \le m \le n+1$), and substituting into the unit-interval bound yields~\eqref{eq:full-ab}.
 
-(iii) Optimality of both constants on $C^\infty([a,b])$ follows from Propositions~\ref{prop:An} and~\ref{prop:sharp} via the same affine rescaling between $[-1,1]$ and $[a,b]$.
+(iii) Optimality of both constants on $C^\infty([a,b])$ follows from Propositions~\ref{prop:An} and~\ref{prop:sharp} via the same affine rescaling.
 
-(iv) By affine rescaling it suffices to work on $I = [-1,1]$. If $F = \lambda U_n$, then $F^{(n+1)} \equiv 0$ and equality holds by Proposition~\ref{prop:An}. Conversely, suppose $F \in C^{n+1}(I)$ achieves equality in~\eqref{eq:main} with $A_n = 2^n n!$ and $B_n = E_n(0)$. Then every step in
-\[
-    \Lone{F^{(n)}}
-    \le \Lone{T_n F} + \int_{-1}^{1} E_n(t)\bigl|F^{(n+1)}(t)\bigr|\,dt
-    \le A_n\Lone{F} + E_n(0)\Lone{F^{(n+1)}}
-\]
-must be an equality, forcing
+(iv) By affine rescaling, take $[a,b] = [-1,1]$. If $F = \lambda U_n$, then $F^{(n+1)} \equiv 0$ and equality holds by Proposition~\ref{prop:An}. Conversely, if $F \in C^{n+1}(I)$ achieves equality in~\eqref{eq:main} with $(A_n, B_n)$, then every inequality in~(ii) is an equality, forcing
 \[
     \int_{-1}^{1} \bigl(E_n(0) - E_n(t)\bigr)\bigl|F^{(n+1)}(t)\bigr|\,dt = 0.
 \]
-The integrand is continuous and nonnegative on $[-1,1]$, and $E_n(0) - E_n(t) > 0$ for all $t \neq 0$ by~(i). Therefore $F^{(n+1)}(t) = 0$ for every $t \neq 0$, and by continuity $F^{(n+1)} \equiv 0$ on $[-1,1]$. Thus $F$ is a polynomial of degree at most $n$ attaining equality in Proposition~\ref{prop:An}, which forces $F = \lambda U_n$ for some $\lambda \in \R$.
+Since the integrand is continuous and nonnegative and $E_n(0) - E_n(t) > 0$ for $t \neq 0$, we get $F^{(n+1)}(t) = 0$ for all $t \neq 0$, hence $F^{(n+1)} \equiv 0$ by continuity. Thus $F$ is a polynomial of degree $\le n$ attaining equality in Proposition~\ref{prop:An}, so $F = \lambda U_n$.
 \end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:stechkin}]
+By Proposition~\ref{prop:jacobi}(ii), each $u_j : (-1,1) \to (r_j, r_{j+1})$ is a $C^1$ diffeomorphism with strictly positive derivative, so the preimage under $u_j$ of any Lebesgue null set has measure zero. Consequently, if $F = G$ almost everywhere on $I$, then $T_n F = T_n G$ almost everywhere on $I$. Together with linearity and~\eqref{eq:Tn-bound}, $T_n$ descends to a well-defined bounded linear operator $T_n : L^1(I) \to L^1(I)$ with $\lVert T_n\rVert_{L^1 \to L^1} \le A_n$ (in fact equal to $A_n$ by evaluating on $Q_n$). For every $f \in \mathcal{W}_n$,~\eqref{eq:peano} and Theorem~\ref{thm:full}(i) give $\Lone{D^n f - T_n f} \le B_n \Lone{f^{(n+1)}} \le B_n$, hence $\mathcal{E}_{A_n} \le B_n$.
+
+Conversely, by Stechkin's inequality~\cite{Stechkin1967} (see~\cite[Proposition~2]{Skorokhodov2019}), for any bounded linear operator $S : L^1(I) \to L^1(I)$ with $\lVert S\rVert_{L^1 \to L^1} \le A_n$ and any $f \in W^{n+1,1}(I)$,
+\[
+    \Lone{D^n f} \le \Lone{Sf} + \Lone{D^n f - Sf}
+    \le A_n\Lone{f} + \left(\sup_{g \in \mathcal{W}_n} \Lone{D^n g - Sg}\right)\Lone{f^{(n+1)}}.
+\]
+Optimality of $B_n$ in Theorem~\ref{thm:full}(iii) forces $\sup_{g \in \mathcal{W}_n}\Lone{D^n g - Sg} \ge B_n$. Taking the infimum over $S$ yields $\mathcal{E}_{A_n} \ge B_n$, so $\mathcal{E}_{A_n} = B_n$ is attained by $T_n$.
+\end{proof}
+
+For supplementary structural observations surrounding the moving-node family—including cross-order interlacing, generalized Gauss quadrature, the cancellation-free integral and $1/\sqrt{\pi n}$ asymptotics for $B_n$, the diffusive Gaussian scaling heuristic, and open problems—see the companion note \code{notes/structural-observations.md} in the repository.
 
 \section{Formal Verification in Lean 4}
 \label{sec:lean}
 
-Every step of the proof of Theorem~\ref{thm:full}---from Chebyshev moment orthogonality and the Jacobi moving-node system to the Gaussian decomposition, the vertical-chord integral, the $n \ge 4$ Beta bounds, the low-order proofs for $n = 1, 2, 3$, and the sharp Sobolev/smoothness conclusions---has been formally verified in Lean~4.32.2 with Mathlib inside the directory \code{Lean/SharpL1/Analysis/}.
+The complete proof of Theorem~\ref{thm:full} has been formally verified in Lean~4.32.2 with Mathlib inside \code{Lean/SharpL1/Analysis/}.
 
-\subsection{Master entry point and axiom audit}
+\subsection{Master entry point, Sobolev characterization, and axiom audit}
 
 The top-level unconditional theorem is
 \begin{center}
     \code{SharpL1.Analysis.theorem_sharp_L1_interpolation_full}
 \end{center}
-in \code{Lean/SharpL1/Analysis/MainTheorem.lean}. Indexed by \code{k : Nat} (corresponding to order $n = k + 1 \ge 1$) and arbitrary real endpoints \code{a < b}, it bundles all four parts of Theorem~\ref{thm:full}:
+in \code{Lean/SharpL1/Analysis/MainTheorem.lean}. Indexed by \code{k : Nat} (order $n = k + 1 \ge 1$) and arbitrary endpoints \code{a < b}, it bundles all four clauses of Theorem~\ref{thm:full}:
 \begin{enumerate}[label=\textup{(\roman*)}]
     \item \code{explicitErrorDerivCurve_neg_all_orders}, \code{explicitErrorCurve_strictAntiOn_Icc_zero_one}, \code{explicitErrorCurve_zero_eq_centerBestConstant}, and \code{explicitErrorCurve_unique_global_max_zero};
-    \item \code{sharp_L1_interpolation_W1} on the one-dimensional Sobolev class \code{SobolevW1 (k + 2) a b f} (iterated absolutely continuous functions satisfying the Fundamental Theorem of Calculus up to order $n+1$ with integrable $(n+1)$-st derivative) and \code{sharp_L1_interpolation_contDiffOn} for \code{ContDiffOn R (k + 2) f (Icc a b)};
-    \item \code{sharp_L1_interpolation_constants_optimal} over globally smooth functions \code{ContDiff R infty f};
+    \item \code{sharp_L1_interpolation_W1} on \code{SobolevW1 (k + 2) a b f}, and \code{sharp_L1_interpolation_contDiffOn} for $C^{n+1}$ functions (\code{ContDiffOn});
+    \item \code{sharp_L1_interpolation_constants_optimal} over smooth functions (\code{ContDiff});
     \item \code{sharp_L1_interpolation_contDiffOn_eq_iff} characterizing equality in $C^{n+1}([a,b])$.
 \end{enumerate}
 
-Verification is reproducible from \code{Lean/} via \code{lake build} followed by \code{lake env lean Audit.lean}. Across the entire library:
+The structure \code{SobolevW1 m a b f} in \code{MovingOperator.lean} encodes the exact one-dimensional characterization~\eqref{eq:W1-char}: a family \code{d : Nat -> R -> R} with \code{d 0 = f} on $[a,b]$, \code{ContinuousOn (d j) (Icc a b)} for $j < m$, \code{IntegrableOn (d m) (Icc a b) volume}, and \code{d j x - d j a = integral_a^x d (j + 1)} for all $j < m$ and $x \in [a,b]$.
+
+Verification is reproduced from \code{Lean/} by running \code{lake build} followed by \code{lake env lean Audit.lean}. Across the entire library, there are zero \code{sorry}s, zero \code{admit}s, zero \code{native_decide}s, and zero custom axioms; \code{Audit.lean} prints the axiom footprint of every main theorem and confirms that all audited declarations depend solely on \code{[propext, Classical.choice, Quot.sound]} (with the pure-kernel \code{decide} certificates for $n = 3$ depending only on \code{[propext]}).
+
+\subsection{Formalization scope and proof-path differences}
+
+We draw an explicit boundary between what is machine-checked in Lean~4 and what appears in prose:
 \begin{itemize}[leftmargin=1.8em]
-    \item there are zero \code{sorry}s, zero \code{admit}s, zero \code{native_decide}s, and zero custom axioms;
-    \item \code{Audit.lean} prints the axiom footprint of every main theorem and confirms that all declarations depend solely on the standard Lean axioms \code{[propext, Classical.choice, Quot.sound]} (with the pure-kernel \code{decide} certificates for $n = 3$ depending only on \code{[propext]}).
+    \item \textbf{Machine-checked in Lean~4:} All four parts of Theorem~\ref{thm:full} and their full all-$n$ proof (Sections~\ref{sec:poly}--\ref{sec:finish} and Appendix~\ref{app:tech}), mapped in Table~\ref{tab:lean-map}.
+    \item \textbf{Streamlined proof paths in Lean~4:} To keep the formal proof elementary in Mathlib without altering any theorem statement, four modules replace analytic detours from the prose:
+    (1)~\code{DividedCDFBridge.lean} proves $0 \le T_n h_t(x) \le 1$ and the eq.~\eqref{eq:comp} bridge algebraically via weighted-exponential CDFs (\code{weightedCdfZero_eq_barycentric_truncatedPower}) rather than Hermite--Genocchi simplex integration;
+    (2)~\code{FirstTermPos.lean} realizes $g^* M g$ via pairs of independent real Gaussian vectors $\frac12(x^T M x + y^T M y)$ (\code{pairQuadForm_pencil_law}) with explicit witness $x_0 = (1, 1, 0, \dots, 0)$, $y_0 = 0$, $e_0 = 1/2$;
+    (3)~\code{ChordIntegral.lean} proves \code{barycentricDelta_eq_chordDelta} via Lagrange partial fractions and \code{Complex.log}/FTC along the Joukowsky loop (Remark~\ref{rem:chord-lean}) rather than Fourier inversion of densities;
+    (4)~\code{LowOrderMono.lean} replaces external floating-point interval arithmetic for $n = 3$ with five kernel-checked natural-number fixed-point Riemann-sum certificates (\code{n3_block0_certified} through \code{n3_block4_certified}) discharged by \code{decide}.
+    \item \textbf{Outside the Lean~4 formalization:} The historical literature comparisons (Section~\ref{sec:history}, Remarks~\ref{rem:burenkov-op} and~\ref{rem:burenkov-kofanov}), the supplementary observations in \code{notes/structural-observations.md}, and the short $L^1$-quotient extension deduction in Corollary~\ref{cor:stechkin} (though all four quantitative ingredients \code{movingOperator_L1_le}, \code{SobolevW1.L1_deriv_sub_movingOperator_le}, \code{sharp_L1_interpolation_constants_optimal}, and \code{explicitErrorCurve_le_centerBestConstant} are Lean-verified) are not separately formalized as Lean theorems.
 \end{itemize}
-
-\subsection{Correspondence between manuscript and Lean 4 proofs}
-
-While the mathematical statements match Theorem~\ref{thm:full} verbatim, four modules streamline analytic detours to stay clean and elementary in Mathlib:
-\begin{itemize}[leftmargin=1.8em]
-    \item \textbf{Divided-difference / CDF bridge (\code{DividedCDFBridge.lean}).} Rather than invoking Hermite--Genocchi simplex integration for $0 \le T_n h_t(x) \le 1$, the Lean proof establishes an exact algebraic identity between barycentric divided differences of truncated powers and the cumulative distribution function at $0$ of weighted exponential sums (\code{weightedCdfZero_eq_barycentric_truncatedPower}), yielding \code{movingOperator_normTruncatedPower_mem_Icc} and the eq.~\eqref{eq:comp} bridge \code{lawSignMean_Hcomp_of_nodes}.
-    \item \textbf{Real-pair Gaussian realization (\code{FirstTermPos.lean}).} Complex Gaussian quadratic forms $g^* M g$ are realized via pairs of independent standard real Gaussian vectors $\frac12(x^T M x + y^T M y)$ (\code{pairQuadForm_pencil_law}), using orthogonal invariance of the standard real Gaussian measure and the explicit witness $x_0 = (1, 1, 0, \dots, 0)$, $y_0 = 0$, $e_0 = 1/2$ to prove \code{firstTerm_lawSignMean_pos}.
-    \item \textbf{Direct partial-fraction chord integral (\code{ChordIntegral.lean}).} As noted in Remark~\ref{rem:chord-lean}, \code{barycentricDelta_eq_chordDelta} is proved directly via Lagrange partial fractions and elementary \code{Complex.log}/FTC integrals along the Joukowsky image of the vertical chord.
-    \item \textbf{Kernel-checked fixed-point arithmetic for $n = 3$ (\code{LowOrderMono.lean}).} Instead of trusting external floating-point interval arithmetic (the companion \code{mpmath.iv} script \code{certify_chebyshev_L1.py} reported in Appendix~\ref{app:n3}), the Lean proof certifies the exact same five subintervals of $(0, 1/2]$ using natural-number fixed-point Riemann sums ($2^4, 2^4, 2^5, 2^5, 2^7$ subintervals, $10^9$ outer scale, $10^6$ intermediate scale, and $10^3$-scaled certified square-root bounds) evaluated inside the Lean kernel by \code{decide} (\code{n3_block0_certified} through \code{n3_block4_certified}), concluding \code{chordDelta_three_pos}.
-\end{itemize}
-
-Table~\ref{tab:lean-map} summarizes the module-by-module correspondence. We emphasize the exact scope boundary: all of Theorem~\ref{thm:full} and its complete proof (Sections~\ref{sec:poly}--\ref{sec:finish} and Appendix~\ref{app:tech}) are formally verified in Lean~4, whereas the structural extensions in Appendix~\ref{app:extensions} are expository complements not required for Theorem~\ref{thm:full} and are not formalized.
 
 \begin{table}[htbp]
 \centering
@@ -831,7 +890,7 @@ Prop.~\ref{prop:jacobi} (global Jacobi nodes) &
 \addlinespace[3pt]
 Sec.~\ref{sec:sharp} (operator $T_n$, $E_n$, eq.~\eqref{eq:bn}) &
 \code{MovingOperator.lean} &
-\code{movingOperator_L1_le}, \code{movingOperator_poly}, \code{movingOperator_normTruncatedPower_mem_Icc}, \code{SobolevW1.deriv_sub_movingOperator_eq}, \code{integral_abs_indicator_sub_movingOperator_eq_explicitError}, \code{explicitError_center_eq} \\
+\code{movingOperator_L1_le}, \code{movingOperator_poly}, \code{movingOperator_normTruncatedPower_mem_Icc}, \code{SobolevW1.deriv_sub_movingOperator_eq}, \code{SobolevW1.L1_deriv_sub_movingOperator_le}, \code{integral_abs_indicator_sub_movingOperator_eq_explicitError}, \code{explicitError_center_eq} \\
 \addlinespace[3pt]
 Prop.~\ref{prop:sharp} \& $C^{n+1}$ equality &
 \code{SharpSobolev.lean} &
@@ -859,95 +918,17 @@ Prop.~\ref{prop:low-orders} \& App.~\ref{app:n3} ($n=1,2,3$) &
 \addlinespace[3pt]
 \textbf{Theorem~\ref{thm:full}} (unconditional bundle) &
 \code{MainTheorem.lean} &
-\code{explicitErrorDerivCurve_neg_all_orders}, \code{explicitErrorCurve_unique_global_max_zero}, \code{sharp_L1_interpolation_W1}, \code{sharp_L1_interpolation_constants_optimal}, \code{sharp_L1_interpolation_contDiffOn_eq_iff}, \code{theorem_sharp_L1_interpolation_full} \\
+\code{explicitErrorDerivCurve_neg_all_orders}, \code{explicitErrorCurve_unique_global_max_zero}, \code{explicitErrorCurve_le_centerBestConstant}, \code{sharp_L1_interpolation_W1}, \code{sharp_L1_interpolation_constants_optimal}, \code{sharp_L1_interpolation_contDiffOn_eq_iff}, \code{theorem_sharp_L1_interpolation_full} \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\section{Retrospective and Open Problems}
-\label{sec:open}
-
-Tracing the arc from the quadratic polynomial $x^2 - \frac14$ to the arbitrary-order Chebyshev polynomial $U_n$, the Jacobi matrix $J_n(x)$, the complex Gaussian quadratic form $Q_t$, and finally the Joukowsky vertical chord $u = t + iv$, one sees why the earlier asymptotic barrier near $n \sim 10^{40}$ dissolved so completely. Low orders did not harbor any hidden anomaly; rather, generic random-matrix bounds could not see the extraordinarily clean rational structure of $\Phi_{n,t}$ in Joukowsky coordinates. Once the contour is pulled onto the vertical chord $u = t + iv$, oscillation disappears, the $(3/4)^n$ versus $(1/4)^n$ gap surfaces immediately, the $t \to 0^+$ cancellation becomes transparent, and the complete proof turns out to be both shorter and far more elementary than a local central limit theorem.
-
-Several stronger properties, though not needed for Theorem~\ref{thm:full}, remain inviting open questions:
-\begin{enumerate}[label=\textup{(\arabic*)}]
-    \item \textbf{Global strict concavity.} Is $E_n$ strictly concave on the entire open interval $(-1,1)$, i.e.\ $E_n''(t) < 0$ for all $t \in (-1,1)$? At present we know strict concavity at the origin ($E_n''(0) < 0$, Appendix~\ref{app:gaussian}) and asymptotically in the $t = O(n^{-1/2})$ scaling window.
-    \item \textbf{Strict monotonicity of the best constants.} Is the sequence $B_n = E_n(0)$ strictly increasing in $n \ge 1$? The asymptotic expansion $1 - B_n \sim (\pi n)^{-1/2}$ (Appendix~\ref{app:asymptotics}) establishes monotonicity for sufficiently large $n$, but an all-order proof remains open.
-    \item \textbf{Global positivity of $\Delta_n(t)$.} The density comparison inequality $\Delta_n(t) > 0$ (equivalently $\rho_t'(0)/\rho_t(0) < \frac{2t}{1-t^2}$ for the density $\rho_t$ of $Q_t$, or $-f_t'(t)/f_t(t) < \frac{2(n+1)t}{1-t^2}$ for the density $f_t$ of the uniform simplex convex combination of the $n+3$ extended nodes $\mathbf{z}_t$) is now proved for all $n \ge 3$ and $t \in (0, 1/2]$. Does it hold across the exterior $t \in (1/2, 1)$ and for $n = 1, 2$ as well?
-\end{enumerate}
 
 \appendix
-
-\section{Expository Extensions: Generalized Gauss Quadrature, Center Asymptotics, and Local Gaussian Profile}
-\label{app:extensions}
-
-This appendix records three complementary structures surrounding the moving-node family. They are \emph{not} required for the proof of Theorem~\ref{thm:full} and are \emph{not} part of the Lean~4 formalization in Section~\ref{sec:lean}; we include them in expository form because they illuminate the broader landscape behind $J_n(x)$ and $E_n(t)$.
-
-\subsection{Cross-order interlacing and generalized Gauss quadrature}
-
-Setting $y = \cos\theta$ in~\eqref{eq:charpoly} and letting $\phi_x(\theta) := \arg\frac{e^{i\theta} - x}{1 - xe^{i\theta}}$ denote the Blaschke phase (which increases strictly from $0$ to $\pi$ on $[0,\pi]$), the eigenvalue angles of $u_{n,j}(x)$ satisfy the phase equation
-\[
-    (n + 1)\theta + \phi_x(\theta) = k\pi \qquad (k = 1, \dots, n+1).
-\]
-Increasing $n$ by $1$ adds $\theta \in (0, \pi)$ to the left-hand side, which forces strict interlacing of nodes across consecutive orders:
-\[
-    u_{n+1,j}(x) < u_{n,j}(x) < u_{n+1,j+1}(x) \qquad (j = 0, \dots, n).
-\]
-Furthermore, embedding the finite matrix $J_n(x)$ into the semi-infinite Jacobi operator on $\ell^2(\N)$ whose $(0,0)$-entry is $x/2$ and whose remaining diagonal entries vanish (with off-diagonals $\frac12$), any closed walk of length at most $2n$ starting at index $0$ never reaches the far boundary entry at index $n$. Hence the moments $\langle e_0, J_n(x)^m e_0 \rangle$ coincide with those of the half-line operator for all $0 \le m \le 2n$. Computing the Stieltjes transform of the half-line operator yields the \emph{generalized Gauss quadrature rule}
-\[
-    \sum_{j=0}^{n} u_j'(x)\,P\bigl(u_j(x)\bigr)
-    = \int_{-1}^{1} P(y)\,\frac{2\sqrt{1 - y^2}}{\pi(1 - 2xy + x^2)}\,dy
-    \qquad (\deg P \le 2n).
-\]
-At $x = 0$ the far-end perturbation disappears and precision increases by one ($\deg P \le 2n+1$), recovering classical Chebyshev--Gauss quadrature. Thus the moving nodes across all orders $n$ are successive interlacing discretizations of a single $x$-dependent spectral measure.
-
-\subsection{Cancellation-free integral and asymptotics for \texorpdfstring{$B_n = E_n(0)$}{B\_n = E\_n(0)}}
-\label{app:asymptotics}
-
-Although~\eqref{eq:bn} gives $B_n$ in closed form, the prefactor $2^{n+1}$ causes severe numerical cancellation at large $n$. Applying Poisson summation to the alternating cosine sum together with Euler's reflection formula for the Gamma function yields the cancellation-free integral representation
-\[
-    1 - B_n
-    = \frac{n + 2}{\pi(n + 1)}\int_0^1 \frac{s^{-1/2}(1 - s)^{n+1}}{1 - (-s)^{n+2}}\,ds.
-\]
-Since $s(1 - s) \le \frac14$ on $[0,1]$, replacing the denominator $1 - (-s)^{n+2}$ by $1$ introduces an error of order $O(4^{-n})$---precisely the $t = 0$ specialization of the $4^{-n}$ reflection tail encountered in Section~\ref{sec:n4}. Evaluating the leading Beta integral produces the high-precision asymptotic formula
-\[
-    1 - B_n
-    = \frac{4^{n+2}}{\pi(n + 1)\binom{2n+4}{n+2}} + O(4^{-n})
-    = \frac{1}{\sqrt{\pi n}}\left(1 + \frac{1}{8n} + O(n^{-2})\right).
-\]
-Table~\ref{tab:bn-values} lists exact formulas and numerical values for several orders $n$ (all now unconditionally proved to be the true optimal constants $B_n$).
-
-\begin{table}[htbp]
-\centering
-\caption{Exact and numerical values of the optimal second constant $B_n = E_n(0)$.}
-\label{tab:bn-values}
-\begin{tabular}{rll@{\qquad}rll}
-\toprule
-$n$ & Exact $B_n$ & Numerical value & $n$ & Exact $B_n$ & Numerical value \\
-\midrule
-$1$ & $1/2$ & $0.500000000$ & $5$ & --- & $0.746758277$ \\
-$2$ & $(2\sqrt{2} - 1)/3$ & $0.609475708$ & $10$ & --- & $0.820466444$ \\
-$3$ & $3\sqrt{5}/4 - 1$ & $0.677050983$ & $20$ & --- & $0.873268528$ \\
-$4$ & $(9\sqrt{3} - 12)/5$ & $0.717691454$ & $100$ & --- & $0.943514627$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Local strict concavity at \texorpdfstring{$t = 0$}{t = 0} and the Gaussian scaling profile}
-\label{app:gaussian}
-
-A parallel Poisson-summation calculation shows that $E_n''(0) < 0$ for every $n \ge 1$, so the center $t = 0$ is always a strict local maximum with negative curvature. On the diffusive scale $t = r/\sqrt{n}$, the central limit theorem for $Q_{r/\sqrt{n}}/\sqrt{n} \Rightarrow N(r, \frac12)$ predicts a universal Gaussian scaling profile: uniformly on compact subsets of $r \in \R$,
-\begin{align*}
-    \sqrt{n}\,H_n(r/\sqrt{n}) &\longrightarrow r\erf(r) + \pi^{-1/2}e^{-r^2} = \E|r - Z|,\\
-    H_n'(r/\sqrt{n}) &\longrightarrow \erf(r),\\
-    n^{-1/2}H_n''(r/\sqrt{n}) &\longrightarrow 2\pi^{-1/2}e^{-r^2},
-\end{align*}
-where $Z \sim N(0, \frac12)$. The limit $\E|r - Z|$ gives an intuitive probabilistic explanation for the smooth parabolic minimum of $H_n$ at the origin.
 
 \section{Technical Supplements: \texorpdfstring{$n \ge 4$}{n >= 4} Monotonicity Polynomials and \texorpdfstring{$n = 3$}{n = 3} Certification}
 \label{app:tech}
 
-To keep the proof of Theorem~\ref{thm:full} completely self-contained, we record the two verification details omitted from Sections~\ref{sec:n4} and~\ref{sec:finish}. Both are formally verified inside Lean~4 (\code{ChordBoundsN4.lean} and \code{LowOrderMono.lean}) and independently reproduced in seconds by the companion Python script \code{certify_chebyshev_L1.py}.
+To keep the proof of Theorem~\ref{thm:full} self-contained, we record the two verification details used in Sections~\ref{sec:n4} and~\ref{sec:finish}. Both are formally verified inside Lean~4 (\code{ChordBoundsN4.lean} and \code{LowOrderMono.lean}) and independently reproduced by the companion Python script \code{certify_chebyshev_L1.py}.
 
 \subsection{Positive-coefficient polynomials for \texorpdfstring{$n \ge 4$}{n >= 4}}
 \label{app:poly-n4}
@@ -969,7 +950,7 @@ Every coefficient is strictly positive, proving $r_1(n) < \frac12$ and $r_2(n) <
 \subsection{Five-subinterval certification of \texorpdfstring{$\Delta_3(t) > 0$}{Delta\_3(t) > 0} on \texorpdfstring{$(0, 1/2]$}{(0, 1/2]}}
 \label{app:n3}
 
-At $n = 3$, the global one-shot bound across all of $(0, 1/2]$ in Proposition~\ref{prop:n4} slightly exceeds $1$. Partitioning $(0, 1/2]$ into five compact blocks $[t_0, t_1]$ and writing $s_i := t_i^2$, we keep the exact lower integration limit $x \ge s_0$ and replace the global estimates by the sharper monotone block bounds
+At $n = 3$, the global one-shot bound across $(0, 1/2]$ in Proposition~\ref{prop:n4} slightly exceeds $1$. Partitioning $(0, 1/2]$ into five compact blocks $[t_0, t_1]$ and writing $s_i := t_i^2$, we keep the exact lower integration limit $x \ge s_0$ and replace the global estimates by the sharper monotone block bounds
 \[
     \frac{v^2}{D} \le \phi_{2,\max}(x) := \frac{x - s_0}{1 - (2 - x)s_0},
     \qquad
@@ -979,13 +960,12 @@ where
 \[
     S_{\mathrm{eff}}(x) := 1 + x + x^2 + x^3 + x^4\,\frac{1 - s_0}{1 - (2 - x)s_0}.
 \]
-This produces an explicit smooth, bounded one-dimensional upper-bound integral $R_{\mathrm{ub}}(3; t_0, t_1)$ over the compact interval $[s_0, 1]$ (with zero truncation error and no tail) to compare against the local Jensen main-term lower bound
+This produces an explicit smooth, bounded one-dimensional upper-bound integral $R_{\mathrm{ub}}(3; t_0, t_1)$ over $[s_0, 1]$ (with zero truncation error and no tail) to compare against the local Jensen main-term lower bound
 \[
-    M_{\mathrm{lb}}(3; t_1)
-    = \frac{176}{315}\,\frac{(1 - s_1)^{7/2}}{11 - 8s_1}.
+    M_{\mathrm{lb}}(3; t_1) = \frac{176}{315}\,\frac{(1 - s_1)^{7/2}}{11 - 8s_1}.
 \]
 
-We verify $R_{\mathrm{ub}}(3; t_0, t_1) < M_{\mathrm{lb}}(3; t_1)$ on all five blocks in two completely independent ways:
+We verify $R_{\mathrm{ub}}(3; t_0, t_1) < M_{\mathrm{lb}}(3; t_1)$ on all five blocks in two independent ways:
 \begin{enumerate}[label=\textup{(\arabic*)}]
     \item \textbf{Pure-kernel Lean~4 certification (\code{LowOrderMono.lean}).} On each block $[t_0, t_1]$, \code{LowOrderMono.lean} divides $[s_0, 1]$ into $2^d$ uniform subintervals ($d = 4, 4, 5, 5, 7$, i.e.\ $16, 16, 32, 32, 128$ boxes), bounds the integrand on each box by exact monotone natural-number fixed-point arithmetic (scale $10^9$ for box ceilings, $10^6$ for intermediate denominators, and $10^3$-scaled certified integer square-root enclosures), and checks the strict inequality against the integer lower bound on $M_{\mathrm{lb}}(3; t_1)$ inside the Lean kernel via \code{decide} (\code{n3_block0_certified} through \code{n3_block4_certified}, depending only on \code{[propext]}).
     \item \textbf{Companion Python interval arithmetic (\code{certify_chebyshev_L1.py}).} Using \code{mpmath.iv} at 40-digit precision with $128$ uniform subintervals per block produces the rigorous bounds reported in Table~\ref{tab:n3-cert}.
@@ -1012,5 +992,104 @@ $[23/50,\, 1/2]$  & $0.022212407$ & $0.022681618$ & $\le 0.9793132$ ($>0.0206$) 
 \end{table}
 
 All five ratios are strictly less than $1$, establishing $\Delta_3(t) > 0$ for every $t \in (0, 1/2]$ and hence $E_3'(t) < 0$ for every $t \in (0, 1)$.
+
+\begin{thebibliography}{99}
+
+\bibitem{BKP1997}
+V.~F. Babenko, V.~A. Kofanov, and S.~A. Pichugov,
+\emph{On additive inequalities for intermediate derivatives of functions given on a finite interval},
+Ukrainian Math. J. \textbf{49} (1997), no.~5, 685--696.
+
+\bibitem{BKKP2003}
+V.~F. Babenko, N.~P. Korneichuk, V.~A. Kofanov, and S.~A. Pichugov,
+\emph{Inequalities for Derivatives and Their Applications},
+Naukova Dumka, Kiev, 2003 (Russian).
+
+\bibitem{BabenkoSkorokhodov2012}
+Yu.~V. Babenko and D.~S. Skorokhodov,
+\emph{The Kolmogorov and Stechkin problems for classes of functions whose second derivative belongs to the Orlicz space},
+Mat. Zametki \textbf{91} (2012), no.~2, 172--183; English transl. in Math. Notes \textbf{91} (2012), no.~2, 161--171.
+
+\bibitem{Boyanov1975}
+B.~D. Boyanov,
+\emph{Best interpolation methods for certain classes of differentiable functions},
+Mat. Zametki \textbf{17} (1975), 511--524; English transl. in Math. Notes \textbf{17} (1975).
+
+\bibitem{Burenkov1980}
+V.~I. Burenkov,
+\emph{Exact constants in inequalities for norms of intermediate derivatives on a finite interval},
+Trudy Mat. Inst. Steklov. \textbf{156} (1980), 22--29 (Russian); \url{https://www.mathnet.ru/eng/tm2408}.
+
+\bibitem{Burenkov1986}
+V.~I. Burenkov,
+\emph{Exact constants in inequalities for norms of intermediate derivatives on a finite interval. II},
+Trudy Mat. Inst. Steklov. \textbf{173} (1986), 38--49 (Russian); \url{https://www.mathnet.ru/eng/tm2147}.
+
+\bibitem{CurrySchoenberg1966}
+H.~B. Curry and I.~J. Schoenberg,
+\emph{On P\'olya frequency functions IV: The fundamental spline functions and their limits},
+J. Analyse Math. \textbf{17} (1966), 71--107, \href{https://doi.org/10.1007/BF02788653}{doi:10.1007/BF02788653}.
+
+\bibitem{GuoLiuXu2024}
+D.~Guo, Y.~Liu, and G.~Xu,
+\emph{An optimal interpolation problem with Hermite information in the Sobolev class $W_1^n([-1,1])$},
+Trudy Inst. Mat. Mekh. UrO RAN \textbf{30} (2024), no.~1, 270--279, \href{https://doi.org/10.21538/0134-4889-2024-30-1-270-279}{doi:10.21538/0134-4889-2024-30-1-270-279}.
+
+\bibitem{Kofanov1984}
+V.~A. Kofanov,
+\emph{Approximation in the mean of classes of differentiable functions by algebraic polynomials},
+Izv. Akad. Nauk SSSR Ser. Mat. \textbf{47} (1983), no.~5; English transl. in Math. USSR Izv. \textbf{23} (1984), no.~2, 353--365, \href{https://doi.org/10.1070/im1984v023n02abeh001774}{doi:10.1070/im1984v023n02abeh001774}.
+
+\bibitem{Kofanov2002}
+V.~A. Kofanov,
+\emph{Inequalities of Kolmogorov Type and Extremal Problems of Analysis},
+Doctoral Dissertation, Dnepropetrovsk, 2002 (Ukrainian).
+
+\bibitem{Kolmogorov1939}
+A.~N. Kolmogorov,
+\emph{On inequalities between the upper bounds of the successive derivatives of an arbitrary function on an infinite interval},
+Uchen. Zap. Moskov. Gos. Univ. Matematika \textbf{30} (1939), 3--16 (Russian).
+
+\bibitem{Landau1913}
+E.~Landau,
+\emph{Einige Ungleichungen f\"ur zweimal differentiierbare Funktionen},
+Proc. London Math. Soc. (2) \textbf{13} (1913), 43--49.
+
+\bibitem{Pinkus1989}
+A.~Pinkus,
+\emph{On $L^1$-Approximation},
+Cambridge Tracts in Mathematics \textbf{93}, Cambridge Univ. Press, Cambridge, 1989, \href{https://doi.org/10.1017/CBO9780511526497}{doi:10.1017/CBO9780511526497}.
+
+\bibitem{Rafalson2004}
+S.~Rafalson,
+\emph{On constants in some inequalities for intermediate derivatives on a finite interval},
+J. Approx. Theory \textbf{127} (2004), no.~2, 207--222, \href{https://doi.org/10.1016/j.jat.2004.03.003}{doi:10.1016/j.jat.2004.03.003}.
+
+\bibitem{Shadrin2014}
+A.~Shadrin,
+\emph{The Landau--Kolmogorov inequality revisited},
+Discrete Contin. Dyn. Syst. \textbf{34} (2014), no.~3, 1183--1210, arXiv:1210.7708.
+
+\bibitem{Skorokhodov2018}
+D.~S. Skorokhodov,
+\emph{Optimal Recovery of Operators and Functionals and Related Extremal Problems of Approximation Theory},
+Doctoral Dissertation, Oles Honchar Dnipro National University / Institute of Mathematics NAS of Ukraine, Dnipro--Kyiv, 2018 (Ukrainian).
+
+\bibitem{Skorokhodov2019}
+D.~Skorokhodov,
+\emph{On the Landau--Kolmogorov inequality between $\|f'\|_\infty$, $\|f\|_\infty$ and $\|f'''\|_1$},
+Res. Math. \textbf{27} (2019), no.~1, 55--66, \href{https://doi.org/10.15421/241906}{doi:10.15421/241906}.
+
+\bibitem{Skorokhodov2022}
+D.~Skorokhodov,
+\emph{The Landau--Kolmogorov problem on a finite interval in the Taikov case},
+J. Approx. Theory \textbf{280} (2022), 105771, arXiv:2107.01698.
+
+\bibitem{Stechkin1967}
+S.~B. Stechkin,
+\emph{Best approximation of linear operators},
+Mat. Zametki \textbf{1} (1967), no.~2, 137--148; English transl. in Math. Notes \textbf{1} (1967), no.~2, 91--99.
+
+\end{thebibliography}
 
 \end{document}

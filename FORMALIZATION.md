@@ -1,43 +1,88 @@
-# Lean Formalization Status
+# Lean 4 Formalization Map
 
-The complete all-$n$ proof in [`paper.tex`](paper.tex) ([`paper.pdf`](paper.pdf); archived Chinese exposition [`notes/chebyshev_L1_complete_zh.tex`](notes/chebyshev_L1_complete_zh.tex)) (Theorem 1 `thm:full`) is formalized unconditionally in Lean 4.32.2 / Mathlib inside [`Lean/`](Lean/).
+This document maps [`paper.tex`](paper.tex) (*Sharp Second Constants in $L^1$ Landau--Kolmogorov Inequalities on a Finite Interval*, Section 9) to the machine-checked Lean 4.32.2 + Mathlib formalization in `Lean/`.
 
-## Verification & Axiom Policy
+**Master theorem:** `SharpL1.Analysis.theorem_sharp_L1_interpolation_full` in [`Lean/SharpL1/Analysis/MainTheorem.lean`](Lean/SharpL1/Analysis/MainTheorem.lean)  
+**Axiom & certificate audit:** [`Lean/Audit.lean`](Lean/Audit.lean)
 
-- Run from `Lean/`:
-  ```sh
-  LEAN_NUM_THREADS=1 lake build
-  LEAN_NUM_THREADS=1 lake env lean Audit.lean
-  ```
-- Zero `sorry`, zero `admit`, zero `native_decide`, zero custom axioms.
-- Every theorem in [`Lean/Audit.lean`](Lean/Audit.lean) depends only on the standard Lean axioms: `propext`, `Classical.choice`, `Quot.sound` (and pure kernel `decide` certificates depend only on `propext`).
+---
 
-## Complete All-$n$ Module Map (`Lean/SharpL1/Analysis/`)
+## 1. Verification Scope & Proof-Path Boundaries
 
-1. **`ChebyshevFirstConstant.lean`** (Section 2, Claim 1 `clm:An`):
-   - `chebyshevMonicU`, `chebyshevSign`, `firstBestConstant` ($A_n = 2^n n!$).
-   - Moment orthogonality (`intervalIntegral_chebyshevSign_mul_pow_eq_zero`), exact $L^1$ norm (`intervalIntegral_abs_chebyshevMonicU`), sharp polynomial $L^1$ inequality (`polynomial_L1_deriv_le`, `firstBestConstant_le_of_poly_bound`), and polynomial extremizer uniqueness (`polynomial_L1_deriv_eq_iff`).
-2. **`GlobalNodes.lean`** (Section 3):
-   - Full-interval `orderedNode` theory on $[-1, 1]$: `continuous_orderedNode`, `orderedNode_neg`, `hasDerivAt_orderedNode_neg`, exact endpoint/center values (`orderedNode_neg_one`, `orderedNode_one`, `orderedNode_zero`, `chebyshevGrid`), `orderedNode_strictMonoOn_Icc`, `orderedNode_bijOn_Icc`, `orderedNode_last_gt_half`.
-3. **`DividedCDFBridge.lean`**:
-   - Bridges `weightedExpSum` / `weightedCdfZero` / `lawSignMean` to `barycentricDividedDifferenceOn` of `truncatedPower`, culminating in `lawSignMean_Hcomp_of_nodes` (eq. (9)).
-4. **`FirstTermPos.lean`** (Section 5, Claim 4 `clm:first-term`):
-   - `firstTerm_lawSignMean_pos` and `firstTerm_weightedCdfZero_pos` for all $n \ge 1, t > 0$, proved via real-pair Gaussian quadratic forms (`pairQuadForm_pencil_law`), alternating-sign orthogonal invariance (`altSignEquiv`), and explicit witness `((x0, 0), 1/2)`.
-5. **`ChordIntegral.lean`** (Section 5, Claim 5 `clm:chord`):
-   - `blaschke`, `chordDelta`, `barycentricDelta_eq_chordDelta`, `lawSignMean_diff_eq_chordDelta` for all $n \ge 1, t \in (0, 1)$, proved via Lagrange partial fractions, the Joukowsky vertical-chord loop, and elementary `Complex.log`/FTC single-pole integrals.
-6. **`ExplicitError.lean`** (Sections 4–5):
-   - `explicitErrorAt`, `explicitErrorCurve`, `HCurve`, continuity, evenness (`explicitErrorCurve_neg`), boundary values, exact center cosine sum (`explicitErrorCurve_zero`), `HasDerivAt` on $(-1, 1)$, unconditional exterior monotonicity on $[1/2, 1)$ (`explicitErrorDerivCurve_neg_of_Ico_half_one`), eq. (9) decomposition (`deriv_HCurve_eq_lawSignMean`), and conditional `chordDelta > 0` monotonicity (`explicitErrorCurve_strictAntiOn_of_chordDelta_pos`).
-7. **`ChordBoundsN4.lean`** (Section 6 & Appendix B.1):
-   - `chordDelta_pos_of_ge_four`: $0 < \mathrm{chordDelta}\; n\; t$ for all $n \ge 4$ and $t \in (0, 1/2]$ via polar bounds, Cauchy-Schwarz main-term lower bound, Wallis/half-Beta recurrences, and step ratios $< 1/2$.
-8. **`LowOrderMono.lean`** (Section 7 & Appendix B.2):
-   - Elementary strict monotonicity for $n = 1, 2$ (`hasDerivAt_explicitError_orderedNode_one`, `hasDerivAt_explicitError_orderedNode_two`), explicit $n = 3$ center bound (`explicitError_orderedNode_three_lt_center`), and kernel-certified 5-block integer fixed-point quadrature (`n3_block0_certified`..`n3_block4_certified` via `decide`) yielding `chordDelta_three_pos` ($0 < \mathrm{chordDelta}\; 3\; t$ on $(0, 1/2]$).
-9. **`MovingOperator.lean`** (Sections 3–4):
-   - `movingOperator` ($T_n$), `SobolevW1`, `movingOperator_eq_factorial_mul_barycentric`, `movingOperator_poly`, `movingOperator_L1_le`, `SobolevW1.taylor_formula`, `SobolevW1.deriv_sub_movingOperator_eq`, `SobolevW1.L1_deriv_sub_movingOperator_le`, `integral_abs_indicator_sub_movingOperator_eq_explicitError`, `explicitError_center_eq`.
-10. **`SharpSobolev.lean`** (Sections 4 & 7, Claim 2 `clm:sharp`):
-    - `SobolevW1.ofContDiff`, `SobolevW1.ofContDiffOn`, `SobolevW1.rescaleToUnit`, `sharp_sobolev_unit_le`, `sharp_sobolev_Icc_le`, `sharp_sobolev_contDiffOn_Icc_le`, `sharp_firstConstant_Icc_le`, `sharp_secondConstant_Icc_le`, `sharp_sobolev_contDiffOn_Icc_eq_iff`.
-11. **`MainTheorem.lean`** (Theorem 1 `thm:full`):
-    - Unconditional all-order monotonicity (`explicitErrorDerivCurve_neg_all_orders`, `explicitErrorCurve_strictAntiOn_Icc_zero_one`), unique center maximum (`explicitErrorCurve_unique_global_max_zero`), and the bundled master theorem `theorem_sharp_L1_interpolation_full` (`sharp_L1_interpolation_W1`, `sharp_L1_interpolation_contDiffOn`, `sharp_L1_interpolation_constants_optimal`, `sharp_L1_interpolation_contDiffOn_eq_iff`).
+### Machine-Checked in Lean 4
+All four clauses of Theorem 1 in [`paper.tex`](paper.tex) are unconditionally proved for every order $n = k + 1 \ge 1$ (`k : Nat`) and every compact interval $[a, b]$ ($a < b$):
+- **Monotonicity and unique center maximum of $E_n$:** `explicitErrorDerivCurve_neg_all_orders`, `explicitErrorCurve_strictAntiOn_Icc_zero_one`, `explicitErrorCurve_zero_eq_centerBestConstant`, `explicitErrorCurve_unique_global_max_zero`, and `explicitErrorCurve_le_centerBestConstant`.
+- **Sobolev & $C^{n+1}$ sharp inequalities:** `sharp_L1_interpolation_W1` on `SobolevW1 (k + 2) a b f`, and `sharp_L1_interpolation_contDiffOn` on $C^{n+1}([a,b])$.
+- **Lexicographic optimality of $(A_n, B_n)$:** `sharp_L1_interpolation_constants_optimal` over smooth (`ContDiff`) functions.
+- **$C^{n+1}$ equality characterization:** `sharp_L1_interpolation_contDiffOn_eq_iff` (scalar multiples of rescaled $U_n$).
 
-## Historical Artifacts
+### One-Dimensional Sobolev Definition (`SobolevW1`)
+In [`Lean/SharpL1/Analysis/MovingOperator.lean`](Lean/SharpL1/Analysis/MovingOperator.lean), `SobolevW1 m a b f` formalizes $W^{m,1}[a,b]$ directly via the classical 1D absolutely continuous characterization: a derivative family `d : Nat -> R -> R` with `d 0 = f` on $[a,b]$, `ContinuousOn (d j) (Icc a b)` for $j < m$, `IntegrableOn (d m) (Icc a b) volume`, and the Fundamental Theorem of Calculus relation
+$$\mathrm{d}_j(x) - \mathrm{d}_j(a) = \int_a^x \mathrm{d}_{j+1}(s)\,ds \qquad \forall j < m,\ \forall x \in [a,b].$$
 
-The earlier v0.2 finite-certificate infrastructure (`Chebyshev.lean`, `RootBrackets.lean`, `Certificate/*`, `Jacobi*`, `Probability/*`, `certificates/`, `notes/`, [`notes/paper-v0.2-zh.tex`](notes/paper-v0.2-zh.tex)) and Chinese exposition ([`notes/chebyshev_L1_complete_zh.tex`](notes/chebyshev_L1_complete_zh.tex)) are preserved in the repository.
+### Streamlined Proof Paths vs. Paper Prose
+Without altering any theorem statement, four Lean modules use elementary algebraic/complex-analytic paths tailored to Mathlib:
+1. **Weighted-exponential CDFs instead of Hermite--Genocchi integration** ([`DividedCDFBridge.lean`](Lean/SharpL1/Analysis/DividedCDFBridge.lean)): `weightedCdfZero_eq_barycentric_truncatedPower` establishes $0 \le T_n h_t(x) \le 1$ and the barycentric identity directly via finite exponential laws.
+2. **Paired real Gaussian vectors instead of complex Gaussian matrices** ([`FirstTermPos.lean`](Lean/SharpL1/Analysis/FirstTermPos.lean)): `pairQuadForm_pencil_law` represents $g^* M g$ via independent real pairs $\frac12(x^T M x + y^T M y)$ with explicit positive witness.
+3. **Partial fractions + `Complex.log` FTC instead of Fourier inversion** ([`ChordIntegral.lean`](Lean/SharpL1/Analysis/ChordIntegral.lean)): `barycentricDelta_eq_chordDelta` derives the vertical-chord contour formula along the Joukowsky loop using `Complex.log` and the Fundamental Theorem of Calculus.
+4. **Pure-kernel `decide` fixed-point quadrature for $n = 3$ instead of `mpmath.iv`** ([`LowOrderMono.lean`](Lean/SharpL1/Analysis/LowOrderMono.lean)): `n3_block0_certified` through `n3_block4_certified` verify the five subintervals on $(0, 1/2]$ purely inside Lean's kernel via exact natural-number arithmetic (`by decide`, zero external arithmetic or `native_decide`).
+
+### Outside the Lean 4 Formalization
+- Historical and literature comparisons in [`paper.tex`](paper.tex) Section 1.1, Remarks 3.2 and 4.2, and [`notes/literature.md`](notes/literature.md).
+- Supplementary/unformalized analytical observations in [`notes/structural-observations.md`](notes/structural-observations.md) (cross-order interlacing, generalized Gauss quadrature walk counts, cancellation-free $1/\sqrt{\pi n}$ asymptotics, $B_n$ tables for $n=1\dots 100$, and heuristic Gaussian scaling).
+- The short $L^1$-quotient extension step concluding Stechkin's problem (Corollary 2 in [`paper.tex`](paper.tex)), although all four quantitative ingredients (`movingOperator_L1_le`, `SobolevW1.L1_deriv_sub_movingOperator_le`, `sharp_L1_interpolation_constants_optimal`, and `explicitErrorCurve_le_centerBestConstant`) are Lean-verified.
+
+---
+
+## 2. Module Map (`Lean/SharpL1/Analysis/`)
+
+| Paper Result | Lean Module | Key Verified Declarations |
+| --- | --- | --- |
+| Prop. `prop:An` ($A_n = 2^n n!$ & $U_n$ uniqueness) | [`ChebyshevFirstConstant.lean`](Lean/SharpL1/Analysis/ChebyshevFirstConstant.lean) | `intervalIntegral_chebyshevSign_mul_pow_eq_zero`, `polynomial_L1_deriv_le`, `firstBestConstant_le_of_poly_bound`, `polynomial_L1_deriv_eq_iff` |
+| Prop. `prop:jacobi` (global nodes on $[-1, 1]$) | [`GlobalNodes.lean`](Lean/SharpL1/Analysis/GlobalNodes.lean) | `orderedNode_bijOn_Icc`, `orderedNode_neg`, `orderedNode_zero`, `hasDerivAt_orderedNode` (building on `JacobiOrdered`, `JacobiSymmetry`, `JacobiContainment`, `OrderedNodeCurves`) |
+| Sec. `sec:sharp` (operator $T_n$, $E_n$, eq. `eq:bn`) | [`MovingOperator.lean`](Lean/SharpL1/Analysis/MovingOperator.lean) | `movingOperator_L1_le`, `movingOperator_poly`, `movingOperator_normTruncatedPower_mem_Icc`, `SobolevW1.deriv_sub_movingOperator_eq`, `SobolevW1.L1_deriv_sub_movingOperator_le`, `integral_abs_indicator_sub_movingOperator_eq_explicitError`, `explicitError_center_eq` |
+| Prop. `prop:sharp` & $C^{n+1}$ equality | [`SharpSobolev.lean`](Lean/SharpL1/Analysis/SharpSobolev.lean) | `sharp_sobolev_Icc_le`, `sharp_firstConstant_Icc_le`, `sharp_secondConstant_Icc_le`, `sharp_sobolev_contDiffOn_Icc_eq_iff` |
+| Prop. `prop:outer` & Lem. `lem:decomp` | [`DividedCDFBridge.lean`](Lean/SharpL1/Analysis/DividedCDFBridge.lean), [`ExplicitError.lean`](Lean/SharpL1/Analysis/ExplicitError.lean) | `weightedCdfZero_eq_barycentric_truncatedPower`, `explicitErrorDerivCurve_neg_of_Ico_half_one`, `deriv_HCurve_eq_lawSignMean`, `lawSignMean_Hcomp_of_nodes` |
+| Prop. `prop:first-term` (first term $> 0$) | [`FirstTermPos.lean`](Lean/SharpL1/Analysis/FirstTermPos.lean) | `pairQuadForm_pencil_law`, `firstTerm_lawSignMean_pos` |
+| Prop. `prop:chord` (vertical-chord integral) | [`ChordIntegral.lean`](Lean/SharpL1/Analysis/ChordIntegral.lean) | `barycentricDelta_eq_chordDelta`, `lawSignMean_diff_eq_chordDelta` |
+| Prop. `prop:n4` & App. `app:poly-n4` ($n \ge 4$) | [`ChordBoundsN4.lean`](Lean/SharpL1/Analysis/ChordBoundsN4.lean) | `rem_lt_main_of_ge_four`, `chordDelta_pos_of_ge_four` |
+| Prop. `prop:low-orders` & App. `app:n3` ($n=1,2,3$) | [`LowOrderMono.lean`](Lean/SharpL1/Analysis/LowOrderMono.lean) | `explicitError_orderedNode_one_strictAntiOn`, `explicitError_orderedNode_two_strictAntiOn`, `explicitError_orderedNode_three_lt_center`, `n3_block0_certified`..`n3_block4_certified`, `chordDelta_three_pos` |
+| **Theorem 1** (`thm:full`) | [`MainTheorem.lean`](Lean/SharpL1/Analysis/MainTheorem.lean) | `explicitErrorDerivCurve_neg_all_orders`, `explicitErrorCurve_unique_global_max_zero`, `explicitErrorCurve_le_centerBestConstant`, `sharp_L1_interpolation_W1`, `sharp_L1_interpolation_constants_optimal`, `sharp_L1_interpolation_contDiffOn_eq_iff`, `theorem_sharp_L1_interpolation_full` |
+| Axiom & `decide` footprint audit | [`Lean/Audit.lean`](Lean/Audit.lean) | `#print axioms` on all top-level theorems: only `[propext, Classical.choice, Quot.sound]` (`[propext]` for `n=3` `decide` certificates) |
+
+---
+
+## 3. Reproduction & CI Verification
+
+### Local Verification
+
+```bash
+# Lean 4 build + axiom audit (Lean v4.32.2 + Mathlib)
+cd Lean
+lake build
+lake env lean Audit.lean
+
+# Independent Python / mpmath.iv interval-arithmetic cross-check (threshold n = 4, 5-block n = 3)
+cd ..
+python certify_chebyshev_L1.py
+```
+
+### GitHub Actions CI Runs
+- **Lean proof checks (`lean.yml`) & Certificate checks (`certificates.yml`) on `main` (PR #7 merge `0957b75`):**
+  - Lean proof checks: [Run #45768034782](https://github.com/Ye-Chern/sharp-L1-interpolation/actions/runs/45768034782)
+  - Certificate checks: [Run #45768034799](https://github.com/Ye-Chern/sharp-L1-interpolation/actions/runs/45768034799)
+- **PR #8 (`docs/english-paper`):**
+  - Lean proof checks: [Run #45770473215](https://github.com/Ye-Chern/sharp-L1-interpolation/actions/runs/45770473215)
+  - Certificate checks: [Run #45770473112](https://github.com/Ye-Chern/sharp-L1-interpolation/actions/runs/45770473112)
+- **Historical v0.2 CSV certificate run (superseded cutoff $n \ge 20$):**
+  - Certificate checks: [Run #45636804324](https://github.com/Ye-Chern/sharp-L1-interpolation/actions/runs/45636804324)
+
+---
+
+## 4. Historical & Archived Artifacts (Superseded)
+
+For provenance, the repository retains earlier drafts and planning artifacts from the superseded v0.2 route ($n \ge 20$ threshold + $3 \le n \le 19$ CSV bracket certificates) clearly separated from the final verified proof:
+- [`notes/project-history.md`](notes/project-history.md) — Chronological record from the Nov 20 second-order note through PR #7 and PR #8.
+- [`notes/origin-second-order-zh.tex`](notes/origin-second-order-zh.tex), [`notes/working-note-v0.1.tex`](notes/working-note-v0.1.tex), [`notes/paper-v0.2-zh.tex`](notes/paper-v0.2-zh.tex), [`notes/chebyshev_L1_complete_zh.tex`](notes/chebyshev_L1_complete_zh.tex) — Chinese developmental manuscripts.
+- [`certificates/`](certificates/) (`check.py`, `check_constants.py`) — Superseded v0.2 rational-interval certificates (`3 <= n <= 19`).
+- [`notes/phase-a.md`](notes/phase-a.md), [`notes/phase-b.md`](notes/phase-b.md), [`notes/tasks/START.md`](notes/tasks/START.md), [`notes/team-calibration.md`](notes/team-calibration.md) — Archived Lean transition plans and multi-model calibration logs.
