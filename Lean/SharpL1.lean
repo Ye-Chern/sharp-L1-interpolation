@@ -32,3 +32,4 @@ import SharpL1.Analysis.ChebyshevFirstConstant
 import SharpL1.Analysis.DividedCDFBridge
 import SharpL1.Analysis.GlobalNodes
 import SharpL1.Analysis.ChordIntegral
+import SharpL1.Analysis.FirstTermPos

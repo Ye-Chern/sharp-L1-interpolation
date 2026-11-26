@@ -116,3 +116,6 @@ private theorem firstRowSigns :
 #print axioms SharpL1.orderedNode_last_gt_half
 #print axioms SharpL1.Analysis.barycentricDelta_eq_chordDelta
 #print axioms SharpL1.Analysis.lawSignMean_diff_eq_chordDelta
+#print axioms SharpL1.Analysis.pairQuadForm_pencil_law
+#print axioms SharpL1.Analysis.firstTerm_lawSignMean_pos
+#print axioms SharpL1.Analysis.firstTerm_weightedCdfZero_pos
