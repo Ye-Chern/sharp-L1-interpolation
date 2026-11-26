@@ -88,3 +88,11 @@ private theorem firstRowSigns :
 #print axioms SharpL1.Analysis.barycentric_Hcomp
 #print axioms SharpL1.Analysis.hasDerivAt_truncatedPower_zero
 #print axioms SharpL1.Analysis.center_min_of_checked_order
+#print axioms SharpL1.Analysis.intervalIntegral_chebyshevSign_mul_pow_eq_zero
+#print axioms SharpL1.Analysis.intervalIntegral_abs_chebyshevMonicU
+#print axioms SharpL1.Analysis.intervalIntegral_abs_chebyshevMonicU_zpow
+#print axioms SharpL1.Analysis.iteratedDeriv_chebyshevMonicU
+#print axioms SharpL1.Analysis.iteratedDeriv_succ_chebyshevMonicU
+#print axioms SharpL1.Analysis.polynomial_L1_deriv_le
+#print axioms SharpL1.Analysis.firstBestConstant_le_of_poly_bound
+#print axioms SharpL1.Analysis.polynomial_L1_deriv_eq_iff
