@@ -1,6 +1,6 @@
 # Lean Formalization Status
 
-The complete all-$n$ proof in [`chebyshev_L1_complete.tex`](chebyshev_L1_complete.tex) (Theorem 1 `thm:full`) is formalized unconditionally in Lean 4.32.2 / Mathlib inside [`Lean/`](Lean/).
+The complete all-$n$ proof in [`paper.tex`](paper.tex) ([`paper.pdf`](paper.pdf); archived Chinese exposition [`notes/chebyshev_L1_complete_zh.tex`](notes/chebyshev_L1_complete_zh.tex)) (Theorem 1 `thm:full`) is formalized unconditionally in Lean 4.32.2 / Mathlib inside [`Lean/`](Lean/).
 
 ## Verification & Axiom Policy
 
@@ -40,4 +40,4 @@ The complete all-$n$ proof in [`chebyshev_L1_complete.tex`](chebyshev_L1_complet
 
 ## Historical Artifacts
 
-The earlier v0.2 finite-certificate infrastructure (`Chebyshev.lean`, `RootBrackets.lean`, `Certificate/*`, `Jacobi*`, `Probability/*`, `certificates/`, `notes/`, `paper.tex`) is preserved in the repository.
+The earlier v0.2 finite-certificate infrastructure (`Chebyshev.lean`, `RootBrackets.lean`, `Certificate/*`, `Jacobi*`, `Probability/*`, `certificates/`, `notes/`, [`notes/paper-v0.2-zh.tex`](notes/paper-v0.2-zh.tex)) and Chinese exposition ([`notes/chebyshev_L1_complete_zh.tex`](notes/chebyshev_L1_complete_zh.tex)) are preserved in the repository.

@@ -1,0 +1,346 @@
+\documentclass[11pt,a4paper,fontset=fandol]{ctexart}
+\usepackage[margin=24mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,booktabs,enumitem,xcolor,hyperref,fancyhdr}
+\definecolor{navy}{HTML}{203B59}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=navy}
+\ctexset{section={format=\Large\bfseries\color{navy}},subsection={format=\large\bfseries}}
+\pagestyle{fancy}\fancyhf{}\lhead{锐 $L^1$ 插值不等式}\rhead{研究稿 v0.2}\cfoot{\thepage}
+\setlength{\parindent}{2em}\setlength{\parskip}{3pt}\allowdisplaybreaks[2]
+\newcommand{\R}{\mathbb R}\newcommand{\E}{\mathbb E}\newcommand{\Prob}{\mathbb P}\newcommand{\sgn}{\operatorname{sgn}}\newcommand{\tr}{\operatorname{tr}}\newcommand{\diag}{\operatorname{diag}}\newcommand{\norm}[1]{\left\|#1\right\|_1}\newcommand{\G}{\mathcal G}
+\newtheorem{theorem}{定理}\newtheorem{lemma}{引理}\newtheorem{proposition}{命题}
+\title{区间上的锐高阶 $L^1$ 插值不等式\\[4pt]\large Chebyshev 差商、概率表示与中心最大值的计算机辅助证明}
+\author{研究草稿：作者与署名待确认\\\small 基于 Lijails 与 GPT 的讨论笔记整理}
+\date{2026 年 11 月 25 日 · v0.2}
+\begin{document}\maketitle
+\begin{abstract}
+对 $F\in W^{n+1,1}([-1,1])$，研究不等式 $\norm{F^{(n)}}\le A_n\norm F+B_n\norm{F^{(n+1)}}$ 的字典序最佳常数。由第二类 Chebyshev 多项式构造移动节点差商算子，将第二常数精确归约为单变量误差函数 $E_n$ 的最大值。含端点的差商给出 B 样条与复高斯二次型的表示。本文采用解析估计证明 $n\ge20$ 时中心为唯一全局最大值；$n=1,2$ 可直接计算，$3\le n\le19$ 则由有理数区间证书验证（其中 $n=3$ 亦有直接证明）。据此得到所有阶数的候选锐常数公式的计算机辅助证明。正文说明精确证书与独立检查器，另附形式化路线。本文为待独立同行复核的研究稿，不声称文献优先权，也不声称已经 Lean 形式化。
+\end{abstract}
+\section{问题及主结果}
+在 $I=[-1,1]$ 上记 $\norm f=\int_I|f|$。令 $n\ge1$。先极小化 $A$，再固定该值极小化 $B$，使
+\begin{equation}\label{main}
+\norm{F^{(n)}}\le A\norm F+B\norm{F^{(n+1)}}\qquad(F\in W^{n+1,1}(I)).
+\end{equation}
+\begin{theorem}[主结果：计算机辅助证明]\label{thm:main}
+字典序最佳常数为
+\begin{align*}
+A_n&=2^nn!,\\
+B_n&=1-\frac{2^n}{n+1}+\frac{2^{n+1}}{n+1}
+\sum_{k=1}^{\lfloor(n+1)/2\rfloor}(-1)^{k-1}\cos^{n+1}\frac{k\pi}{n+2}.
+\end{align*}
+证明由下文的解析归约、$n\ge20$ 的统一估计和附带的有限整数证书组成。
+\end{theorem}
+在长度为 $L$ 的区间上，系数分别成为 $4^nn!/L^n$ 和 $LB_n/2$。例如 $B_1=1/2$，$B_2=(2\sqrt2-1)/3$，$B_3=3\sqrt5/4-1$。
+
+本问题属于 Landau--Kolmogorov 型导数插值不等式的加法形式，但这里是有限区间、三个 $L^1$ 范数且第一系数取其可能的最小值。一般背景参见 \cite{LK,Finch,MPF}。这些文献仅作为相关背景；尚未完成关于这一精确命题的优先权检索。本文证明的重点是从极值多项式构造算子，再通过概率表示解决中心最大值，不以全区间严格凹性为前提。
+\section{极值多项式与差商算子的构造}
+设 $Q_n=2^{-n}U_n$ 为首一多项式，$s_n=\sgn Q_n$。换元 $y=\cos\theta$ 后，$s_n(\cos\theta)=\sgn\sin((n+1)\theta)$，而 $\cos^k\theta\sin\theta$ 只含不超过 $k+1$ 的正弦频率。因此
+\begin{equation}\label{mom}
+ \int_{-1}^1s_n(y)y^k\,dy=0\quad(0\le k<n),\qquad \norm{Q_n}=2^{1-n}.
+\end{equation}
+若 $P(y)=a_ny^n+\cdots+a_0$，则 $\norm{P^{(n)}}=2n!|a_n|=2^nn!|\int s_nP|\le 2^nn!\norm P$。取 $P=Q_n$ 取等，且非零取等多项式必须在 $Q_n$ 的所有变号点为零，故恰为其常数倍。这说明任何 \eqref{main} 的第一常数不得小于 $A_n=2^nn!$。
+
+令 $r_j=-\cos(j\pi/(n+1))$（$0\le j\le n+1$），$\varepsilon_j=(-1)^{n-j}$。希望构造递增双射 $u_j:I\to[r_j,r_{j+1}]$，并定义
+\begin{equation}\label{T}
+ T_nF(x)=A_n\sum_{j=0}^n\varepsilon_j u_j'(x)F(u_j(x)).
+\end{equation}
+由换元立即有 $\norm{T_nF}\le A_n\norm F$。要求 $T_nP=P^{(n)}$ 对 $\deg P\le n$ 成立，等价于
+\[
+ \sum_j\varepsilon_j u_j'u_j^k=0\ (k<n),\qquad \sum_j\varepsilon_j u_j'u_j^n=2^{-n}.
+\]
+比较 Lagrange 插值的最高次系数即可解出
+\begin{equation}\label{ode}
+ u_j'=\frac{2^{-n}}{\prod_{i\ne j}|u_j-u_i|},\quad u_j(-1)=r_j,\qquad T_nF=n!F[u_0,\ldots,u_n].
+\end{equation}
+下一节的矩阵表示直接保证节点的全局存在及端点条件。
+
+\section{Jacobi 矩阵与对称性}\label{sec:matrix}
+令 $J_n(x)$ 为 $(n+1)\times(n+1)$ 实对称三对角矩阵，两个端点对角元为 $x/2$，其他对角元为零，相邻非对角元为 $1/2$：
+\begin{equation}\label{J}
+ J_n(x)=\frac12\begin{pmatrix}x&1&&&\\1&0&1&&\\&1&\ddots&\ddots&\\&&\ddots&0&1\\&&&1&x\end{pmatrix}.
+\end{equation}
+（$n=1$ 时为 $\frac12\left(\begin{smallmatrix}x&1\\1&x\end{smallmatrix}\right)$。）其首一特征多项式由行列式递推得
+\begin{equation}\label{char}
+ p_x(y)=2^{-n-1}\bigl(U_{n+1}(y)-2xU_n(y)+x^2U_{n-1}(y)\bigr).
+\end{equation}
+所有特征值为单根，按升序记为 $u_j(x)$。由 $U_{n+1}+U_{n-1}=2yU_n$，
+\[
+ p_{-1}=2^{-n}(y+1)U_n,\quad p_0=2^{-n-1}U_{n+1},\quad p_1=2^{-n}(y-1)U_n.
+\]
+单位特征向量 $v_j$ 在反对角线反射下为奇或偶，所以 $|v_{j,0}|=|v_{j,n}|$。特征值导数公式给出 $u_j'=|v_{j,0}|^2>0$。再取
+$\operatorname{adj}(u_jI-J_n)=p_x'(u_j)v_jv_j^*$ 的右上角元素，该余子式为 $2^{-n}$，便恢复 \eqref{ode}。这同时证明了全部节点的存在、严格递增和端点条件。
+
+\subsection{节点的恒等式与特殊位置}
+反射及交替符号的对角共轭给出 $J_n(-x)$ 与 $-J_n(x)$ 酉相似。因此
+\begin{equation}\label{sym}
+ u_j(-x)=-u_{n-j}(x),\quad u_j'(-x)=u_{n-j}'(x),\quad T_nR=(-1)^nRT_n,
+ \quad RF(y)=F(-y).
+\end{equation}
+由矩阵迹和特征值导数，
+\[
+ \sum_j u_j=x,\qquad \sum_j u_j^2=\tfrac{n+x^2}{2},\qquad 0<u_j'\le\tfrac12.
+\]
+更高次幂和均为 $\tr J_n(x)^k$。在 $|x|<1$ 时，由 \eqref{char} 的三角形式或隐式求导可得
+\begin{equation}\label{speed}
+ u_j'=\frac{2(1-u_j^2)}{L_x(u_j)},\qquad L_x(y)=n+2-2(n+1)xy+nx^2.
+\end{equation}
+因为 $L_x(y)=(n+1)(1-y^2)+(n+1)(y-x)^2+1-x^2$，还得到 $u_j'\le2/(n+1)$。在中心，$u_j(0)=-\cos((j+1)\pi/(n+2))$，$u_j'(0)=2(1-u_j(0)^2)/(n+2)$。代入 $y=x$ 可知 $p_x(x)=2^{-n-1}(x^2-1)U_{n-1}(x)$，因而所有节点与对角线的交点参数恰为 $\cos(k\pi/n)$，$k=0,\ldots,n$。
+
+\section{误差函数与第二常数的锐性}\label{sec:sharp}
+定义 $h_t(y)=(y-t)_+^n/n!$。Hermite--Genocchi 公式为
+\[
+ T_nF(x)=\E F^{(n)}\Big(\sum_{j=0}^n\lambda_j u_j(x)\Big),
+\]
+其中 $\lambda$ 在标准 $n$ 维单纯形上均匀分布。由光滑逼近或直接用积分公式，这也适用于 $h_t$，且 $0\le T_nh_t\le1$。Taylor 积分余项及 $T_nP=P^{(n)}$ 给出
+\[
+ (D^n-T_n)F(x)=\int_I(\mathbf1_{x>t}-T_nh_t(x))F^{(n+1)}(t)\,dt.
+\]
+记
+\begin{equation}\label{E}
+ E_n(t)=\int_{-1}^tT_nh_t(x)\,dx+\int_t^1(1-T_nh_t(x))\,dx.
+\end{equation}
+则 $\norm{(D^n-T_n)F}\le (\max E_n)\norm{F^{(n+1)}}$。对 \eqref{T} 换元积分，内部端点的交错贡献抵消，得到
+\begin{equation}\label{Eexplicit}
+ \boxed{E_n(t)=1-t-\frac{2^n}{n+1}(1-t)^{n+1}
+ +\frac{2^{n+1}}{n+1}\sum_j\varepsilon_j(u_j(t)-t)_+^{n+1}.}
+\end{equation}
+由 \eqref{sym} 和 $h_t(y)+(-1)^nh_{-t}(-y)=(y-t)^n/n!$，有 $T_nh_t(x)+T_nh_{-t}(-x)=1$，故 $E_n(-t)=E_n(t)$。
+
+\begin{theorem}[任意阶的锐常数]\label{thm:sharp}
+\eqref{main} 中第一常数最小为 $A_n=2^nn!$，固定它后第二常数最小为 $B_n=\max_{t\in I}E_n(t)$。
+\end{theorem}
+\begin{proof}
+上界已经证明。对任意内点 $t$，取 $P_t$ 为 $h_t$ 在 $u_j(t)$ 上的 $n$ 次插值多项式，令 $G_t=h_t-P_t$。由于 $D^{n+1}h_t=\delta_t\ge0$，插值余项
+\[
+ G_t(y)=h_t[u_0(t),\ldots,u_n(t),y]\prod_{j=0}^n(y-u_j(t))
+\]
+其中差商非负（由光滑逼近的差商中值定理）。各 $u_j$ 单调且在各自区间内运动。因此， $\varepsilon_jG_t(u_j(x))$ 在 $x>t$ 时非负，在 $x<t$ 时非正，因而 $\norm{T_nG_t}=A_n\norm{G_t}$。此外 $P_t^{(n)}=T_nh_t(t)$，于是
+\[
+ G_t^{(n)}=\mathbf1_{x>t}-T_nh_t(t),\qquad (D^n-T_n)G_t=\mathbf1_{x>t}-T_nh_t(x).
+\]
+它们与 $T_nG_t$ 具有相同的分段符号，所有三角不等式取等。故 $\norm{G_t^{(n)}}-A_n\norm{G_t}=E_n(t)$，且 $D^{n+1}G_t=\delta_t$。在全实线定义截断幂与多项式后作紧支撑光滑核卷积，得到光滑逼近，$F,F^{(n)}$ 分别在 $L^1$ 中收敛，且 $\norm{F^{(n+1)}}=1$（核支撑充分小）。于是 $B_n\ge E_n(t)$。端点误差为零，连续性完成证明。
+\end{proof}
+换回长度 $L=b-a$ 的区间，锐不等式为 $\norm{f^{(n)}}\le 4^nn!L^{-n}\norm f+(L/2)B_n\norm{f^{(n+1)}}$（这里各范数在 $[a,b]$）。
+
+
+\section{中心最大值的概率化简}
+由上一节的定理，唯一需要证明的事实为 $E_n(t)<E_n(0)$（$0<|t|\le1$）。记 $H_n=1-E_n$。中心的节点是 $U_{n+1}$ 的零点，代入 \eqref{Eexplicit} 得
+\begin{equation}\label{center}
+E_n(0)=1-\frac{2^n}{n+1}+\frac{2^{n+1}}{n+1}
+\sum_{k=1}^{\lfloor(n+1)/2\rfloor}(-1)^{k-1}\cos^{n+1}\frac{k\pi}{n+2}.
+\end{equation}
+以下始终令 $-1<t<1$。
+\subsection{增广节点与两条恒等式}
+记 $\boldsymbol z_t=(-1,u_0(t),\ldots,u_n(t),1)$，$P_t^*(y)=(y^2-1)p_t(y)$，$S_t(y)=\sgn p_t(y)$ 在区间外零延拓。由 \eqref{ode}、\eqref{speed} 及端点处 $2^{n+1}p_t(1)=L_t(1)$（负端点由反射得到），可得测度恒等式
+\begin{equation}\label{dS}
+ dS_t=(-1)^{n+1}\delta_{-1}+2\sum_j\varepsilon_j\delta_{u_j(t)}-\delta_1
+ =-2^{-n}\sum_{z\in\boldsymbol z_t}\frac{L_t(z)}{(P_t^*)'(z)}\delta_z.
+\end{equation}
+设 $W_t=\sum_{z\in\boldsymbol z_t}\lambda_z z$，其中 $\lambda$ 在标准单纯形上均匀分布。记 $F_t,f_t$ 为其分布函数和密度。Hermite--Genocchi 公式给出
+\begin{align*}
+[\boldsymbol z_t](y-s)_+^{n+2}&=1-F_t(s),\\
+[\boldsymbol z_t](y-s)_+^{n+1}&=f_t(s)/(n+2),\\
+[\boldsymbol z_t](y-s)_+^{n}&=-f_t'(s)/((n+1)(n+2)).
+\end{align*}
+这里导数针对密度自变量。对 $n\ge2$，这些式子可通过求导或光滑逼近取得。
+\begin{lemma}\label{lem:identities}
+有
+\begin{align}
+H_n(t)&=t(2F_t(t)-1)+\frac{1-t^2}{n+1}f_t(t),\label{Hvalue}\\
+H_n'(t)&=2F_t(t)-1+\frac{2(n-1)t}{n+2}f_t(t)
+ +\frac{n(1-t^2)}{(n+1)(n+2)}f_t'(t).\label{Hderivative}
+\end{align}
+\end{lemma}
+\begin{proof}
+由 \eqref{Eexplicit} 与 \eqref{dS}，
+\[H_n(t)=t+\frac1{n+1}[\boldsymbol z_t]L_t(y)(y-t)_+^{n+1}.\]
+利用 $L_t(y)=(n+2)(1-t^2)-2(n+1)t(y-t)$，即得 \eqref{Hvalue}。
+再直接微分 \eqref{Eexplicit}（而不是对 $F_t$ 作全导数），使用 $u_j'=2(1-u_j^2)/L_t(u_j)$ 得
+\[H_n'(t)=1-[\boldsymbol z_t](L_t(y)-2(1-y^2))(y-t)_+^n.\]
+将 $L_t(y)-2(1-y^2)=n(1-t^2)-2(n-1)t(y-t)+2(y-t)^2$ 代入即得 \eqref{Hderivative}。
+\end{proof}
+\subsection{复高斯二次型}
+设 $g$ 为各分量独立的标准复高斯向量，$|g_j|^2$ 是均值为一的独立指数变量。令 $e_\pm$ 为额外的独立标准指数变量，定义
+\begin{align*}
+ Q_t^0&=g^*(tI-J_n(t))g,\\
+ Q_t^+&=Q_t^0+(t+1)e_+,\quad Q_t^-=Q_t^0+(t-1)e_-,\\
+ Q_t&=Q_t^0+(t+1)e_++(t-1)e_- .
+\end{align*}
+记 $\G(X)=\E\sgn X$，$\rho_t$ 为 $Q_t$ 的密度。由复高斯的酉不变性和方向与长度的独立性，$Q_t\stackrel{d}=L(t-W_t)$，其中 $L\sim\mathrm{Gamma}(n+3,1)$ 与 $W_t$ 独立。故
+\[\G(Q_t)=2F_t(t)-1,\quad \rho_t(0)=\frac{f_t(t)}{n+2},\quad \rho_t'(0)=-\frac{f_t'(t)}{(n+1)(n+2)}.\]
+于是 \eqref{Hvalue}、\eqref{Hderivative} 变为
+\begin{align}
+H_n(t)&=t\G(Q_t)+\frac{(n+2)(1-t^2)}{n+1}\rho_t(0),\label{HgaussValue}\\
+H_n'(t)&=\G(Q_t)+2(n-1)t\rho_t(0)-n(1-t^2)\rho_t'(0).\label{Hgauss}
+\end{align}
+同时 $Q_t$ 可写为 $g^*(tD_n-M_n)g$（此处 $g$ 具有 $n+3$ 个分量），其中
+\[M_n=\diag(-1,1)\oplus J_n(0),\qquad D_n=\diag(1,1)\oplus\diag(1/2,1,\ldots,1,1/2).\]
+由于 $D_n>0$，$\G(Q_t)$ 随 $t$ 不减，且在 $t=0$ 为零。特别地 $H_n(t)\ge t\G(Q_t)$（$t\ge0$）。
+
+另一个供有限验证使用的式子由指数卷积得到。若 $Y=X+ae$，则 $\rho_X=\rho_Y+a\rho_Y'$，因而 $\G(X)=\G(Y)-2a\rho_Y(0)$。这是由 Fourier 变换或指数核的微分方程直接得到的。连续使用两次，得到
+\begin{equation}\label{Hcomp}
+ H_n'(t)=\tfrac12(\G(Q_t^+)+\G(Q_t^-))+\tfrac n2(\G(Q_t)-\G(Q_t^0)).
+\end{equation}
+四个 $\G$ 函数均随 $t$ 不减，因为对应二次型的参数方向矩阵正定。本文的解析部分使用 \eqref{Hgauss}，整数证书部分使用 \eqref{Hcomp}。
+\section{统一解析估计：$n\ge20$}\label{sec:analytic}
+\begin{theorem}\label{thm:20}
+若 $n\ge20$，则 $E_n(t)<E_n(0)$ 对所有 $0<|t|\le1$ 成立。
+\end{theorem}
+\subsection{保留有限阶的均值、方差与四阶迹}
+令 $r=\sqrt n t$，暂取 $0\le r\le1$，$R=Q_{r/\sqrt n}/\sqrt n$，$A=rD_n/n-M_n/\sqrt n$，并记 $R$ 的密度为 $p$。
+其特征函数（采用 $\E e^{i\xi R}$ 约定）为
+\[\Phi(\xi)=\det(I-i\xi A)^{-1}=w(\xi)e^{i\theta(\xi)},\quad \theta(0)=0.\]
+由矩阵迹计算，有
+\begin{align*}
+\mu&=\tr A=cr,\quad c=1+2/n\le1.1,\\
+v&=\tr A^2=1/2+2/n+r^2(n+3/2)/n^2<0.654.
+\end{align*}
+更重要的是，保留 $r^2$ 项在 $v$ 中的贡献，可以获得
+\begin{equation}\label{traceRatio}
+\frac{n\tr A^4}{v^2}\le\frac{31}{20}.
+\end{equation}
+证明如下。$\tr M_n^4=3n/8+7/4$，可通过四步闭合路径计数得到；$\tr D_n^4=n+9/8$。由谱反射（在路径块上交替符号共轭，在端点块上交换两个端点）所有含奇数个 $M_n$ 的迹项消失。混合项利用 $D_n\le I$ 及 Cauchy--Schwarz 估计，得到
+\[n\tr A^4\le\frac38+\frac7{4n}+\frac{6r^2}{n}(\tfrac12+2/n)+\frac{r^4}{n^2}(1+9/(8n)).\]
+记 $x=1/n\le1/20$，$y=r^2\le1$。将右侧从 $(31/20)v^2$ 中减去，所得多项式为
+\begin{align*}
+&\tfrac1{80}+\tfrac{27}{20}x+\tfrac{31}{5}x^2
+ +y(\tfrac{93}{10}x^3-\tfrac{139}{40}x^2-\tfrac{29}{20}x)\\
+&\qquad +y^2(\tfrac{279}{80}x^4+\tfrac{141}{40}x^3+\tfrac{11}{20}x^2)\\
+&\ge \tfrac1{80}-\tfrac{x}{10}+\tfrac{109}{40}x^2>0.
+\end{align*}
+这就证明了 \eqref{traceRatio}。
+\subsection{由迹比直接控制振幅}
+令 $\lambda_j$ 为 $A$ 的特征值。函数 $f(a)=\log(1+\xi^2a)/a=\int_0^{\xi^2}(1+sa)^{-1}\,ds$ 在 $a\ge0$ 上凸（在零处连续定义）。以 $\lambda_j^2/v$ 为权重应用 Jensen 不等式，得
+\[\sum_j\log(1+\xi^2\lambda_j^2)\ge\frac{v^2}{\tr A^4}\log(1+\xi^2\tr A^4/v).\]
+因 $s=\tr A^4/v^2\le31/(20n)<1/12$，而 $v\ge1/2$，利用 $\log(1+sz)/s$ 对 $s>0$ 单调递减，得
+\begin{equation}\label{amp}
+ e^{-v\xi^2/2}\le w(\xi)\le W(\xi):=(1+\xi^2/24)^{-6}.
+\end{equation}
+下界来自 $\log(1+z)\le z$。所需积分只有
+\begin{align}
+ I_0&=\int_0^\infty W\,d\xi=63\pi\sqrt{24}/512,\notag\\
+ I_2&=\int_0^\infty \xi^2W\,d\xi=7\pi 24^{3/2}/512<5.051,\notag\\
+ J(L)&=\int_L^\infty W\,d\xi,\qquad J(2.85)<0.153,\quad J(5.7)<0.006.\label{integrals}
+\end{align}
+前两式由 Beta 积分直接得到。后两个上界可由 $\xi=\sqrt{24}\tan u$ 后的余弦幂积分递推严格计算：设 $I_k(a)=\int_a^{\pi/2}\cos^k u\,du$，则 $I_k=(k-1)I_{k-2}/k-\sin a\cos^{k-1}a/k$，$I_0=\pi/2-a$，且 $J(L)=\sqrt{24}I_{10}(\arctan(L/\sqrt{24}))$。用 $3.14159<\pi<3.14160$、$4.89897<\sqrt{24}<4.89898$ 及反正切交错级数前 100 项和余项（当参数 $x>1$ 时，先用 $\arctan x=\pi/2-\arctan(1/x)$），或附带的纯有理数积分界检查器 \texttt{check\_constants.py}，均可核查这些常数。
+\subsection{符号期望的单侧估计}
+由行列式求导，
+\[\partial_r\theta(\xi)=\frac{\xi}{n}\tr(D_n(I+\xi^2A^2)^{-1}).\]
+对 $\xi\ge0$，它位于 $[0,c\xi]$。$\theta$ 在 $r=0$ 时为零，故 $0\le\theta\le\mu\xi$，并有
+\[0\le\mu\xi-\theta(\xi)\le\frac{rv}{n}\xi^3.\]
+后式由 $0\le c\xi-\partial_r\theta\le v\xi^3/n$ 积分而得，注意 $v$ 对 $r\ge0$ 递增。
+由符号期望反演公式，
+\[\G(R)=\frac2\pi\int_0^\infty\frac{w(\xi)\sin\theta(\xi)}\xi\,d\xi.\]
+比较同均值、同方差的高斯积分。相位误差至多 $rvI_2/n$；振幅下界只在正弦为正时有帮助，故仅需估计负正弦部分。取 $L=2.85<\pi/1.1$。当 $\xi\le L$ 时正弦非负；当 $L\le\xi\le2L$ 且 $\sin(\mu\xi)<0$ 时，
+\[\frac{|\sin(\mu\xi)|}{\xi}\le\mu-\pi/\xi\le\mu/2,\]
+而 $\xi\ge2L$ 时它不超过 $\mu$。于是
+\begin{equation}\label{Gbound}
+\G(R)\ge\operatorname{erf}(\mu/\sqrt{2v})-
+\frac{2r}\pi\left(\frac{vI_2}{n}+\frac c2(J(L)+J(2L))\right).
+\end{equation}
+$\mu/\sqrt{2v}\ge(24/25)r$，因为
+\[(1+2x)^2-(24/25)^2(1+6x+3x^2)>0\quad (0\le x\le1/20),\]
+可直接展开验证。由 $\operatorname{erf}$ 在正半轴的凹性及其 Taylor 下界
+\[\operatorname{erf}(24/25)\ge\tfrac2{\sqrt\pi}(z-z^3/3+z^5/10-z^7/42)\big|_{z=24/25}>0.822,\]
+代入 \eqref{integrals}、\eqref{Gbound} 得到
+\begin{equation}\label{Gpositive}
+\G(R)>0.661r\qquad(0<r\le1).
+\end{equation}
+\subsection{分部积分：估计高斯恒等式的残差}
+定义 $\Delta=p'(0)-\mu p(0)/v$，$d(\xi)=(\log\Phi)'(\xi)-i\mu+v\xi$。直接求导得到
+\[\Re d=\xi^3\tr(A^4(I+\xi^2A^2)^{-1}),\quad \Im d=-\xi^2\tr(A^3(I+\xi^2A^2)^{-1}).\]
+对 $h(a)=a^3/(1+\xi^2a^2)$ 有 $0\le h'(a)\le3a^2$。在 $r=0$ 时 $\tr h(A)=0$，由迹函数求导和 $0<D_n\le I$ 得
+\[|\Im d|\le3rv\xi^2/n.\]
+另一方面，以 $\lambda_j^2$ 为权重，$\lambda_j^2$ 与 $(1+\xi^2\lambda_j^2)^{-1}$ 反向单调，故
+\[\frac{\sum_j\lambda_j^4/(1+\xi^2\lambda_j^2)}{\sum_j\lambda_j^2/(1+\xi^2\lambda_j^2)}\le\frac{\tr A^4}{v}.\]
+由 $-w'=\xi w\sum_j\lambda_j^2/(1+\xi^2\lambda_j^2)$，得到 $w\Re d\le(\tr A^4/v)\xi^2(-w')$。分部积分给出
+\[\int_0^\infty\xi^3(-w')\,d\xi=3\int_0^\infty\xi^2w\,d\xi\le3I_2.\]
+利用 Fourier 反演，及 $\int_0^\infty\Phi'(\xi)\,d\xi=-1$ 的虚部为零，有
+\[\Delta=\frac1{\pi v}\int_0^\infty\Im(\Phi d)\,d\xi.\]
+上述运算合法，因 \eqref{amp} 给出可积的多项式尾界，而矩阵求导项至多多项式增长。再用 $|\sin\theta|\le cr\xi$，最终得到
+\begin{align}
+|\Delta|&\le\frac{rI_2}{\pi n}\left(3+3c\frac{n\tr A^4}{v^2}\right)\notag\\
+&<\frac{5.051r}{20\pi}(3+3\cdot1.1\cdot31/20)<0.653r.\label{Delta}
+\end{align}
+\subsection{中心与外围的严格比较}
+由 \eqref{Hgauss} 和缩放，
+\[H_n'(r/\sqrt n)=\G(R)+\left[2(1-1/n)r-(1-r^2/n)\mu/v\right]p(0)-(1-r^2/n)\Delta.\]
+中括号非负，因为 $2(1-1/n)v\ge(1-1/n)(1+4/n)\ge1+2/n$（$n\ge4$）。由 \eqref{Gpositive}、\eqref{Delta}，得
+\begin{equation}\label{localpos}
+H_n'(r/\sqrt n)>0.008r\qquad(0<r\le1).
+\end{equation}
+故中心区域严格成立。中心值本身直接由 \eqref{HgaussValue} 与 \eqref{amp} 控制，无需 Poisson 求和或 Beta 中心公式：
+\[\sqrt n H_n(0)=\frac{n+2}{n+1}p_{n,0}(0)\le\frac{22}{21}\frac{I_0}{\pi}<0.632.\]
+对于 $1/\sqrt n\le t<1$，由 $\G(Q_t)$ 的单调性及 \eqref{HgaussValue}，
+\[\sqrt n H_n(t)\ge\sqrt n t\G(Q_t)\ge\G(Q_{1/\sqrt n})>0.661.\]
+所以外围也严格成立。端点由 $E_n(\pm1)=0$、$E_n(0)>0$ 处理；后者可由 $T_nh_0(x)$ 在原点附近连续且处于 $(0,1)$ 得到。偶性完成定理 \ref{thm:20} 的证明。
+
+\section{有限阶数的严格验证}\label{sec:certificate}
+\subsection{低阶直接计算与外部单调性}
+$n=1$ 时 $E_1(t)=(1-t^2)/2$。$n=2$ 时，在 $0\le t\le1$ 有
+\[6E_2(t)=(2+7t^2)\sqrt{8+t^2}-2-24t^2-t^3.\]
+其导数为 $t((114+21t^2)/\sqrt{8+t^2}-48-3t)$，当 $t>0$ 时小于零，因为 $135/\sqrt8<48$。
+$n=3$ 亦可以按节点与对角线交点 $t=1/2$ 分段消去根式；为统一证书，本稿仍验证该阶。具体直接计算式见附录。
+
+对于所有 $n\ge3$，在 $1/2\le t<1$ 直接由 \eqref{Eexplicit} 得到 $E_n'(t)<0$。事实上令 $v_t(y)=2(1-y^2)/L_t(y)$；$v_t$ 在 $[t,1]$ 递减，因为导数的相反数符号由 $yL_t(y)-(n+1)t(1-y^2)$ 决定，此式在 $y=t$ 为 $t(1-t^2)>0$，在 $[t,1]$ 递增。又 $v_t(y)\le2/(n+1)<1$。于是 $g(y)=(y-t)_+^n(1-v_t(y))$（在 $y\le t$ 处置零）非负递增，交错和 $\sum_j\varepsilon_jg(u_j(t))\ge0$，故
+\[E_n'(t)=-1+[2(1-t)]^n-2^{n+1}\sum_j\varepsilon_jg(u_j(t))<0.\]
+$t>1/2$ 时严格性来自第一两项；$t=1/2$ 时来自最右节点的正贡献与严格递增（该节点 $u_n(t)>t$，例如 $u_n(0)=\cos(\pi/(n+2))>1/2$）。
+\subsection{将连续区间判定变成有限判定}
+记 $G_0,G_+,G_-,G_Q$ 为 \eqref{Hcomp} 的四个符号期望。利用单调性，对于任意 $0<a\le t\le b\le1/2$，
+\begin{equation}\label{intervalLower}
+2H_n'(t)\ge G_+(a)+G_-(a)+n(G_Q(a)-G_0(b)).
+\end{equation}
+因此只需在有理端点处建立四个概率的上下界；无须对整个区间做特征值运算，也无须直接计算高阶交错和。
+
+设有序节点 $a_i\le\cdots\le a_j$，$F_{i:j}$ 为均匀单纯形线性组合在零处的分布函数。若全非正，$F=1$；若全非负且至少有一个正节点，$F=0$；若 $a_i<0<a_j$，则
+\begin{equation}\label{cdfrec}
+F_{i:j}=\frac{-a_i}{a_j-a_i}F_{i:j-1}+\frac{a_j}{a_j-a_i}F_{i+1:j}.
+\end{equation}
+证明：由 Hermite--Genocchi 公式，$1-F_{i:j}=[a_i,\ldots,a_j]y_+^{j-i}$；应用差商递推 $[a_i,\ldots,a_j](y h(y))=(a_j[a_{i+1},\ldots,a_j]h-a_i[a_i,\ldots,a_{j-1}]h)/(a_j-a_i)$ 即得。零端点情形按连续性或单节点的定义处理。此递推是凸组合，适合有理数的向下与向上取整。
+
+$Q_t^0$ 的系数是 $t-u_j(t)$，$Q_t^\pm,Q_t$ 分别增加 $t\pm1$。其符号概率等于对应单纯形线性组合的符号概率。因此一次增广数组的递推即可同时给出四个分布函数，时间复杂度为 $O(n^2)$ 次算术运算、空间为 $O(n)$。
+\subsection{原点邻域的解析控制}
+取 $a_0=2^{-24}$。在 $[0,a_0]$ 上，四个二次型的核心矩阵 $tI-J_n(t)$ 均至少具有四个绝对值不小于 $1/4$ 的特征值：在 $t=0$ 由 $\cos(k\pi/(n+2))$（$n\ge3$）可见，Weyl 估计及 $\|tD\|\le a_0$ 保持此下界。于是各特征函数满足 $|\Phi(\xi)|\le(1+\xi^2/16)^{-2}$。维数 $d\le n+3$，参数矩阵 $D$ 满足 $\|D\|\le1$；对行列式两次求导并使用 resolvent 范数不超过一，得到 $|\partial_t^2\Phi|\le(d^2+d)\xi^2|\Phi|$。由符号期望 Fourier 反演，
+\[|G''(t)|\le\frac{2(d^2+d)}\pi\int_0^\infty\xi(1+\xi^2/16)^{-2}\,d\xi<6d(d+1).\]
+结合 \eqref{Hcomp}，可取
+\[|H_n^{\prime\prime\prime}(t)|\le M_n:=6(n+1)(n+3)(n+4).\]
+偶性给出 $H_n'(0)=0$。由中值定理，若 $H_n'(a_0)/a_0>2M_na_0$，则 $H_n''(t)>0$ 在 $[0,a_0]$ 成立。这一充分条件由整数证书验证。
+\subsection{证书格式、检查器与结果}
+所有输入有理数用共同分母 $S=2^{55}$ 表示。每一行记录 $n$、参数整数 $tS$ 及 $n+1$ 个根区间的整数端点（由大根至小根）。检查器不信任生成器：使用任意精度整数递推 $V_k=S^kU_k(y/S)$，
+\[V_0=1,\quad V_1=2y,\quad V_{k+1}=2yV_k-S^2V_{k-1}.\]
+若参数整数为 $T$，则检查多项式 $V_{n+1}-2TV_n+T^2V_{n-1}$ 在每个区间端点严格异号；验证所有区间互不相交并位于 $(-S,S)$。由次数可知每个区间恰含一根，且无遗漏。
+
+特征值区间转换成二次型系数的上下界，再利用系数单调性与 \eqref{cdfrec} 的有向整数取整，得到四个 $G$ 的上下界。检查器核查原点条件、每个相邻参数端点间的 \eqref{intervalLower} 严格为正，以及全部区间恰覆盖 $[2^{-24},1/2]$。不使用浮点数判定任何符号；浮点仅用于生成器提出根位置及日志展示。
+
+随稿的 \texttt{certificates/brackets.csv} 为实际证书，\texttt{check.py} 为只依赖 Python 标准库的独立检查器，\texttt{verify.cpp} 为生成器。重新运行检查器得到如下结果：
+\begin{center}\begin{tabular}{lr}\toprule
+验证范围 & $3\le n\le19$\\
+连续子区间总数 & 2128\\
+原点邻域数 & 17\\
+最小 $H_n'$ 下界除以区间左端点（近似显示） & 0.3422703980\\
+最小原点安全余量（近似显示） & 1.8179550990\\\bottomrule\end{tabular}\end{center}
+因此所有有限阶数均通过。与定理 \ref{thm:20} 及锐性归约合并，即得定理 \ref{thm:main}。这些检查尚未由 Lean 内核验证；程序正确性与上述桥接引理是下一阶段独立复核的重点。
+\section{结语：后续研究的边界}
+当前稿的目标不是继续优化门槛或建立全区间严格凹性，而是固定一个可以逐段阅读和形式化的证明。本文使用的三个主要结构为：取等多项式产生差商算子；增广节点产生概率恒等式；同均值方差的高斯比较与分部积分产生可控误差。独立的指数倾斜路线在附录保留，但不参与主证明。全阶纯解析证明、全区间凹性及密度比较仍未完成。文献优先权有待进一步检索。
+\appendix
+\section{三阶直接计算（可选）}
+对 $0\le t\le1$，令 $a=(-1-3t+\sqrt{5+2t+t^2})/4$，$b=(1-3t+\sqrt{5-2t+t^2})/4$。由矩阵反射的两个二阶块，
+\[E_3=1-t-2(1-t)^4+4b^4-4(a_+)^4.\]
+$t\ge1/2$ 时 $a\le0,b'<0$，故 $E_3'<-1+8(1-t)^3\le0$（内点）。在 $0\le t\le1/2$，令 $C_\pm=3\pm13t+17t^2\pm15t^3$，$r_\pm=\sqrt{5\pm2t+t^2}$，展开得
+\[E_3(t)=\frac{C_+r_++C_-r_-}8-1-12t^2-2t^4.\]
+平方根的凹性给出 $r_\pm\le\sqrt5+(t^2\pm2t)/(2\sqrt5)$；当 $C_-<0$ 时改用 Taylor 下界 $r_-\ge\sqrt5+(t^2-2t)/(2\sqrt5)-t^2/16$（根号内至少为 4）。又 $C_-\ge-6$，故
+\begin{align*}
+E_3(t)-E_3(0)&\le(34\sqrt5/8+58/(16\sqrt5)-12+3/64)t^2\\
+ &\quad +(94/(16\sqrt5)-2)t^4\le-11t^2/32.
+\end{align*}
+\section{指数倾斜与 Toeplitz 结构（独立路线）}
+此节不参与主证明。对 $0<t<1$，取 $\kappa=2t/(1-t^2)$，$A_t=tI-J_n(t)$。直接相乘得到
+\[(I+\kappa A_t)^{-1}=(t^{|i-j|})_{0\le i,j\le n}=:R_t.\]
+指数倾斜将 $Q_t$ 的密度换为 $\widetilde\rho_t(q)=e^{-\kappa q}\rho_t(q)/(1-t^2)^n$；这里归一化常数由 $\det R_t=(1-t^2)^n$ 与两端点因子相消得到。对应二次型的内部矩阵成为
+\[C_t=A_t(I+\kappa A_t)^{-1}=\frac{1-t^2}{2t}(I-R_t).\]
+它是零对角 Toeplitz 矩阵，非对角元为 $-(1-t^2)t^{|i-j|-1}/2$。增广后的变量为 $g^*C_tg+(1-t)e_+-(1+t)e_-$，其均值为 $-2t$。如果能证明 $\widetilde\rho_t'(0)\le0$，则原来的密度充分条件 $\rho_t'(0)\le2t\rho_t(0)/(1-t^2)$ 成立。由指数卷积恒等式，这等价于 $\G(Q_t)\ge\G(Q_t^0)$，与 \eqref{Hcomp} 中严格为正的第一项合用即得中心严格最大值。这一密度命题尚未证明；均值为负不保证它成立。
+\begin{thebibliography}{9}
+\bibitem{LK} A. Shadrin, The Landau--Kolmogorov inequality revisited, Discrete Contin. Dyn. Syst. 34 (2014), 1183--1210. \url{https://arxiv.org/abs/1210.7708}. （背景：主要为最大范数。）
+\bibitem{Finch} S. R. Finch, Mathematical Constants, Cambridge University Press, 2003; Errata and Addenda, Landau--Kolmogorov constants. （相关加法形式的文献线索。）
+\bibitem{MPF} D. S. Mitrinovi\'c, J. E. Pe\v cari\'c, A. M. Fink, Inequalities Involving Functions and Their Integrals and Derivatives, Kluwer, 1991. （导数不等式背景。）
+\end{thebibliography}
+\end{document}

@@ -1,6 +1,6 @@
 # Sharp higher-order L1 interpolation on an interval
 
-**Complete all-order formalization (`formalize/chebyshev-L1-complete`).** The complete all-$n$ proof in [`chebyshev_L1_complete.tex`](chebyshev_L1_complete.tex) (with companion verification script [`certify_chebyshev_L1.py`](certify_chebyshev_L1.py)) is formalized unconditionally in Lean 4.32.2 / Mathlib under [`Lean/`](Lean/), with zero `sorry`, zero `native_decide`, and only the three standard Lean axioms (`propext`, `Classical.choice`, `Quot.sound`).
+**Complete all-order formalization (`formalize/chebyshev-L1-complete`).** The complete all-$n$ proof in [`paper.tex`](paper.tex) ([`paper.pdf`](paper.pdf); archived Chinese exposition [`notes/chebyshev_L1_complete_zh.tex`](notes/chebyshev_L1_complete_zh.tex), with companion verification script [`certify_chebyshev_L1.py`](certify_chebyshev_L1.py)) is formalized unconditionally in Lean 4.32.2 / Mathlib under [`Lean/`](Lean/), with zero `sorry`, zero `native_decide`, and only the three standard Lean axioms (`propext`, `Classical.choice`, `Quot.sound`).
 
 For every positive integer $n \ge 1$ and every compact interval $[a, b]$ with $L = b - a > 0$, the sharp $L^1$ interpolation inequality
 
@@ -18,12 +18,13 @@ Both constants are optimal (even on $C^\infty([a,b])$), and equality in $C^{n+1}
 
 ## Contents
 
-- [`chebyshev_L1_complete.tex`](chebyshev_L1_complete.tex): complete all-$n$ proof (Theorem 1 `thm:full`, moving-node operator $T_n$, vertical-chord contour integral $\Delta_n(t)$, analytic $n \ge 4$ bounds, elementary $n=1,2$ and certified $n=3$ bounds).
+- [`paper.tex`](paper.tex) ([`paper.pdf`](paper.pdf)): English paper with the complete all-$n$ proof (Theorem 1 `thm:full`, moving-node operator $T_n$, vertical-chord contour integral $\Delta_n(t)$, analytic $n \ge 4$ bounds, elementary $n=1,2$ and certified $n=3$ bounds, and Section 9 Lean 4 formalization map).
+- [`notes/chebyshev_L1_complete_zh.tex`](notes/chebyshev_L1_complete_zh.tex): archived Chinese exposition of the complete all-$n$ proof.
 - [`certify_chebyshev_L1.py`](certify_chebyshev_L1.py): companion Python script for the $n=3$ rational Riemann-sum check and sanity checks.
 - [`Lean/SharpL1/Analysis/MainTheorem.lean`](Lean/SharpL1/Analysis/MainTheorem.lean): unconditional master theorem `SharpL1.Analysis.theorem_sharp_L1_interpolation_full` and its individual parts.
 - [`Lean/Audit.lean`](Lean/Audit.lean): axiom audit across all modules.
 - [`FORMALIZATION.md`](FORMALIZATION.md): module map, theorem inventory, and verification instructions.
-- Historical v0.2 draft artifacts (preserved): `paper.pdf`, `paper.tex`, `certificates/`, `notes/`.
+- Historical v0.2 draft artifacts (preserved): [`notes/paper-v0.2-zh.tex`](notes/paper-v0.2-zh.tex), `certificates/`, `notes/`.
 
 ## Reproduce
 
