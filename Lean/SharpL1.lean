@@ -29,3 +29,4 @@ import SharpL1.Analysis.ErrorDividedDifference
 import SharpL1.Analysis.TruncatedPowerDeriv
 import SharpL1.Analysis.FiniteCenter
 import SharpL1.Analysis.ChebyshevFirstConstant
+import SharpL1.Analysis.DividedCDFBridge

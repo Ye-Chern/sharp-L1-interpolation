@@ -96,3 +96,9 @@ private theorem firstRowSigns :
 #print axioms SharpL1.Analysis.polynomial_L1_deriv_le
 #print axioms SharpL1.Analysis.firstBestConstant_le_of_poly_bound
 #print axioms SharpL1.Analysis.polynomial_L1_deriv_eq_iff
+#print axioms SharpL1.Analysis.weightedExpSum_perm
+#print axioms SharpL1.Analysis.weightedCdfZero_perm
+#print axioms SharpL1.Analysis.weightedCdfZero_eq_barycentric_truncatedPower
+#print axioms SharpL1.Analysis.weightedCdfZero_eq_barycentric_truncatedPower_of_nodup
+#print axioms SharpL1.Analysis.lawSignMean_weightedExpSum_eq_barycentric_truncatedPower
+#print axioms SharpL1.Analysis.lawSignMean_Hcomp_of_nodes
