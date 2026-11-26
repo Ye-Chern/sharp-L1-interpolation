@@ -129,3 +129,14 @@ private theorem firstRowSigns :
 #print axioms SharpL1.Analysis.explicitErrorCurve_strictAntiOn_Icc_half_one
 #print axioms SharpL1.Analysis.neg_explicitErrorDerivAt_eq_lawSignMean
 #print axioms SharpL1.Analysis.deriv_HCurve_eq_lawSignMean
+#print axioms SharpL1.Analysis.movingOperator_eq_factorial_mul_barycentric
+#print axioms SharpL1.Analysis.movingOperator_poly
+#print axioms SharpL1.Analysis.barycentric_truncatedPower_mem_Icc
+#print axioms SharpL1.Analysis.barycentric_truncatedPower_higher_nonneg
+#print axioms SharpL1.Analysis.movingOperator_normTruncatedPower_mem_Icc
+#print axioms SharpL1.Analysis.movingOperator_L1_le
+#print axioms SharpL1.Analysis.integral_abs_indicator_sub_movingOperator_eq_explicitError
+#print axioms SharpL1.Analysis.explicitError_center_eq
+#print axioms SharpL1.Analysis.SobolevW1.taylor_formula
+#print axioms SharpL1.Analysis.SobolevW1.deriv_sub_movingOperator_eq
+#print axioms SharpL1.Analysis.SobolevW1.L1_deriv_sub_movingOperator_le
