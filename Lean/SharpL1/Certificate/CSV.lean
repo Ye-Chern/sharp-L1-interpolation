@@ -16,7 +16,7 @@ checker, and the checker proofs have no oracle for arithmetic validity.
 
 namespace SharpL1.Certificate
 
-private meta def certificateText : String := include_str "../../../certificates/brackets.csv"
+private meta def certificateText : String := include_str "../../certificates/brackets.csv"
 
 private meta def bracketPairs : List ℤ → List (ℤ × ℤ)
   | lo :: hi :: rest => (lo, hi) :: bracketPairs rest

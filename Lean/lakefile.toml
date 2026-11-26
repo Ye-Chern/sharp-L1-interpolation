@@ -16,7 +16,7 @@ needs = ["certificateCsv"]
 
 [[input_file]]
 name = "certificateCsv"
-path = "../certificates/brackets.csv"
+path = "certificates/brackets.csv"
 text = true
 
 [[lean_lib]]
