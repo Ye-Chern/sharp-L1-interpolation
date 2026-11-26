@@ -829,7 +829,6 @@ theorem firstTerm_lawSignMean_pos (k : ℕ) {t : ℝ} (ht : 0 < t) :
     have h1 : (S ∩ U : Set _) =ᵐ[P] S := by
       filter_upwards [compl_mem_ae_iff.mpr hU_compl] with ω hω
       have hωU : ω ∈ U := by simpa using hω
-      change (ω ∈ S ∩ U) = (ω ∈ S)
       simp [hωU]
     exact h1
   -- Set decompositions inside `U`
