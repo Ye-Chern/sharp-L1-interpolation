@@ -159,3 +159,9 @@ private theorem firstRowSigns :
 #print axioms SharpL1.Analysis.sharp_secondConstant_Icc_le
 #print axioms SharpL1.Analysis.sharp_sobolev_unit_eq_iff_of_continuous_top
 #print axioms SharpL1.Analysis.sharp_sobolev_contDiffOn_Icc_eq_iff
+#print axioms SharpL1.Analysis.explicitError_orderedNode_one_strictAntiOn
+#print axioms SharpL1.Analysis.explicitError_orderedNode_two_strictAntiOn
+#print axioms SharpL1.Analysis.explicitError_orderedNode_three_lt_center
+#print axioms SharpL1.Analysis.n3_block0_certified
+#print axioms SharpL1.Analysis.n3_block4_certified
+#print axioms SharpL1.Analysis.chordDelta_three_pos
