@@ -829,7 +829,8 @@ theorem firstTerm_lawSignMean_pos (k : ℕ) {t : ℝ} (ht : 0 < t) :
     have h1 : (S ∩ U : Set _) =ᵐ[P] S := by
       filter_upwards [compl_mem_ae_iff.mpr hU_compl] with ω hω
       have hωU : ω ∈ U := by simpa using hω
-      exact propext ⟨fun h => h.1, fun h => ⟨h, hωU⟩⟩
+      change (ω ∈ S ∩ U) = (ω ∈ S)
+      simp [hωU]
     exact h1
   -- Set decompositions inside `U`
   have hS1 : {ω | 0 < X ω + Y ω} ∩ U = ({ω | |Y ω| < X ω} ∩ U) ∪ ({ω | X ω - Y ω < 0} ∩ U) := by
@@ -845,7 +846,8 @@ theorem firstTerm_lawSignMean_pos (k : ℕ) {t : ℝ} (ht : 0 < t) :
   have hD1 : Disjoint ({ω | |Y ω| < X ω} ∩ U) ({ω | X ω - Y ω < 0} ∩ U) := by
     rw [Set.disjoint_left]
     rintro ω ⟨habs, _⟩ ⟨hlt, _⟩
-    dsimp only [Set.mem_setOf_eq] at habs hlt
+    change |Y ω| < X ω at habs
+    change X ω - Y ω < 0 at hlt
     linarith [(abs_lt.mp habs).2]
   have hS2 : {ω | 0 < X ω - Y ω} ∩ U = ({ω | |Y ω| < X ω} ∩ U) ∪ ({ω | X ω + Y ω < 0} ∩ U) := by
     ext ω; simp only [Set.mem_inter_iff, Set.mem_union, Set.mem_setOf_eq, U, abs_lt]
@@ -860,7 +862,8 @@ theorem firstTerm_lawSignMean_pos (k : ℕ) {t : ℝ} (ht : 0 < t) :
   have hD2 : Disjoint ({ω | |Y ω| < X ω} ∩ U) ({ω | X ω + Y ω < 0} ∩ U) := by
     rw [Set.disjoint_left]
     rintro ω ⟨habs, _⟩ ⟨hlt, _⟩
-    dsimp only [Set.mem_setOf_eq] at habs hlt
+    change |Y ω| < X ω at habs
+    change X ω + Y ω < 0 at hlt
     linarith [(abs_lt.mp habs).1]
   have hm_sub_neg : MeasurableSet ({ω | X ω - Y ω < 0} ∩ U) :=
     (measurableSet_lt hXY_sub_cont.measurable measurable_const).inter hU_meas
@@ -903,7 +906,7 @@ theorem firstTerm_lawSignMean_pos (k : ℕ) {t : ℝ} (ht : 0 < t) :
       exact div_nonneg (add_nonneg (quadForm_jacobiPencilD_nonneg k _) (quadForm_jacobiPencilD_nonneg k _))
         (by norm_num)
     have hY0 : Y ω0 = 0 := by dsimp [Y, ω0]; linarith
-    dsimp only [Set.mem_setOf_eq]
+    change |Y ω0| < X ω0
     rw [hY0, abs_zero]
     dsimp [X, ω0]
     nlinarith

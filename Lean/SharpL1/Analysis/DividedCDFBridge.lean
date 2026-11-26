@@ -86,7 +86,7 @@ theorem weightedCdfZero_eq_barycentric_truncatedPower (zs : List ℝ)
           (fun z => truncatedPower (zs.length - 1) t z) := by
     intro n
     induction n using Nat.strong_induction_on with
-    | h n ih =>
+    | ind n ih =>
       intro zs hlen hdesc hne
       cases zs with
       | nil => contradiction
