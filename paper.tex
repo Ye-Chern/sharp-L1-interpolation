@@ -66,7 +66,7 @@ While the minimal first constant $4^n n!\,L^{-n}$ (governed by the second-kind C
 \]
 In particular, for $n = 1$ on $[0,1]$, the second constant improves from $1/2$ to the sharp value $1/4$, resolving---to the best of our knowledge---the $L^1$ case of an open problem posed by Burenkov~(1980).
 
-On the reference interval $I = [-1,1]$, we construct an $(n+1)$-point moving-node divided-difference operator $T_n$ driven by the eigenvalues of a symmetric tridiagonal Jacobi matrix $J_n(x)$, disintegrating Burenkov's rank-one functional while preserving $\lVert T_n\rVert_{L^1 \to L^1} = A_n := 2^n n!$. This reduces the sharp second constant to $B_n = \max_{t \in [-1,1]} E_n(t)$ for an explicit even error profile $E_n$. We prove unconditionally for every $n \ge 1$ that $E_n$ is strictly decreasing on $[0,1]$ and attains its unique global maximum at $t = 0$. After clearing $t \in [1/2,1)$ directly from node-speed monotonicity, we represent $-E_n'(t)$ on $(0,1/2]$ via a complex Gaussian quadratic form whose characteristic function simplifies in Joukowsky coordinates to a closed rational function. Deforming the inversion contour onto the vertical chord $u = t + iv$ eliminates oscillation, exposes a $(3/4)^n$ versus $(1/4)^n$ separation between the half-line main term and the finite-boundary reflection tail, and resolves all orders $n \ge 4$ via closed-form Beta bounds; orders $n = 1, 2$ are elementary and $n = 3$ is certified on five compact subintervals. As consequences, we characterize equality in $C^{n+1}([a,b])$ (scalar multiples of rescaled $U_n$), note the exact center relation $B_n = 1 - A_n E_n(W_1^{n+1})_1$ with Boyanov--Kofanov polynomial $L^1$-approximation, and solve Stechkin's optimal operator approximation problem at the minimal admissible norm $N = A_n$.
+On the reference interval $I = [-1,1]$, we construct an $(n+1)$-point moving-node divided-difference operator $T_n$ driven by the eigenvalues of a symmetric tridiagonal Jacobi matrix $J_n(x)$, disintegrating Burenkov's rank-one functional while preserving $\lVert T_n\rVert_{L^1 \to L^1} = A_n := 2^n n!$. This reduces the sharp second constant to $B_n = \max_{t \in [-1,1]} E_n(t)$ for an explicit even error profile $E_n$. We prove unconditionally for every $n \ge 1$ that $E_n$ is strictly decreasing on $[0,1]$ and attains its unique global maximum at $t = 0$. After clearing $t \in [1/2,1)$ directly from node-speed monotonicity, we represent $-E_n'(t)$ on $(0,1/2]$ via a complex Gaussian quadratic form whose characteristic function simplifies in Joukowsky coordinates to a closed rational function. Deforming the inversion contour onto the vertical chord $u = t + iv$ eliminates oscillation, exposes a $(3/4)^n$ versus $(1/4)^n$ separation between the half-line main term and the finite-boundary reflection tail, and resolves all orders $n \ge 4$ via closed-form Beta bounds; orders $n = 1, 2$ are elementary and $n = 3$ is certified on five compact subintervals. As consequences, we characterize equality in $C^{n+1}([a,b])$ (scalar multiples of rescaled $U_n$), note the exact center relation $B_n = 1 - A_n E_n(W_1^{n+1})_1$ with Boyanov--Kofanov polynomial $L^1$-approximation, solve Stechkin's optimal operator approximation problem at the minimal admissible norm $N = A_n$, and deduce from a cancellation-free integral representation that the sharp constants $B_n$ are strictly increasing in $n$.
 
 The complete proof of Theorem~\ref{thm:full} has been formally verified in Lean~4 / Mathlib with zero \code{sorry}, zero \code{native_decide}, and only the standard Lean axioms (\code{propext}, \code{Classical.choice}, \code{Quot.sound}).
 \end{abstract}
@@ -193,7 +193,24 @@ As an immediate consequence of the moving-node construction and Theorem~\ref{thm
     Then $\mathcal{E}_{A_n} = B_n$, and the infimum is attained by the bounded linear extension of the moving-node operator $T_n$ to $L^1(I)$.
 \end{corollary}
 
-We stop at the minimal admissible norm $N = A_n$ (determining $\mathcal{E}_N$ for $N > A_n$ is left open). As documented in Section~\ref{sec:lean}, all four quantitative ingredients entering Corollary~\ref{cor:stechkin} are verified in Lean~4, while the short $L^1$-quotient extension deduction itself is given in prose in Section~\ref{sec:finish}.
+We stop at the minimal admissible norm $N = A_n$ (determining $\mathcal{E}_N$ for $N > A_n$ is left open).
+
+Finally, transforming the closed-form cosine sum~\eqref{eq:bn-thm} by an elementary contour integral in the right half-disk removes all alternating cancellation and establishes strict monotonicity of the sharp second constants across all orders.
+
+\begin{corollary}[Cancellation-free integral representation and strict monotonicity of $B_n$]
+    \label{cor:Bn-strict-mono}
+    For every integer $n \ge 1$,
+    \begin{equation}
+        1 - B_n = \frac{n + 2}{\pi(n + 1)}\int_0^1 \frac{s^{-1/2}(1 - s)^{n+1}}{1 - (-s)^{n+2}}\,ds.
+        \label{eq:Bn-integral}
+    \end{equation}
+    In particular, the sequence of sharp second constants is strictly increasing:
+    \[
+        \frac12 = B_1 < B_2 < B_3 < \dots < 1.
+    \]
+\end{corollary}
+
+As documented in Section~\ref{sec:lean}, all quantitative ingredients entering Corollary~\ref{cor:stechkin} and the closed form~\eqref{eq:bn-thm} entering Corollary~\ref{cor:Bn-strict-mono} are verified in Lean~4, while these two short corollaries themselves are proved in prose in Section~\ref{sec:finish}.
 
 \subsection{Discovery narrative and roadmap}
 \label{sec:roadmap}
@@ -213,8 +230,8 @@ We retain that natural narrative arc as the organizational backbone of the proof
     \item Section~\ref{sec:sharp} derives the error profile $E_n(t)$, proves sharpness of $B_n = \max_t E_n(t)$ via the sign-aligned spline $G_t = h_t - P_t$ and smooth mollification, and explains the exact Boyanov--Kofanov identity at $t = 0$.
     \item Section~\ref{sec:setup} clears the exterior $[1/2, 1)$ via node-speed monotonicity and decomposes $-E_n'(t)$ on $(0, 1/2]$ into a strictly positive symmetry term plus $\frac{n}{2}\Delta_n(t)$.
     \item Section~\ref{sec:chord} computes the exact rational characteristic function of the associated Gaussian quadratic form in Joukowsky coordinates and deforms the contour to the vertical chord $u = t + iv$, eliminating oscillation.
-    \item Sections~\ref{sec:n4} and~\ref{sec:finish} resolve $\Delta_n(t) > 0$ for all $n \ge 4$ via real-part separation and closed-form Beta bounds, complete the low orders $n = 1, 2, 3$, and prove Theorem~\ref{thm:full} and Corollary~\ref{cor:stechkin}.
-    \item Section~\ref{sec:lean} documents the complete Lean~4 / Mathlib formalization, its exact scope boundary, and its module-by-module dictionary. Appendix~\ref{app:tech} supplies the two proof-essential technical verifications ($n \ge 4$ positive-coefficient polynomials and $n = 3$ five-block certification). Supplementary non-essential observations (generalized Gauss quadrature, cross-order interlacing, center asymptotics, local Gaussian profile, and open problems) are kept separately in \code{notes/structural-observations.md}.
+    \item Sections~\ref{sec:n4} and~\ref{sec:finish} resolve $\Delta_n(t) > 0$ for all $n \ge 4$ via real-part separation and closed-form Beta bounds, complete the low orders $n = 1, 2, 3$, and prove Theorem~\ref{thm:full} and Corollaries~\ref{cor:stechkin} and~\ref{cor:Bn-strict-mono}.
+    \item Section~\ref{sec:lean} documents the complete Lean~4 / Mathlib formalization, its exact scope boundary, and its module-by-module dictionary. Appendix~\ref{app:tech} supplies the two proof-essential technical verifications ($n \ge 4$ positive-coefficient polynomials and $n = 3$ five-block certification). Supplementary non-essential observations (generalized Gauss quadrature, cross-order interlacing, $1/\sqrt{\pi n}$ asymptotics and extended numerical table for $B_n$, the diffusive Gaussian scaling heuristic, and open problems) are kept separately in \code{notes/structural-observations.md}.
 \end{itemize}
 
 \section{Without the \texorpdfstring{$(n+1)$}{(n+1)}-st Derivative: Chebyshev Polynomials}
@@ -356,14 +373,20 @@ At $n = 2$, the $3 \times 3$ matrix $\frac12\bigl(\begin{smallmatrix} x & 1 & 0 
 \end{proposition}
 
 \begin{proof}
-(i) Expanding $\det(yI - J_n(x))$ along the first and last rows expresses it via the unperturbed Toeplitz determinants $d_m(y) = 2^{-m}U_m(y)$:
+(i) For $n = 1$, direct $2 \times 2$ determinant expansion gives
+\[
+    \det\bigl(yI - J_1(x)\bigr)
+    = \Bigl(y - \frac{x}{2}\Bigr)^2 - \frac14
+    = 2^{-2}\bigl(U_2(y) - 2xU_1(y) + x^2 U_0(y)\bigr).
+\]
+For $n \ge 2$, expanding $\det(yI - J_n(x))$ along the first and last rows expresses it via the unperturbed Toeplitz determinants $d_m(y) = 2^{-m}U_m(y)$ (with $d_0 = 1$, $d_{-1} = 0$, so every index satisfies $m \ge -1$):
 \[
     \det\bigl(yI - J_n(x)\bigr)
     = \Bigl(y - \frac{x}{2}\Bigr)^2 d_{n-1}(y)
       - \frac12\Bigl(y - \frac{x}{2}\Bigr)d_{n-2}(y)
-      + \frac{1}{16} d_{n-3}(y)
+      + \frac{1}{16} d_{n-3}(y).
 \]
-(with $d_0 = 1$, $d_{-1} = 0$, $U_{-1} = 0$). Applying $2yU_m(y) = U_{m+1}(y) + U_{m-1}(y)$ yields~\eqref{eq:charpoly}. Because $J_n(x)$ is symmetric tridiagonal with strictly positive off-diagonal entries $\frac12$, its eigenvalues are simple for every $x \in \R$, hence real-analytic and continuous in $x$. Evaluating~\eqref{eq:charpoly} at $x = -1, 0, 1$ using $U_{n+1}(y) \pm 2U_n(y) + U_{n-1}(y) = 2(y \pm 1)U_n(y)$ gives the stated boundary and center values.
+Applying $2yU_m(y) = U_{m+1}(y) + U_{m-1}(y)$ (with $U_{-1} = 0$) yields~\eqref{eq:charpoly}. Because $J_n(x)$ is symmetric tridiagonal with strictly positive off-diagonal entries $\frac12$, its eigenvalues are simple for every $x \in \R$, hence real-analytic and continuous in $x$. Evaluating~\eqref{eq:charpoly} at $x = -1, 0, 1$ using $U_{n+1}(y) \pm 2U_n(y) + U_{n-1}(y) = 2(y \pm 1)U_n(y)$ gives the stated boundary and center values.
 
 (ii) Let $v_j = (v_{j,0}, \dots, v_{j,n})^T$ be a unit eigenvector for $u_j(x)$. Since $J_n(x)$ is centrosymmetric (invariant under reversing coordinate order), $v_j$ is either symmetric or skew-symmetric, so $|v_{j,0}| = |v_{j,n}|$. By first-order eigenvalue perturbation (Hellmann--Feynman),
 \[
@@ -386,7 +409,13 @@ Meanwhile, the rank-one adjugate identity $\adj(u_j I - J_n(x)) = p_x'(u_j)\, v_
         = 2^{n-1} n! \sum_{j=0}^{n} \varepsilon_j \int_{r_j}^{r_{j+1}} F(y)\,dy
         = (A_\omega F)(x).
     \]
-    Thus Burenkov's $A_\omega$ is the \emph{spatial average} of $T_n$. However, for \emph{any} constant-valued operator $S$ exact on polynomials of degree $\le n$, evaluating on $h_0(y) = \frac{1}{n!}y_+^n$ forces $S h_0 \equiv c \in [0,1]$ and hence $\Lone{D^n h_0 - S h_0} = |c| + |1-c| = 1$ (which is $1/2$ on $[0,1]$, matching Burenkov's computation $\lVert \mathcal{B}\rVert_{L^1(0,1)\to L^1(0,1)} = 1/2$ in~\cite[p.~43]{Burenkov1986}). Disintegrating $A_\omega$ into the $x$-dependent moving-node operator $T_n$ while preserving $\lVert T_n\rVert_{L^1 \to L^1} = A_n$ is strictly necessary to break below $1$ on $[-1,1]$ and achieve the sharp constant $B_n < 1$.
+    Thus Burenkov's $A_\omega$ is the \emph{spatial average} of $T_n$. However, for \emph{any} constant-valued operator $S$, evaluating on $h_0(y) = \frac{1}{n!}y_+^n$ gives $S h_0 \equiv c \in \R$ and hence, by the triangle inequality,
+    \[
+        \Lone{D^n h_0 - S h_0}
+        = \int_{-1}^{0} |c|\,dx + \int_0^1 |1 - c|\,dx
+        = |c| + |1 - c| \ge 1
+    \]
+    (which is $1/2$ on $[0,1]$, matching Burenkov's computation $\lVert \mathcal{B}\rVert_{L^1(0,1)\to L^1(0,1)} = 1/2$ in~\cite[p.~43]{Burenkov1986}). Disintegrating $A_\omega$ into the $x$-dependent moving-node operator $T_n$ while preserving $\lVert T_n\rVert_{L^1 \to L^1} = A_n$ is strictly necessary to break below $1$ on $[-1,1]$ and achieve the sharp constant $B_n < 1$.
 \end{remark}
 
 \section{The Error Profile \texorpdfstring{$E_n(t)$}{E\_n(t)} and Sharpness of the Second Constant}
@@ -476,7 +505,11 @@ To pass from the spline $G_t$ to $C^\infty([-1,1])$, take a nonnegative bump fun
 
 \begin{remark}[Exact relation to Boyanov~\cite{Boyanov1975} and Kofanov~\cite{Kofanov1984} at $t = 0$]
     \label{rem:burenkov-kofanov}
-    Let $E_n(W_1^{n+1})_1 := \sup_{\Lone{f^{(n+1)}} \le 1} \inf_{P \in \pi_n} \Lone{f - P}$ be the best $L^1$ polynomial approximation error of the Sobolev class $W_1^{n+1}(I)$. Boyanov~\cite[\S3]{Boyanov1975} and Kofanov~\cite[Theorems~3 and~5]{Kofanov1984} proved that $E_n(W_1^{n+1})_1 = |s_{n,n+1}(0)|$, where $s_{n,n+1}$ is the $(n+1)$-st integral of $\sgn U_{n+1}$ vanishing at its Chebyshev nodes $-\cos\frac{j\pi}{n+2}$ ($j = 1, \dots, n+1$), namely
+    Let $E_n(W_1^{n+1})_1 := \sup_{\Lone{f^{(n+1)}} \le 1} \inf_{P \in \pi_n} \Lone{f - P}$ be the best $L^1$ polynomial approximation error of the Sobolev class $W_1^{n+1}(I)$. Boyanov~\cite[\S3]{Boyanov1975} and Kofanov~\cite[Theorems~3 and~5]{Kofanov1984} proved that $E_n(W_1^{n+1})_1 = \lVert s_{n,n+1}\rVert_\infty = |s_{n,n+1}(0)|$, where
+    \[
+        s_{n,n+1}(x) := \pm\frac{1}{(n+1)!}\left[(x + 1)^{n+1} + 2\sum_{j=1}^{n+1}(-1)^j(x - x_j)_+^{n+1}\right]
+    \]
+    is the Chebyshev perfect spline of order $n+1$ whose $(n+1)$-st derivative $\pm\sgn U_{n+1}$ changes sign at the \emph{knots} $x_j = -\cos\frac{j\pi}{n+2}$ ($j = 1, \dots, n+1$); evaluating at $x = 0$ gives
     \[
         |s_{n,n+1}(0)|
         = \frac{1}{(n+1)!}\left[1 - 2\sum_{k=1}^{\lfloor(n+1)/2\rfloor}(-1)^{k-1}\cos^{n+1}\frac{k\pi}{n+2}\right].
@@ -775,7 +808,7 @@ Set $A_k(n) := T_k(n)/M_{\mathrm{lb}}(n)$ ($k = 1, 2$); the factor $\sqrt{\pi}$ 
 (exact square $\frac{16314878132224}{28110467001123} < 1$, margin $> 0.238$). By the Beta recurrence, the step ratios $r_k(n) := A_k(n+1)/A_k(n)$ are explicit rational functions (Appendix~\ref{app:poly-n4}) whose shifted polynomials at $n = m + 4$ ($m \ge 0$) have strictly positive coefficients, giving $r_1(n) < \frac12$ and $r_2(n) < \frac12$ for all $n \ge 4$. By induction, $R_n(t)/M_n(t) \le 2^{-(n-4)}(A_1(4) + A_2(4)) < 1$ on $(0, 1/2]$, whence $\Delta_n(t) > 0$.
 \end{proof}
 
-\section{Low Orders (\texorpdfstring{$n = 1, 2, 3$}{n = 1, 2, 3}) and Proofs of Theorem~\ref{thm:full} and Corollary~\ref{cor:stechkin}}
+\section{Low Orders (\texorpdfstring{$n = 1, 2, 3$}{n = 1, 2, 3}) and Proofs of Theorem~\ref{thm:full} and Corollaries~\ref{cor:stechkin}--\ref{cor:Bn-strict-mono}}
 \label{sec:finish}
 
 \begin{proposition}[Low-order strict monotonicity]
@@ -823,15 +856,69 @@ Since the integrand is continuous and nonnegative and $E_n(0) - E_n(t) > 0$ for 
 \begin{proof}[Proof of Corollary~\ref{cor:stechkin}]
 By Proposition~\ref{prop:jacobi}(ii), each $u_j : (-1,1) \to (r_j, r_{j+1})$ is a $C^1$ diffeomorphism with strictly positive derivative, so the preimage under $u_j$ of any Lebesgue null set has measure zero. Consequently, if $F = G$ almost everywhere on $I$, then $T_n F = T_n G$ almost everywhere on $I$. Together with linearity and~\eqref{eq:Tn-bound}, $T_n$ descends to a well-defined bounded linear operator $T_n : L^1(I) \to L^1(I)$ with $\lVert T_n\rVert_{L^1 \to L^1} \le A_n$ (in fact equal to $A_n$ by evaluating on $Q_n$). For every $f \in \mathcal{W}_n$,~\eqref{eq:peano} and Theorem~\ref{thm:full}(i) give $\Lone{D^n f - T_n f} \le B_n \Lone{f^{(n+1)}} \le B_n$, hence $\mathcal{E}_{A_n} \le B_n$.
 
-Conversely, by Stechkin's inequality~\cite{Stechkin1967} (see~\cite[Proposition~2]{Skorokhodov2019}), for any bounded linear operator $S : L^1(I) \to L^1(I)$ with $\lVert S\rVert_{L^1 \to L^1} \le A_n$ and any $f \in W^{n+1,1}(I)$,
+Conversely, let $S : L^1(I) \to L^1(I)$ be any bounded linear operator with $\lVert S\rVert_{L^1 \to L^1} \le A_n$, and set $M_S := \sup_{g \in \mathcal{W}_n} \Lone{D^n g - Sg}$. If $M_S = \infty$, the desired bound $M_S \ge B_n$ is trivial; assume therefore that $M_S < \infty$. For any $f \in W^{n+1,1}(I)$:
+\begin{itemize}[leftmargin=1.8em]
+    \item if $\Lone{f^{(n+1)}} > 0$, then $g := f/\Lone{f^{(n+1)}} \in \mathcal{W}_n$, so homogeneity gives $\Lone{D^n f - Sf} \le M_S\Lone{f^{(n+1)}}$;
+    \item if $\Lone{f^{(n+1)}} = 0$, then $f^{(n+1)} = 0$ almost everywhere and~\eqref{eq:W1-char} implies $f = P$ for a polynomial $P$ of degree at most $n$; then $\lambda P \in \mathcal{W}_n$ for every $\lambda \in \R$, so $|\lambda|\Lone{D^n P - SP} \le M_S$, and letting $|\lambda| \to \infty$ forces $SP = D^n P$, whence $\Lone{D^n f - Sf} = 0 = M_S\Lone{f^{(n+1)}}$.
+\end{itemize}
+In either case, Stechkin's inequality~\cite{Stechkin1967} (see~\cite[Proposition~2]{Skorokhodov2019}) gives
 \[
     \Lone{D^n f} \le \Lone{Sf} + \Lone{D^n f - Sf}
-    \le A_n\Lone{f} + \left(\sup_{g \in \mathcal{W}_n} \Lone{D^n g - Sg}\right)\Lone{f^{(n+1)}}.
+    \le A_n\Lone{f} + M_S\Lone{f^{(n+1)}}
+    \qquad \bigl(f \in W^{n+1,1}(I)\bigr).
 \]
-Optimality of $B_n$ in Theorem~\ref{thm:full}(iii) forces $\sup_{g \in \mathcal{W}_n}\Lone{D^n g - Sg} \ge B_n$. Taking the infimum over $S$ yields $\mathcal{E}_{A_n} \ge B_n$, so $\mathcal{E}_{A_n} = B_n$ is attained by $T_n$.
+Optimality of $B_n$ in Theorem~\ref{thm:full}(iii) forces $M_S \ge B_n$. Taking the infimum over $S$ yields $\mathcal{E}_{A_n} \ge B_n$, so $\mathcal{E}_{A_n} = B_n$ is attained by $T_n$.
 \end{proof}
 
-For supplementary structural observations surrounding the moving-node family—including cross-order interlacing, generalized Gauss quadrature, the cancellation-free integral and $1/\sqrt{\pi n}$ asymptotics for $B_n$, the diffusive Gaussian scaling heuristic, and open problems—see the companion note \code{notes/structural-observations.md} in the repository.
+\begin{proof}[Proof of Corollary~\ref{cor:Bn-strict-mono}]
+Fix $n \ge 1$, set $m := n + 2 \ge 3$, and consider the rational function
+\[
+    F(u) := \frac{(1 + u^2)^{m-1}}{1 - u^{2m}}
+    = \frac{(1 + u^2)^{n+1}}{1 - u^{2n+4}}.
+\]
+Its poles in $\C$ are contained among the $2m$-th roots of unity $u_k := e^{ik\pi/m}$ ($k \in \mathbb{Z}$), all of which are simple zeros of $1 - u^{2m}$. At $u = \pm i$, the numerator $(1 + u^2)^{m-1}$ has a zero of order $m - 1 \ge 2$, so when $m$ is even $u = \pm i$ are removable singularities (zeros) of $F$, while when $m$ is odd $1 - (\pm i)^{2m} = 2 \neq 0$. Thus $F$ is holomorphic on the open right half-disk $\D_+ := \{u \in \C : |u| < 1,\ \RePart u > 0\}$ and on a neighborhood of the closed vertical diameter $\{iv : v \in [-1,1]\}$; its only poles on $\overline{\D_+}$ are the simple poles $u_k$ with $|k| \le \lfloor(m-1)/2\rfloor = \lfloor(n+1)/2\rfloor$, all lying on the open right semicircle $\{e^{i\theta} : -\pi/2 < \theta < \pi/2\}$.
+
+Since $u_k^m = (-1)^k$ and $1 + u_k^2 = u_k(u_k + u_k^{-1}) = 2u_k\cos(k\pi/m)$, the residue of $F$ at $u_k$ is
+\[
+    R_k := \operatorname{Res}_{u = u_k} F(u)
+    = \frac{(1 + u_k^2)^{m-1}}{-2m\,u_k^{2m-1}}
+    = \frac{u_k^m\,2^{m-1}\cos^{m-1}(k\pi/m)}{-2m}
+    = \frac{(-1)^{k-1}\,2^n}{n+2}\cos^{n+1}\!\left(\frac{k\pi}{n+2}\right).
+\]
+For sufficiently small $\varepsilon > 0$, let $\Omega_\varepsilon := \D_+ \setminus \bigcup_{|k| \le \lfloor(n+1)/2\rfloor} \overline{B(u_k, \varepsilon)}$, oriented counterclockwise. Its boundary consists of:
+\begin{enumerate}[label=\textup{(\arabic*)}]
+    \item the vertical diameter $u = iv$ from $v = 1$ down to $v = -1$, contributing
+    \[
+        \int_i^{-i} F(u)\,du
+        = -i\int_{-1}^{1} \frac{(1 - v^2)^{n+1}}{1 - (-v^2)^{n+2}}\,dv
+        = -i\int_0^1 \frac{s^{-1/2}(1 - s)^{n+1}}{1 - (-s)^{n+2}}\,ds
+    \]
+    (by evenness and the substitution $s = v^2$);
+    \item the remaining circular arcs $\Gamma_\varepsilon \subset \{e^{i\theta} : -\pi/2 \le \theta \le \pi/2\}$, along which
+    \[
+        F(e^{i\theta})\,de^{i\theta}
+        = \frac{e^{i(m-1)\theta}(2\cos\theta)^{m-1}}{-2i\,e^{im\theta}\sin(m\theta)}\,i e^{i\theta}\,d\theta
+        = -\frac{(2\cos\theta)^{m-1}}{2\sin(m\theta)}\,d\theta \in \R,
+    \]
+    so $\ImPart\int_{\Gamma_\varepsilon} F(u)\,du = 0$ identically for every $\varepsilon > 0$;
+    \item the small clockwise inward circular arcs $\gamma_{k,\varepsilon} := \partial B(u_k, \varepsilon) \cap \D_+$ around each simple pole $u_k$ ($|k| \le \lfloor(n+1)/2\rfloor$), which subtend angle $-\pi + O(\varepsilon)$ and hence satisfy $\lim_{\varepsilon \to 0^+}\int_{\gamma_{k,\varepsilon}} F(u)\,du = -\pi i\,R_k$.
+\end{enumerate}
+By Cauchy's theorem, $\int_{\partial\Omega_\varepsilon} F(u)\,du = 0$ for every small $\varepsilon > 0$. Taking imaginary parts annihilates the integral over $\Gamma_\varepsilon$, and letting $\varepsilon \to 0^+$ yields
+\[
+    \int_0^1 \frac{s^{-1/2}(1 - s)^{n+1}}{1 - (-s)^{n+2}}\,ds
+    = -\pi\sum_{|k| \le \lfloor(n+1)/2\rfloor} R_k
+    = \frac{\pi}{n+2}\left[2^n - 2^{n+1}\sum_{k=1}^{\lfloor(n+1)/2\rfloor}(-1)^{k-1}\cos^{n+1}\frac{k\pi}{n+2}\right]
+\]
+(using $R_{-k} = R_k$ and $R_0 = -2^n/(n+2)$). Comparing with~\eqref{eq:bn-thm} gives~\eqref{eq:Bn-integral}.
+
+To deduce strict monotonicity, set $K_n(s) := \frac{(1 - s)^{n+1}}{1 - (-s)^{n+2}} > 0$ for $s \in (0,1)$, so that
+\[
+    \frac{K_{n+1}(s)}{K_n(s)} = (1 - s)\,\frac{1 - (-s)^{n+2}}{1 - (-s)^{n+3}}.
+\]
+If $n$ is even, then $\frac{K_{n+1}(s)}{K_n(s)} = \frac{(1 - s)(1 - s^{n+2})}{1 + s^{n+3}} < 1$. If $n$ is odd, then $1 - (-s)^{n+3} = 1 - s^{n+3} > 0$ and $(1 - s)(1 + s^{n+2}) = 1 - s + s^{n+2} - s^{n+3} < 1 - s^{n+3}$ because $s^{n+2} < s$ on $(0,1)$, so again $\frac{K_{n+1}(s)}{K_n(s)} < 1$. Since $\frac{n+3}{n+2} < \frac{n+2}{n+1}$ as well,~\eqref{eq:Bn-integral} gives $0 < 1 - B_{n+1} < 1 - B_n$, i.e.\ $B_n < B_{n+1} < 1$ for every $n \ge 1$.
+\end{proof}
+
+For supplementary structural observations surrounding the moving-node family—including cross-order interlacing, generalized Gauss quadrature, the $1/\sqrt{\pi n}$ asymptotics and extended numerical table for $B_n$, the diffusive Gaussian scaling heuristic, and open problems—see the companion note \code{notes/structural-observations.md} in the repository.
 
 \section{Formal Verification in Lean 4}
 \label{sec:lean}
@@ -866,7 +953,7 @@ We draw an explicit boundary between what is machine-checked in Lean~4 and what 
     (2)~\code{FirstTermPos.lean} realizes $g^* M g$ via pairs of independent real Gaussian vectors $\frac12(x^T M x + y^T M y)$ (\code{pairQuadForm_pencil_law}) with explicit witness $x_0 = (1, 1, 0, \dots, 0)$, $y_0 = 0$, $e_0 = 1/2$;
     (3)~\code{ChordIntegral.lean} proves \code{barycentricDelta_eq_chordDelta} via Lagrange partial fractions and \code{Complex.log}/FTC along the Joukowsky loop (Remark~\ref{rem:chord-lean}) rather than Fourier inversion of densities;
     (4)~\code{LowOrderMono.lean} replaces external floating-point interval arithmetic for $n = 3$ with five kernel-checked natural-number fixed-point Riemann-sum certificates (\code{n3_block0_certified} through \code{n3_block4_certified}) discharged by \code{decide}.
-    \item \textbf{Outside the Lean~4 formalization:} The historical literature comparisons (Section~\ref{sec:history}, Remarks~\ref{rem:burenkov-op} and~\ref{rem:burenkov-kofanov}), the supplementary observations in \code{notes/structural-observations.md}, and the short $L^1$-quotient extension deduction in Corollary~\ref{cor:stechkin} (though all four quantitative ingredients \code{movingOperator_L1_le}, \code{SobolevW1.L1_deriv_sub_movingOperator_le}, \code{sharp_L1_interpolation_constants_optimal}, and \code{explicitErrorCurve_le_centerBestConstant} are Lean-verified) are not separately formalized as Lean theorems.
+    \item \textbf{Outside the Lean~4 formalization:} The historical literature comparisons (Section~\ref{sec:history}, Remarks~\ref{rem:burenkov-op} and~\ref{rem:burenkov-kofanov}), the supplementary observations in \code{notes/structural-observations.md}, the short $L^1$-quotient extension deduction in Corollary~\ref{cor:stechkin} (though all four quantitative ingredients \code{movingOperator_L1_le}, \code{SobolevW1.L1_deriv_sub_movingOperator_le}, \code{sharp_L1_interpolation_constants_optimal}, and \code{explicitErrorCurve_le_centerBestConstant} are Lean-verified), and the contour-integral monotonicity deduction in Corollary~\ref{cor:Bn-strict-mono} (deduced from the Lean-verified formula \code{centerBestConstant} / \code{explicitError_center_eq}) are not separately formalized as Lean theorems.
 \end{itemize}
 
 \begin{table}[htbp]

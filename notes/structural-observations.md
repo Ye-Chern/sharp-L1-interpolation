@@ -51,21 +51,18 @@ At $x = 0$, the far-endpoint self-loop weight $x/2$ vanishes, so the first discr
 
 ---
 
-## 2. Cancellation-Free Integral, Asymptotics, and Numerical Table for $B_n = E_n(0)$
+## 2. Asymptotics and Extended Numerical Table for $B_n = E_n(0)$
 
-*Proof status: Expository analytic derivation and numerical evaluation (not Lean-verified; the exact closed-form cosine sum `centerBestConstant` is formalized in `Lean/SharpL1/Analysis/MovingOperator.lean`).*
+*Proof status: The cancellation-free integral representation and strict monotonicity $B_{n+1} > B_n$ are proved rigorously in prose in Corollary 3 of [`paper.tex`](../paper.tex) (not separately formalized in Lean~4; the closed-form cosine sum `centerBestConstant` is formalized in `Lean/SharpL1/Analysis/MovingOperator.lean`). The asymptotic expansion and extended numerical table below are expository complements (not Lean-verified).*
 
-Although the exact center constant
-$$
-B_n = E_n(0)
-= 1 - \frac{2^n}{n+1}
-  + \frac{2^{n+1}}{n+1}\sum_{k=1}^{\lfloor(n+1)/2\rfloor}(-1)^{k-1}\cos^{n+1}\frac{k\pi}{n+2}
-$$
-is completely explicit, the factor $2^{n+1}$ causes severe catastrophic cancellation when evaluated directly in floating-point arithmetic at large $n$. Applying Poisson summation to the alternating cosine sum together with Euler's reflection formula for the Gamma function produces the cancellation-free integral representation
+By Corollary 3 of [`paper.tex`](../paper.tex), the exact center constant satisfies the cancellation-free integral representation
 $$
 1 - B_n
-= \frac{n + 2}{\pi(n + 1)}\int_0^1 \frac{s^{-1/2}(1 - s)^{n+1}}{1 - (-s)^{n+2}}\,ds.
+= \frac{n + 2}{\pi(n + 1)}\int_0^1 \frac{s^{-1/2}(1 - s)^{n+1}}{1 - (-s)^{n+2}}\,ds
+\qquad (n \ge 1),
 $$
+from which strict monotonicity $\frac12 = B_1 < B_2 < B_3 < \dots < 1$ follows directly. Unlike the alternating cosine sum (whose $2^{n+1}$ prefactor causes catastrophic floating-point cancellation at large $n$), the integral above has a strictly positive integrand on $(0, 1)$.
+
 Because $s(1 - s) \le \frac14$ on $[0, 1]$, replacing the denominator $1 - (-s)^{n+2}$ by $1$ commits an error of order $O(4^{-n})$—the $t = 0$ specialization of the $4^{-n}$ reflection tail in the vertical-chord analysis of `paper.tex`. Evaluating the resulting Beta integral $B(\frac12, n+2)$ gives the asymptotic expansion
 $$
 1 - B_n
@@ -112,10 +109,9 @@ where $Z \sim N(0, \frac12)$.
 
 ## 4. Open Problems
 
-Several natural questions surrounding $E_n(t)$, $B_n$, and finite-interval Landau--Kolmogorov inequalities remain open:
+Several natural questions surrounding $E_n(t)$, $B_n$, and finite-interval Landau--Kolmogorov inequalities remain open (note that strict monotonicity $B_{n+1} > B_n$ for all $n \ge 1$, listed as open in earlier drafts, is now proved unconditionally in Corollary 3 of [`paper.tex`](../paper.tex)):
 
 1. **Global strict concavity of $E_n$.** Is $E_n''(t) < 0$ on the entire open interval $(-1, 1)$ for every $n \ge 1$? Currently we only have local concavity at $t = 0$ and the diffusive-scale Gaussian heuristic above.
-2. **Strict monotonicity of the best constants $B_n$.** Is the sequence $B_n = E_n(0)$ strictly increasing in $n \ge 1$? The asymptotic formula $1 - B_n \sim (\pi n)^{-1/2}$ implies monotonicity for sufficiently large $n$, while an all-$n$ proof remains open.
-3. **Global positivity of $\Delta_n(t)$.** The vertical-chord quantity $\Delta_n(t) = 4t\rho_t(0) - 2(1 - t^2)\rho_t'(0)$ (equivalently $\rho_t'(0)/\rho_t(0) < \frac{2t}{1-t^2}$ for the density $\rho_t$ of $Q_t$, or $-f_t'(t)/f_t(t) < \frac{2(n+1)t}{1-t^2}$ for the density $f_t$ of the uniform simplex convex combination of the $n+3$ extended nodes $\mathbf{z}_t$) is proved strictly positive for all $n \ge 3$ and $t \in (0, 1/2]$ in `paper.tex` and `Lean/SharpL1/`. Does $\Delta_n(t) > 0$ also hold on the exterior $t \in (1/2, 1)$ and for $n = 1, 2$?
-4. **Full optimal trade-off curve and Stechkin problem for $N > A_n$.** Theorem 1 and its Stechkin corollary determine the sharp constant $B_n = \mathcal{E}_{A_n}$ at the minimal admissible first constant $A = A_n$. Determining the exact trade-off curve $B_n(A)$ (and $\mathcal{E}_N$) for all $A > A_n$ on a finite interval in the all-$L^1$ setting remains open.
-5. **Burenkov's $L^2$ open problem.** In Burenkov (1980), alongside the all-$L^1$ inequality (eq. (24)) whose sharp second constant is resolved by our $n = 1$ theorem, the analogous all-$L^2$ inequality on $[0, 1]$ (eq. (25)) was also left open and is not addressed by the present work.
+2. **Global positivity of $\Delta_n(t)$.** The vertical-chord quantity $\Delta_n(t) = 4t\rho_t(0) - 2(1 - t^2)\rho_t'(0)$ (equivalently $\rho_t'(0)/\rho_t(0) < \frac{2t}{1-t^2}$ for the density $\rho_t$ of $Q_t$, or $-f_t'(t)/f_t(t) < \frac{2(n+1)t}{1-t^2}$ for the density $f_t$ of the uniform simplex convex combination of the $n+3$ extended nodes $\mathbf{z}_t$) is proved strictly positive for all $n \ge 3$ and $t \in (0, 1/2]$ in `paper.tex` and `Lean/SharpL1/`. Does $\Delta_n(t) > 0$ also hold on the exterior $t \in (1/2, 1)$ and for $n = 1, 2$?
+3. **Full optimal trade-off curve and Stechkin problem for $N > A_n$.** Theorem 1 and its Stechkin corollary determine the sharp constant $B_n = \mathcal{E}_{A_n}$ at the minimal admissible first constant $A = A_n$. Determining the exact trade-off curve $B_n(A)$ (and $\mathcal{E}_N$) for all $A > A_n$ on a finite interval in the all-$L^1$ setting remains open.
+4. **Burenkov's $L^2$ open problem.** In Burenkov (1980), alongside the all-$L^1$ inequality (eq. (24)) whose sharp second constant is resolved by our $n = 1$ theorem, the analogous all-$L^2$ inequality on $[0, 1]$ (eq. (25)) was also left open and is not addressed by the present work.
