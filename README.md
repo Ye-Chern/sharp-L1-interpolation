@@ -1,44 +1,38 @@
 # Sharp higher-order L1 interpolation on an interval
 
-**Research draft v0.2 — 2026-11-25.** This is a proposed computer-assisted proof, not yet independently peer-reviewed or Lean-verified. Priority in the literature and author attribution remain to be confirmed. The PDF is in Chinese; the certificate scripts are in English.
+**Complete all-order formalization (`formalize/chebyshev-L1-complete`).** The complete all-$n$ proof in [`chebyshev_L1_complete.tex`](chebyshev_L1_complete.tex) (with companion verification script [`certify_chebyshev_L1.py`](certify_chebyshev_L1.py)) is formalized unconditionally in Lean 4.32.2 / Mathlib under [`Lean/`](Lean/), with zero `sorry`, zero `native_decide`, and only the three standard Lean axioms (`propext`, `Classical.choice`, `Quot.sound`).
 
-For positive integer n, the goal is to find the lexicographically best pair (A_n, B_n) in
+For every positive integer $n \ge 1$ and every compact interval $[a, b]$ with $L = b - a > 0$, the sharp $L^1$ interpolation inequality
 
 ```
-||F^(n)||_1 <= A_n ||F||_1 + B_n ||F^(n+1)||_1,  F in W^(n+1,1)([-1,1]).
+||f^(n)||_{L^1[a,b]} <= 4^n n! L^(-n) ||f||_{L^1[a,b]} + (L/2) b_n ||f^(n+1)||_{L^1[a,b]}
 ```
 
-The draft proves the reduction to a single-variable maximum E_n, a uniform analytic estimate for n >= 20, and a finite interval certificate for n = 3,...,19. The cases n=1,2 are elementary; n=3 also admits an elementary calculation. The remaining open objectives of this project are a uniform purely analytic proof, independent proof review, literature verification, and Lean formalization. No claim of novelty or publication priority is made.
+holds for all $f \in W^{n+1,1}([a,b])$ (and $C^{n+1}([a,b])$), where
+
+```
+b_n = E_n(0) = 1 - 2^n/(n+1) + 2^(n+1)/(n+1) * sum_{m=1}^{floor((n+1)/2)} (-1)^(m-1) cos(m pi / (n+2))^(n+1).
+```
+
+Both constants are optimal (even on $C^\infty([a,b])$), and equality in $C^{n+1}([a,b])$ holds if and only if $f(x) = c\, U_n((2x - a - b)/(b - a))$ for some $c \in \mathbb{R}$.
 
 ## Contents
 
-- `paper.pdf`, `paper.tex`: self-contained article. Build with XeLaTeX twice (CTeX + Fandol fonts).
-- `certificates/brackets.csv`: exact integer endpoint and root-bracket data, denominator 2^55.
-- `certificates/check.py`: independent verifier using Python arbitrary-precision integers, not the C++ generator.
-- `certificates/check_constants.py`: rational checks of the explicit analytic constants.
-- `certificates/verify.cpp`: fast certificate generator, using floating point only to propose root brackets; not trusted by the independent verifier.
-- `certificates/check.log`, `constants.log`, `generation.log`: actual run output.
-- `FORMALIZATION.md`: suggested Lean architecture and trusted-base audit.
+- [`chebyshev_L1_complete.tex`](chebyshev_L1_complete.tex): complete all-$n$ proof (Theorem 1 `thm:full`, moving-node operator $T_n$, vertical-chord contour integral $\Delta_n(t)$, analytic $n \ge 4$ bounds, elementary $n=1,2$ and certified $n=3$ bounds).
+- [`certify_chebyshev_L1.py`](certify_chebyshev_L1.py): companion Python script for the $n=3$ rational Riemann-sum check and sanity checks.
+- [`Lean/SharpL1/Analysis/MainTheorem.lean`](Lean/SharpL1/Analysis/MainTheorem.lean): unconditional master theorem `SharpL1.Analysis.theorem_sharp_L1_interpolation_full` and its individual parts.
+- [`Lean/Audit.lean`](Lean/Audit.lean): axiom audit across all modules.
+- [`FORMALIZATION.md`](FORMALIZATION.md): module map, theorem inventory, and verification instructions.
+- Historical v0.2 draft artifacts (preserved): `paper.pdf`, `paper.tex`, `certificates/`, `notes/`.
 
 ## Reproduce
 
-Run from the repository root:
+Run the Lean build and axiom audit from `Lean/` (using `LEAN_NUM_THREADS=1` on 16 GiB hosts):
 
 ```sh
-python certificates/check.py
-python certificates/check_constants.py
+cd Lean
+LEAN_NUM_THREADS=1 lake build
+LEAN_NUM_THREADS=1 lake env lean Audit.lean
 ```
 
-Expected: `PASS n=3..19: 2128 intervals, 17 origin neighborhoods`, and `PASS: all numerical bounds in Section 6`.
-
-Regenerate the certificate if desired (GCC/Clang with `__int128` support):
-
-```sh
-g++ -O3 -std=c++17 certificates/verify.cpp -o verify
-./verify 3 19 certificates/brackets.csv
-python certificates/check.py
-```
-
-Certificate rows have no header: `n,T,l1,h1,...,l_(n+1),h_(n+1)`. All values after n are signed integers in units of 2^-55. The root brackets are in descending root order. The verifier checks the exact polynomial sign changes, disjointness, root count via degree, directed CDF recursion, all consecutive parameter intervals, origin neighborhoods, and exact coverage. Its logical bridge to the real-variable theorem is Section 7 of the paper. The constants script uses a decreasing-function Riemann upper sum for two simple integrals; the article also gives an elementary antiderivative recurrence, so this script is optional for the analytic proof.
-
-A PASS message is not a Lean theorem. In particular the probability, Fourier, Sobolev and interpolation lemmas in the paper require independent proof review and eventual formalization.
+All `#print axioms` checks in `Lean/Audit.lean` report only `[propext, Classical.choice, Quot.sound]` (with kernel-computed checks such as `n3_block0_certified`..`n3_block4_certified` depending only on `[propext]`).
