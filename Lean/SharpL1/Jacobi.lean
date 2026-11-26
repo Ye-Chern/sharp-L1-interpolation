@@ -1,7 +1,11 @@
-import SharpL1.Chebyshev
-import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
-import Mathlib.Tactic.Ring
-import Lean.Elab.Tactic.Omega
+module
+
+public import SharpL1.Chebyshev
+public import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
+public import Mathlib.Tactic.Ring
+public import Lean.Elab.Tactic.Omega
+
+public section
 
 open Polynomial
 
@@ -41,7 +45,7 @@ theorem sparse_det (n : ℕ) (A : Matrix (Fin (n+2)) (Fin (n+2)) R)
 
 
 /-- Leading continuants of the unnormalized tridiagonal pencil. -/
-noncomputable def leadingContinuant (t : ℝ) : ℕ → ℝ[X]
+@[expose] noncomputable def leadingContinuant (t : ℝ) : ℕ → ℝ[X]
   | 0 => 1
   | 1 => 2 * X - C t
   | n + 2 => 2 * X * leadingContinuant t (n + 1) - leadingContinuant t n
@@ -97,7 +101,7 @@ open Polynomial
 namespace SharpL1
 
 /-- A tridiagonal matrix with arbitrary diagonal and −1 on neighboring indices. -/
-def pathPencil {R : Type*} [CommRing R] (m : ℕ) (a : ℕ → R) :
+@[expose] def pathPencil {R : Type*} [CommRing R] (m : ℕ) (a : ℕ → R) :
     Matrix (Fin m) (Fin m) R := fun i j =>
   if i.val = j.val then a i.val
   else if i.val + 1 = j.val ∨ j.val + 1 = i.val then -1 else 0
@@ -139,7 +143,7 @@ open Polynomial
 namespace SharpL1
 
 /-- The pencil diagonal with the single t endpoint at its final index. -/
-noncomputable def lastDiagonal (t : ℝ) (m i : ℕ) : ℝ[X] :=
+@[expose] noncomputable def lastDiagonal (t : ℝ) (m i : ℕ) : ℝ[X] :=
   if i + 1 = m then 2 * X - C t else 2 * X
 
 theorem lastPencil_det (t : ℝ) (m : ℕ) :
@@ -167,7 +171,7 @@ theorem lastPencil_det (t : ℝ) (m : ℕ) :
     rfl
 
 /-- The polynomial diagonal of the unnormalized two-endpoint pencil. -/
-noncomputable def endpointDiagonal (t : ℝ) (m i : ℕ) : ℝ[X] :=
+@[expose] noncomputable def endpointDiagonal (t : ℝ) (m i : ℕ) : ℝ[X] :=
   if i = 0 ∨ i + 1 = m then 2 * X - C t else 2 * X
 
 theorem endpointPencil_det (t : ℝ) (k : ℕ) :
@@ -198,7 +202,7 @@ open Polynomial
 namespace SharpL1
 
 /-- The real symmetric Jacobi matrix from paper.tex, equation J, with n = k+1. -/
-noncomputable def jacobiMatrix (k : ℕ) (t : ℝ) :
+@[expose] noncomputable def jacobiMatrix (k : ℕ) (t : ℝ) :
     Matrix (Fin (k + 2)) (Fin (k + 2)) ℝ := fun i j =>
   if i.val = j.val then
     if i.val = 0 ∨ i.val + 1 = k + 2 then t / 2 else 0

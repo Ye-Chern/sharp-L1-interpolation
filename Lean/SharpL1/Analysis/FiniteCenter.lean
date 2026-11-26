@@ -1,5 +1,9 @@
-import SharpL1.Analysis.CenterCriterion
-import SharpL1.Certificate.DerivativeBridge
+module
+
+public import SharpL1.Analysis.CenterCriterion
+public import SharpL1.Certificate.DerivativeBridge
+
+public section
 
 /-! ## The finite certificate implies center minimality given its analytic inputs -/
 

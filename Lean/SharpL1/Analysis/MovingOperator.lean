@@ -1,12 +1,16 @@
-import SharpL1.Analysis.ChebyshevFirstConstant
-import SharpL1.Analysis.GlobalNodes
-import SharpL1.Analysis.DividedCDF
-import SharpL1.Analysis.ErrorValue
-import SharpL1.Analysis.NodeWeights
-import SharpL1.Analysis.TruncatedPowerDeriv
-import Mathlib.MeasureTheory.Function.JacobianOneDim
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
-import Mathlib.MeasureTheory.Integral.Prod
+module
+
+public import SharpL1.Analysis.ChebyshevFirstConstant
+public import SharpL1.Analysis.GlobalNodes
+public import SharpL1.Analysis.DividedCDF
+public import SharpL1.Analysis.ErrorValue
+public import SharpL1.Analysis.NodeWeights
+public import SharpL1.Analysis.TruncatedPowerDeriv
+public import Mathlib.MeasureTheory.Function.JacobianOneDim
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+public import Mathlib.MeasureTheory.Integral.Prod
+
+@[expose] public section
 
 /-!
 # Moving-node operator `T_n`, Taylor kernel representation, and explicit error `E_n`

@@ -1,6 +1,10 @@
-import SharpL1.Certificate.CDFSemantics
-import SharpL1.Certificate.CDFSigns
-import SharpL1.Probability.WeightedComparison
+module
+
+public import SharpL1.Certificate.CDFSemantics
+public import SharpL1.Certificate.CDFSigns
+public import SharpL1.Probability.WeightedComparison
+
+public section
 
 /-! ## Real sign bounds from scaled integer coefficients -/
 
@@ -9,7 +13,7 @@ namespace SharpL1.Certificate
 open SharpL1.Probability
 
 /-- Interpret grid coefficients at scale `s` as real coefficients. -/
-noncomputable def realCoefficients (s : ℤ) (knots : List ℤ) : List ℝ :=
+@[expose] noncomputable def realCoefficients (s : ℤ) (knots : List ℤ) : List ℝ :=
   knots.map fun k : ℤ => (k : ℝ) / (s : ℝ)
 
 private theorem weightedCdfZero_realCoefficients (s : ℤ) (hs : 0 < s) (knots : List ℤ) :

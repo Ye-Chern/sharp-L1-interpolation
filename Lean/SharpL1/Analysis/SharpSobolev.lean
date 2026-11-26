@@ -1,11 +1,15 @@
-import SharpL1.Analysis.MovingOperator
-import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
-import Mathlib.Analysis.Calculus.BumpFunction.Normed
-import Mathlib.Analysis.Calculus.ContDiff.Basic
-import Mathlib.Analysis.Calculus.ContDiff.Deriv
-import Mathlib.Analysis.Calculus.ContDiff.Polynomial
-import Mathlib.Analysis.Calculus.IteratedDeriv.Lemmas
-import Mathlib.LinearAlgebra.Lagrange
+module
+
+public import SharpL1.Analysis.MovingOperator
+public import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
+public import Mathlib.Analysis.Calculus.BumpFunction.Normed
+public import Mathlib.Analysis.Calculus.ContDiff.Basic
+public import Mathlib.Analysis.Calculus.ContDiff.Deriv
+public import Mathlib.Analysis.Calculus.ContDiff.Polynomial
+public import Mathlib.Analysis.Calculus.IteratedDeriv.Lemmas
+public import Mathlib.LinearAlgebra.Lagrange
+
+@[expose] public section
 
 /-!
 # Sharp higher-order `L¹` Sobolev interpolation inequality (Claim 2 & Theorem 1)

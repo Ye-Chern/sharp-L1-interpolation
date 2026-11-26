@@ -1,5 +1,9 @@
-import SharpL1.JacobiSpectrum
-import Mathlib.Data.Multiset.Sort
+module
+
+public import SharpL1.JacobiSpectrum
+public import Mathlib.Data.Multiset.Sort
+
+public section
 
 /-!
 # Ordered Jacobi nodes
@@ -17,7 +21,7 @@ private theorem sortedNodeRoots_length (k : ℕ) (t : ℝ) :
   simp [nodePolynomial_card_roots]
 
 /-- The roots of the node polynomial in globally ascending order. -/
-noncomputable def orderedNode (k : ℕ) (t : ℝ) (i : Fin (k + 2)) : ℝ :=
+@[expose] noncomputable def orderedNode (k : ℕ) (t : ℝ) (i : Fin (k + 2)) : ℝ :=
   let roots := (nodePolynomial k t).roots.sort
   roots.get (Fin.cast (sortedNodeRoots_length k t).symm i)
 

@@ -1,4 +1,8 @@
-import SharpL1.Probability.ExponentialMix
+module
+
+public import SharpL1.Probability.ExponentialMix
+
+public section
 
 /-! ## Rescaling the unit exponential measure -/
 

@@ -1,5 +1,9 @@
-import SharpL1.JacobiSymmetry
-import Mathlib.Tactic.Ring
+module
+
+public import SharpL1.JacobiSymmetry
+public import Mathlib.Tactic.Ring
+
+public section
 
 open Polynomial
 open Polynomial.Chebyshev (U)

@@ -1,5 +1,9 @@
-import SharpL1.Certificate.Checker
-import Lean.Elab.Term
+module
+
+public import SharpL1.Certificate.Checker
+public import Lean.Elab.Term
+
+public section
 
 /-!
 # Import the integer CSV for kernel checking
@@ -43,7 +47,7 @@ structure ImportedOrder where
   chunks : List (List Row)
 
 /-- The CSV rows in the original order, with chunk boundaries erased. -/
-def ImportedOrder.rows (order : ImportedOrder) : List Row :=
+@[expose] def ImportedOrder.rows (order : ImportedOrder) : List Row :=
   order.first :: order.chunks.flatten
 
 private def rowChunks (order : ℕ) (rows : List Row) : List (List Row) :=
@@ -73,7 +77,7 @@ elab "certify_order " n:num " as " name:ident : command => do
   let data := mkIdentFrom name (name.getId.appendAfter "Data")
   elabCommand (← `(command|
     set_option maxRecDepth 131072 in
-    def $data : ImportedOrder := certificate_order% $n))
+    @[expose] def $data : ImportedOrder := certificate_order% $n))
   elabCommand (← `(command|
     set_option maxRecDepth 131072 in
     set_option maxHeartbeats 0 in

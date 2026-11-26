@@ -1,7 +1,11 @@
-import SharpL1.Chebyshev
-import Mathlib.Algebra.Polynomial.Roots
-import Mathlib.Topology.Order.IntermediateValue
-import Mathlib.Topology.Algebra.Polynomial
+module
+
+public import SharpL1.Chebyshev
+public import Mathlib.Algebra.Polynomial.Roots
+public import Mathlib.Topology.Order.IntermediateValue
+public import Mathlib.Topology.Algebra.Polynomial
+
+public section
 
 namespace SharpL1
 

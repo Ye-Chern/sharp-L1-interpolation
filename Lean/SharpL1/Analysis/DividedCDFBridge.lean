@@ -1,7 +1,11 @@
-import SharpL1.Analysis.DividedCDF
-import SharpL1.Analysis.ErrorDividedDifference
-import SharpL1.Probability.WeightedExponential
-import SharpL1.Probability.WeightedComparison
+module
+
+public import SharpL1.Analysis.DividedCDF
+public import SharpL1.Analysis.ErrorDividedDifference
+public import SharpL1.Probability.WeightedExponential
+public import SharpL1.Probability.WeightedComparison
+
+public section
 
 /-! ## Bridge between barycentric divided differences and weighted exponential laws -/
 

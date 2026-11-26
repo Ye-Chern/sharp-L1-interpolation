@@ -1,7 +1,11 @@
-import SharpL1.Certificate.CDF
-import SharpL1.Certificate.CDFSigns
-import SharpL1.Certificate.RootRow
-import SharpL1.Certificate.Intervals
+module
+
+public import SharpL1.Certificate.CDF
+public import SharpL1.Certificate.CDFSigns
+public import SharpL1.Certificate.RootRow
+public import SharpL1.Certificate.Intervals
+
+public section
 
 /-!
 # Executable finite interval certificate checker
@@ -17,11 +21,11 @@ structure Row where
   brackets : List (ℤ × ℤ)
   deriving Repr
 
-def gridScale : ℤ := 2 ^ 55
+@[expose] def gridScale : ℤ := 2 ^ 55
 
-def originGrid : ℤ := gridScale / 2 ^ 24
+@[expose] def originGrid : ℤ := gridScale / 2 ^ 24
 
-def outerGrid : ℤ := gridScale / 2
+@[expose] def outerGrid : ℤ := gridScale / 2
 
 structure Endpoint where
   row : Row
@@ -30,42 +34,42 @@ structure Endpoint where
   deriving Repr
 
 /-- Convert descending root brackets into ascending coefficient bounds. -/
-def coefficientLower (row : Row) : List ℤ :=
+@[expose] def coefficientLower (row : Row) : List ℤ :=
   row.brackets.map fun bracket => row.t - bracket.2
 
-def coefficientUpper (row : Row) : List ℤ :=
+@[expose] def coefficientUpper (row : Row) : List ℤ :=
   row.brackets.map fun bracket => row.t - bracket.1
 
 /-- The four coefficient lists entering H′, using exactly the same core. -/
-def evalAugmentations (cdf : List ℤ → ℤ) (s t : ℤ) (core : List ℤ) : Signs ℤ :=
+@[expose] def evalAugmentations (cdf : List ℤ → ℤ) (s t : ℤ) (core : List ℤ) : Signs ℤ :=
   let left := t - s
   let right := t + s
   let sign := fun knots => cdfToSign s (cdf knots)
   ⟨sign core, sign (core ++ [right]), sign (left :: core), sign (left :: core ++ [right])⟩
 
-def evaluate (row : Row) : Endpoint :=
+@[expose] def evaluate (row : Row) : Endpoint :=
   ⟨row,
     evalAugmentations (cdfUpper gridScale) gridScale row.t (coefficientLower row),
     evalAugmentations (cdfLower gridScale) gridScale row.t (coefficientUpper row)⟩
 
-def checkEndpoint (n : ℕ) (p : Endpoint) : Bool :=
+@[expose] def checkEndpoint (n : ℕ) (p : Endpoint) : Bool :=
   decide (0 < p.row.t ∧ p.row.t ≤ outerGrid) &&
     checkRootRow gridScale p.row.t (n - 1) p.row.brackets &&
     decide (p.lower.core ≤ p.upper.core ∧ p.lower.plus ≤ p.upper.plus ∧
       p.lower.minus ≤ p.upper.minus ∧ p.lower.both ≤ p.upper.both)
 
-def checkTailTo (n : ℕ) (finish : ℤ) (previous : Endpoint) : List Endpoint → Bool
+@[expose] def checkTailTo (n : ℕ) (finish : ℤ) (previous : Endpoint) : List Endpoint → Bool
   | [] => decide (previous.row.t = finish)
   | current :: rest =>
     (decide (previous.row.t < current.row.t ∧ 0 < intervalMargin n previous.lower current.upper) &&
       checkEndpoint n current) && checkTailTo n finish current rest
 
-def checkStart (n : ℕ) (row : Row) : Bool :=
+@[expose] def checkStart (n : ℕ) (row : Row) : Bool :=
   let first := evaluate row
   (decide (3 ≤ n ∧ n ≤ 19 ∧ row.t = originGrid) && checkEndpoint n first) &&
     checkOrigin n gridScale row.t first.lower first.upper
 
-def checkOrder (n : ℕ) : List Row → Bool
+@[expose] def checkOrder (n : ℕ) : List Row → Bool
   | [] => false
   | first :: rest =>
     checkStart n first && checkTailTo n outerGrid (evaluate first) (rest.map evaluate)

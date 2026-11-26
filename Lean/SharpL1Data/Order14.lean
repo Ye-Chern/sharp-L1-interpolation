@@ -1,4 +1,8 @@
-import SharpL1.Certificate.CSV
+module
+
+public import SharpL1.Certificate.CSV
+
+public section
 
 namespace SharpL1.Certificate.Data
 

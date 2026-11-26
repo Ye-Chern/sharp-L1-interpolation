@@ -1,9 +1,13 @@
-import Mathlib.Analysis.Calculus.Deriv.MeanValue
-import Mathlib.Analysis.SpecialFunctions.Sqrt
-import Mathlib.Tactic.FieldSimp
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Positivity
-import Mathlib.Tactic.Ring
+module
+
+public import Mathlib.Analysis.Calculus.Deriv.MeanValue
+public import Mathlib.Analysis.SpecialFunctions.Sqrt
+public import Mathlib.Tactic.FieldSimp
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Positivity
+public import Mathlib.Tactic.Ring
+
+public section
 
 /-!
 # Low-order center comparisons from Section 7
@@ -21,12 +25,12 @@ center maximality on `(0, 1]`:
 namespace SharpL1.Analysis
 
 /-- Explicit order-1 error function `E₁(t) = (1 - t²) / 2` from `paper.tex` Section 7. -/
-noncomputable def e₁ (t : ℝ) : ℝ :=
+@[expose] noncomputable def e₁ (t : ℝ) : ℝ :=
   (1 - t ^ 2) / 2
 
 /-- Explicit order-2 error function on `[0, 1]` from `paper.tex` Section 7:
 `6 E₂(t) = (2 + 7 t²) √(8 + t²) - 2 - 24 t² - t³`. -/
-noncomputable def e₂ (t : ℝ) : ℝ :=
+@[expose] noncomputable def e₂ (t : ℝ) : ℝ :=
   ((2 + 7 * t ^ 2) * Real.sqrt (8 + t ^ 2) - 2 - 24 * t ^ 2 - t ^ 3) / 6
 
 /-- Center comparison for `e₁`: `e₁ t < e₁ 0` for `0 < t ≤ 1`. -/

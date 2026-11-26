@@ -1,5 +1,9 @@
-import SharpL1.Probability.DifferenceLaw
-import Mathlib.MeasureTheory.Group.Convolution
+module
+
+public import SharpL1.Probability.DifferenceLaw
+public import Mathlib.MeasureTheory.Group.Convolution
+
+public section
 
 /-! ## Adding independent interior terms in the mixed-sign recursion -/
 

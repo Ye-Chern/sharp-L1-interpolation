@@ -1,4 +1,8 @@
-import SharpL1.Probability.NoAtom
+module
+
+public import SharpL1.Probability.NoAtom
+
+public section
 
 /-! ## The mixture law of a difference of independent exponentials -/
 

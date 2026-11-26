@@ -1,6 +1,10 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.FieldSimp
+module
+
+public import Mathlib.Data.Real.Basic
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.FieldSimp
+
+public section
 
 /-!
 # Continuous interval bounds from integer certificates
@@ -20,14 +24,14 @@ structure Signs (α : Type) where
   deriving Repr
 
 /-- The integer lower bound for 2 S H′ on an interval. -/
-def intervalMargin (n : ℕ) (lower upper : Signs ℤ) : ℤ :=
+@[expose] def intervalMargin (n : ℕ) (lower upper : Signs ℤ) : ℤ :=
   lower.plus + lower.minus + n * (lower.both - upper.core)
 
 /-- The third-derivative bound from the origin-neighborhood argument. -/
-def originBound (n : ℕ) : ℤ :=
+@[expose] def originBound (n : ℕ) : ℤ :=
   6 * ((n : ℤ) + 1) * ((n : ℤ) + 3) * ((n : ℤ) + 4)
 
-def checkOrigin (n : ℕ) (s t : ℤ) (lower upper : Signs ℤ) : Bool :=
+@[expose] def checkOrigin (n : ℕ) (s t : ℤ) (lower upper : Signs ℤ) : Bool :=
   decide (4 * originBound n * t ^ 2 < intervalMargin n lower upper * s)
 
 /-- Given componentwise bounds at one parameter, the signed combination uses

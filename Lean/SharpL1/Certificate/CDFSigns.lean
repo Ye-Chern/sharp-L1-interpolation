@@ -1,10 +1,14 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.Tactic.Linarith
+module
+
+public import Mathlib.Data.Real.Basic
+public import Mathlib.Tactic.Linarith
+
+public section
 
 namespace SharpL1.Certificate
 
 /-- The scaled sign quantity from a scaled CDF. -/
-def cdfToSign (s cdf : ℤ) : ℤ := s - 2 * cdf
+@[expose] def cdfToSign (s cdf : ℤ) : ℤ := s - 2 * cdf
 
 /-- Reversing the CDF bounds, including coefficient and rounding uncertainty,
 gives bounds on the scaled value of `1 - 2 * F`. -/

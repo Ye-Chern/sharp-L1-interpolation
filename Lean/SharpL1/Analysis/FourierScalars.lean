@@ -1,8 +1,12 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.Real.Sqrt
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Positivity
-import Mathlib.Tactic.Ring
+module
+
+public import Mathlib.Data.Real.Basic
+public import Mathlib.Analysis.Real.Sqrt
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Positivity
+public import Mathlib.Tactic.Ring
+
+public section
 
 /-!
 # Scalar inequalities for the Section 6 Fourier estimate

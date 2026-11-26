@@ -1,11 +1,15 @@
-import SharpL1.Analysis.NodeSpeed
-import Mathlib.Analysis.Calculus.InverseFunctionTheorem.FDeriv
-import Mathlib.Analysis.Calculus.FDeriv.Prod
-import Mathlib.Analysis.Calculus.FDeriv.Mul
-import Mathlib.Algebra.Polynomial.Roots
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Positivity
-import Mathlib.Tactic.Ring
+module
+
+public import SharpL1.Analysis.NodeSpeed
+public import Mathlib.Analysis.Calculus.InverseFunctionTheorem.FDeriv
+public import Mathlib.Analysis.Calculus.FDeriv.Prod
+public import Mathlib.Analysis.Calculus.FDeriv.Mul
+public import Mathlib.Algebra.Polynomial.Roots
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Positivity
+public import Mathlib.Tactic.Ring
+
+public section
 
 /-!
 # Local differentiable root branches for the Jacobi pencil
@@ -36,12 +40,12 @@ open Polynomial.Chebyshev (U)
 
 /-- The map `(s, x) ↦ (s, p_s(x))` used to construct local root branches via the
 inverse function theorem. -/
-noncomputable def nodeMap (k : ℕ) (p : ℝ × ℝ) : ℝ × ℝ :=
+@[expose] noncomputable def nodeMap (k : ℕ) (p : ℝ × ℝ) : ℝ × ℝ :=
   (p.1, (nodePolynomial k p.1).eval p.2)
 
 /-- Continuous linear equivalence on `ℝ × ℝ` given by the lower-triangular map
 `(ds, dx) ↦ (ds, a * ds + b * dx)` for `b ≠ 0`. -/
-noncomputable def lowerTriangularEquiv (a b : ℝ) (hb : b ≠ 0) : (ℝ × ℝ) ≃L[ℝ] (ℝ × ℝ) where
+@[expose] noncomputable def lowerTriangularEquiv (a b : ℝ) (hb : b ≠ 0) : (ℝ × ℝ) ≃L[ℝ] (ℝ × ℝ) where
   toFun p := (p.1, a * p.1 + b * p.2)
   invFun q := (q.1, (q.2 - a * q.1) / b)
   map_add' p q := by
@@ -168,7 +172,7 @@ theorem hasStrictFDerivAt_nodeMap_equiv (k : ℕ) {t y : ℝ}
 
 /-- Local root branch `u : ℝ → ℝ` passing through `(t, y)` for `nodePolynomial k`,
 obtained as the second coordinate of the local inverse of `nodeMap k`. -/
-noncomputable def localRootBranch (k : ℕ) (t y : ℝ)
+@[expose] noncomputable def localRootBranch (k : ℕ) (t y : ℝ)
     (ht : |t| < 1) (hy : |y| ≤ 1) (hroot : (nodePolynomial k t).eval y = 0) : ℝ → ℝ :=
   fun s =>
     ((hasStrictFDerivAt_nodeMap_equiv k ht hy hroot).localInverse (nodeMap k)

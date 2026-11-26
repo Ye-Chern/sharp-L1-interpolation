@@ -1,4 +1,8 @@
-import SharpL1.Analysis.NodeSpeed
+module
+
+public import SharpL1.Analysis.NodeSpeed
+
+public section
 
 /-!
 # Chebyshev Cassini identity and the divided-difference denominator of the nodes
@@ -152,7 +156,7 @@ theorem leadingCoeff_nodePolynomial (k : ℕ) (t : ℝ) :
 /-- The monic node polynomial `p_t` of `paper.tex`:
 `p_t = 2 ^ (-(k+2)) · nodePolynomial k t`, matching `jacobi_charpoly`
 (`charpoly (jacobiMatrix k t) = C ((1/2)^(k+2)) * nodePolynomial k t`). -/
-noncomputable def monicNodePolynomial (k : ℕ) (t : ℝ) : ℝ[X] :=
+@[expose] noncomputable def monicNodePolynomial (k : ℕ) (t : ℝ) : ℝ[X] :=
   C ((1 / 2 : ℝ) ^ (k + 2)) * nodePolynomial k t
 
 @[simp]

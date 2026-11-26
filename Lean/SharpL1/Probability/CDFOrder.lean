@@ -1,4 +1,8 @@
-import Mathlib.Probability.Distributions.Exponential
+module
+
+public import Mathlib.Probability.Distributions.Exponential
+
+public section
 
 /-! ## Coefficient monotonicity for CDFs of nonnegative random variables -/
 

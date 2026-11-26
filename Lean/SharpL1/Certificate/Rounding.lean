@@ -1,7 +1,11 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Int.DivMod
-import Mathlib.Tactic.Linarith
-import Lean.Elab.Tactic.Omega
+module
+
+public import Mathlib.Data.Real.Basic
+public import Mathlib.Data.Int.DivMod
+public import Mathlib.Tactic.Linarith
+public import Lean.Elab.Tactic.Omega
+
+public section
 
 /-!
 # Directed rounding for the mixed-sign CDF step
@@ -12,13 +16,13 @@ the already scaled children; the conversion back to a CDF uses positive S.
 
 namespace SharpL1.Certificate
 
-def roundDown (v d : ℤ) : ℤ := v / d
-def roundUp (v d : ℤ) : ℤ := (v + d - 1) / d
-def mixedNumerator (l h x y : ℤ) : ℤ := (-l) * x + h * y
-def lowerUpdate (l h x y : ℤ) : ℤ := roundDown (mixedNumerator l h x y) (h - l)
-def upperUpdate (l h x y : ℤ) : ℤ := roundUp (mixedNumerator l h x y) (h - l)
+@[expose] def roundDown (v d : ℤ) : ℤ := v / d
+@[expose] def roundUp (v d : ℤ) : ℤ := (v + d - 1) / d
+@[expose] def mixedNumerator (l h x y : ℤ) : ℤ := (-l) * x + h * y
+@[expose] def lowerUpdate (l h x y : ℤ) : ℤ := roundDown (mixedNumerator l h x y) (h - l)
+@[expose] def upperUpdate (l h x y : ℤ) : ℤ := roundUp (mixedNumerator l h x y) (h - l)
 
-noncomputable def scaledAverage (S l h : ℤ) (f g : ℝ) : ℝ :=
+@[expose] noncomputable def scaledAverage (S l h : ℤ) (f g : ℝ) : ℝ :=
   (S : ℝ) * ((-(l : ℝ)) * f + (h : ℝ) * g) / ((h : ℝ) - (l : ℝ))
 
 private theorem floor_div_le_real (v d : ℤ) (hd : 0 < d) :

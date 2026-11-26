@@ -1,9 +1,13 @@
-import SharpL1.Chebyshev
-import Mathlib.Analysis.Calculus.Deriv.Comp
-import Mathlib.Analysis.Calculus.Deriv.Polynomial
-import Mathlib.Tactic.LinearCombination
-import Mathlib.Tactic.Positivity
-import Mathlib.Tactic.Ring
+module
+
+public import SharpL1.Chebyshev
+public import Mathlib.Analysis.Calculus.Deriv.Comp
+public import Mathlib.Analysis.Calculus.Deriv.Polynomial
+public import Mathlib.Tactic.LinearCombination
+public import Mathlib.Tactic.Positivity
+public import Mathlib.Tactic.Ring
+
+public section
 
 /-!
 # Implicit differentiation and node speed for the Jacobi pencil
@@ -32,11 +36,11 @@ open Polynomial.Chebyshev (U)
 
 /-- The `t`-partial derivative of `nodePolynomial k t` as a polynomial in `y`:
 `∂_t p(t, y) = -2 U_{k+1}(y) + 2 t U_k(y)`. -/
-noncomputable def nodePolynomialDerivTPoly (k : ℕ) (t : ℝ) : ℝ[X] :=
+@[expose] noncomputable def nodePolynomialDerivTPoly (k : ℕ) (t : ℝ) : ℝ[X] :=
   -C 2 * U ℝ ((k : ℤ) + 1) + C (2 * t) * U ℝ k
 
 /-- The `t`-partial derivative `∂_t p(t, y) = -2 U_{k+1}(y) + 2 t U_k(y)` evaluated at `y`. -/
-noncomputable def nodePolynomialDerivT (k : ℕ) (t y : ℝ) : ℝ :=
+@[expose] noncomputable def nodePolynomialDerivT (k : ℕ) (t y : ℝ) : ℝ :=
   -2 * (U ℝ ((k : ℤ) + 1)).eval y + 2 * t * (U ℝ k).eval y
 
 @[simp]
@@ -46,7 +50,7 @@ theorem nodePolynomialDerivTPoly_eval (k : ℕ) (t y : ℝ) :
 
 /-- The node speed denominator `L_t(y) = (n + 2) - 2 (n + 1) t y + n t^2` from `paper.tex`,
 equation `speed`. For `nodePolynomial k t`, the order is `n = k + 1`. -/
-def speedDenominator (n : ℕ) (t y : ℝ) : ℝ :=
+@[expose] def speedDenominator (n : ℕ) (t y : ℝ) : ℝ :=
   (n + 2 : ℝ) - 2 * (n + 1 : ℝ) * t * y + (n : ℝ) * t ^ 2
 
 /-! ### Algebraic identity (Priority 1) -/

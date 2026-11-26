@@ -1,12 +1,16 @@
-import SharpL1.JacobiOrdered
-import SharpL1.JacobiSymmetry
-import SharpL1.JacobiContainment
-import SharpL1.Analysis.OrderedNodeCurves
-import SharpL1.Analysis.NodeWeights
-import SharpL1.RootBrackets
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Chebyshev.RootsExtrema
-import Mathlib.Topology.Algebra.Polynomial
-import Mathlib.Analysis.Calculus.Deriv.Comp
+module
+
+public import SharpL1.JacobiOrdered
+public import SharpL1.JacobiSymmetry
+public import SharpL1.JacobiContainment
+public import SharpL1.Analysis.OrderedNodeCurves
+public import SharpL1.Analysis.NodeWeights
+public import SharpL1.RootBrackets
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Chebyshev.RootsExtrema
+public import Mathlib.Topology.Algebra.Polynomial
+public import Mathlib.Analysis.Calculus.Deriv.Comp
+
+public section
 
 /-!
 # Global ordered Jacobi nodes on the closed interval [-1, 1]
@@ -27,7 +31,7 @@ open Polynomial.Chebyshev (U)
 
 /-- The Chebyshev-U partition points `r_j = -cos(j * π / (n + 1))` for order `n = k + 1`
 (so `n + 1 = k + 2` and `j = 0, ..., k + 2`). -/
-noncomputable def chebyshevGrid (k j : ℕ) : ℝ :=
+@[expose] noncomputable def chebyshevGrid (k j : ℕ) : ℝ :=
   -Real.cos ((j : ℝ) * Real.pi / ((k : ℝ) + 2))
 
 @[simp]

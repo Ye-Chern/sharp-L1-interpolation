@@ -1,10 +1,14 @@
-import SharpL1.JacobiOrdered
-import SharpL1.Probability.WeightedComparison
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.SpecialFunctions.PolarCoord
-import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
-import Mathlib.Probability.Distributions.Gaussian.Real
+module
+
+public import SharpL1.JacobiOrdered
+public import SharpL1.Probability.WeightedComparison
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.SpecialFunctions.PolarCoord
+public import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+public import Mathlib.Probability.Distributions.Gaussian.Real
+
+@[expose] public section
 
 /-!
 # Strict positivity of the first term in the H' decomposition (Claim 4)

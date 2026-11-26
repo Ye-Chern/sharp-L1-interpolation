@@ -1,7 +1,11 @@
-import SharpL1.Analysis.RootBranches
-import SharpL1.JacobiContainment
-import SharpL1.JacobiOrdered
-import Mathlib.Analysis.Calculus.Deriv.MeanValue
+module
+
+public import SharpL1.Analysis.RootBranches
+public import SharpL1.JacobiContainment
+public import SharpL1.JacobiOrdered
+public import Mathlib.Analysis.Calculus.Deriv.MeanValue
+
+public section
 
 /-! ## The ordered Jacobi roots follow the local branches in the interior -/
 

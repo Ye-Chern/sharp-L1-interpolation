@@ -1,6 +1,10 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.RingTheory.Polynomial.Chebyshev
-import Mathlib.Tactic.FieldSimp
+module
+
+public import Mathlib.Data.Real.Basic
+public import Mathlib.RingTheory.Polynomial.Chebyshev
+public import Mathlib.Tactic.FieldSimp
+
+public section
 
 /-!
 # Chebyshev evaluation on the certificate grid
@@ -15,18 +19,18 @@ open Polynomial
 open Polynomial.Chebyshev (U)
 
 /-- `(V_k, V_{k+1})`, evaluated by the integer loop in the certificate checker. -/
-def scaledUPair (s y : ℤ) : ℕ → ℤ × ℤ
+@[expose] def scaledUPair (s y : ℤ) : ℕ → ℤ × ℤ
   | 0 => (1, 2 * y)
   | k + 1 =>
     let (a, b) := scaledUPair s y k
     (b, 2 * y * b - s ^ 2 * a)
 
 /-- The unnormalized node polynomial at order `k + 1`. -/
-noncomputable def nodePolynomial (k : ℕ) (t : ℝ) : ℝ[X] :=
+@[expose] noncomputable def nodePolynomial (k : ℕ) (t : ℝ) : ℝ[X] :=
   U ℝ ((k : ℤ) + 2) - C (2 * t) * U ℝ ((k : ℤ) + 1) + C (t ^ 2) * U ℝ k
 
 /-- The integer sign test in certificates/check.py at order `k + 1`. -/
-def scaledNodeEval (s t y : ℤ) (k : ℕ) : ℤ :=
+@[expose] def scaledNodeEval (s t y : ℤ) (k : ℕ) : ℤ :=
   let (a, b) := scaledUPair s y k
   2 * y * b - s ^ 2 * a - 2 * t * b + t ^ 2 * a
 
