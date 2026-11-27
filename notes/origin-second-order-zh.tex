@@ -1,0 +1,703 @@
+\documentclass[UTF8,fontset=windows,a4paper,11pt]{ctexart}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=2.6cm]{geometry}
+
+\newcommand{\Lone}[1]{\lVert #1\rVert_1}
+
+% 可被 \ref 指向的“结论”环境（amsthm 已加载）
+\newtheorem{claim}{结论}
+\pagestyle{plain}
+
+\begin{document}
+\begin{center}
+    \Large 从二次多项式出发：一个 $L^1$ 插值不等式\\[6pt]
+    \normalsize Lijails\quad \&\quad GPT 6.2 Astra,\ Qwen3.8-flash（辅助写作）\\[2pt]
+    11 月 20 日
+\end{center}
+
+\section{出发点}
+
+为了讨论方便，我们先做一个换元，这个换元不是本质的（比如之后能看到我们仍旧是从边界开始积分），但是可以简化很多形式；之所以做这个换元，是因为第二节里取等的函数可以被简化。
+
+对 $f\in C^3([0,1])$，令
+\[
+    F(x)=f\!\left(\frac{x+1}{2}\right),
+    \qquad -1\le x\le 1.
+\]
+在区间 $I$ 上，$L^1$ 范数定义为
+\[
+    \lVert g\rVert_{L^1(I)}=\int_I |g(t)|\,dt.
+\]
+原不等式是
+\begin{equation}
+    \lVert f''\rVert_{L^1([0,1])}
+    \le
+    32\lVert f\rVert_{L^1([0,1])}
+    +\frac{2\sqrt{2}-1}{6}\lVert f'''\rVert_{L^1([0,1])}.
+    \label{eq:original}
+\end{equation}
+
+记 $t=(x+1)/2$，则 $dx=2\,dt$。由链式法则和积分换元，对 $k=0,1,2,3$ 有
+\[
+    F^{(k)}(x)=2^{-k}f^{(k)}(t),
+    \qquad
+    \lVert F^{(k)}\rVert_{L^1([-1,1])}
+    =2^{1-k}\lVert f^{(k)}\rVert_{L^1([0,1])}.
+\]
+因此，代入 \eqref{eq:original} 时，原式中 $f$、$f''$、$f'''$ 的范数分别是对应 $F$ 的范数的 $1/2$、$2$、$4$ 倍。约去两边的因子 $2$，得到等价的目标
+\begin{equation}
+    \Lone{F''}
+    \le 8\Lone{F}
+    +\frac{2\sqrt{2}-1}{3}\Lone{F'''}.
+    \label{eq:normalized}
+\end{equation}
+以下只讨论 $F$，并用 $\Lone{\cdot}$ 表示 $[-1,1]$ 上的 $L^1$ 范数。
+
+我们最基本的思路就是，找一个算子$T$来逼近$\dfrac{d^2}{dx^2}$，我们知道，在一些情况下，我们可以用$F$的若干插值来逼近$F''$，
+我希望我们这里也可以这么做，也就是，找到$c_1,c_2,\dots,c_n$以及$u_1(x),u_2(x),\dots,u_n(x)$使得
+
+\begin{equation}
+    TF(x)=\sum_{i=1}^{n}c_iF(u_i(x)).
+\end{equation}
+
+这样做的好处就是，右边是$F$在不同地方的取值，因此可以期望它可以被$\Lone{F}$控制，又我们是拿它来逼近$\dfrac{d^2}{dx^2}$，
+可以期望它们俩的差被更高一阶的项，也就是三阶导数控制，总的来说，我们期望的是：
+
+\begin{align}
+    \Lone{TF}
+    &\le 8\Lone{F},
+    \label{eq:operator-bound}\\
+    \Lone{F''-TF}
+    &\le \frac{2\sqrt{2}-1}{3}\Lone{F'''}.
+    \label{eq:remainder-bound}
+\end{align}
+
+一旦两者成立，我们就证明了原不等式。
+
+
+
+\section{没有三阶导的时候}
+\label{sec:quadratic}
+我们首先考虑\eqref{eq:operator-bound}。为此我们先消去三阶导的影响，仔细看看这第一项是什么样子的。
+
+此时，假设$\forall x, F'''(x)=0$，那么这个$F$必为一个度数至多二阶的多项式，对于这种情形，\eqref{eq:remainder-bound} 的右端为零，也就是 $F''=TF$，于是我们真正要证的 \eqref{eq:normalized} 变成
+\[
+    \Lone{F''}\le 8\Lone{F}.
+\]
+
+左边，实际上只与$F$的二次项系数有关系，但是右边和其它系数都有关系。这提示我们，通过一种方法将
+常数项和一次项系数消去。如何消去呢？一般来讲，我们是用正负性，也就是符号消去的。具体地想，就是对于$s(x)\in\{-1,1\}$，我们有
+$s(x)F(x)\le|F(x)|$，于是积分就有
+\[
+    \int_{-1}^{1}s(x)F(x)\,dx\le \Lone{F},
+\]
+
+我们希望
+\[
+    \int_{-1}^{1}s(x)\,dx=\int_{-1}^{1}s(x)x\,dx=0,
+\]
+这样它就和二阶导一样只和二次项系数相关了。
+
+我们来考虑这样的阶梯函数如何可能。首先，由于我们是想要我们的构造是可以取等的，也就是这个$s(x)$会是某一个度小于等于2的多项式的
+符号函数（大于 $0$ 时为 $1$，小于 $0$ 时为 $-1$，等于 $0$ 就是间断点），这样它的间断点最多为两个。先说明间断点其实必须恰好是两个：若没有间断点，则 $s\equiv\pm1$，$\displaystyle\int_{-1}^{1}s(x)\,dx=\pm2\neq0$；若只有一个间断点 $a$（设 $s$ 左正右负），两个矩条件分别给出
+\[
+    \int_{-1}^{1}s(x)\,dx=2a=0,\qquad \int_{-1}^{1}s(x)x\,dx=a^2-1=0,
+\]
+即 $a=0$ 又 $a=\pm1$，矛盾。
+
+于是设两个间断点为 $a<b$，把 $s$ 写成三段
+\[
+    s(x)=
+    \begin{cases}
+        1, & -1\le x<a\ \text{或}\ b<x\le 1,\\[2pt]
+        -1, & a<x<b,
+    \end{cases}
+\]
+（若整体反过来取 $-1,1,-1$，下面每个式子只是多一个负号，结论不变。）第一个矩条件给出
+\[
+    0=\int_{-1}^{1}s(x)\,dx=(a+1)-(b-a)+(1-b)=2-2(b-a),
+\]
+即 $b-a=1$；第二个矩条件给出
+\[
+    0=\int_{-1}^{1}s(x)x\,dx=\frac{a^2-1}{2}-\frac{b^2-a^2}{2}+\frac{1-b^2}{2}=a^2-b^2,
+\]
+即 $a^2=b^2$。因为 $a<b$，只能 $a=-b$，与 $b-a=1$ 联立即得
+\[
+    a=-\frac12,\qquad b=\frac12.
+\]
+
+于是取
+\[
+    s(x)=
+    \begin{cases}
+        1, & \dfrac12<|x|\le 1,\\[2pt]
+        -1, & |x|\le\dfrac12,
+    \end{cases}
+\]
+这正是 $x^2-\dfrac14$ 的符号函数。下面验证它确实够用。
+
+先算三个矩。$s$ 是偶函数，所以 $\displaystyle\int_{-1}^{1}s(x)x\,dx=0$；$\{s=1\}$ 与 $\{s=-1\}$ 的长度同为 $1$，所以 $\displaystyle\int_{-1}^{1}s(x)\,dx=0$；剩下
+\[
+    \int_{-1}^{1}s(x)x^2\,dx
+    =2\left(\int_{1/2}^{1}x^2\,dx-\int_{0}^{1/2}x^2\,dx\right)
+    =2\left(\frac{7}{24}-\frac{1}{24}\right)
+    =\frac12.
+\]
+
+现在设 $F(x)=a+bx+cx^2$，则 $F''=2c$ 是常数，$\Lone{F''}=4|c|$。把 $F$ 代入并利用上面三个矩，
+\[
+    \int_{-1}^{1}s(x)F(x)\,dx
+    =a\int_{-1}^{1}s(x)\,dx+b\int_{-1}^{1}s(x)x\,dx+c\int_{-1}^{1}s(x)x^2\,dx
+    =\frac{c}{2},
+\]
+写成范数就是
+\[
+    \Lone{F''}
+    =4|c|
+    =8\left|\int_{-1}^{1}s(x)F(x)\,dx\right|
+    \le 8\int_{-1}^{1}|s(x)|\,|F(x)|\,dx
+    =8\Lone{F}.
+\]
+因为$|s(x)|\equiv1$，所以最后一步取等当且仅当 $s(x)F(x)$ 几乎处处非负，或者几乎处处非正（$F\equiv0$ 时两种说法同时成立，自然也算取等）。把这个条件翻译一下：$s$ 在 $\dfrac12<|x|\le1$ 上为正、在 $|x|<\dfrac12$ 上为负，所以 $F$ 必须在外面那两段与中间那一段里取相反的固定符号。而 $F$ 是多项式，是连续函数，要从非负跨到非正，只能在两段的交界处变号，也就是说只可能在 $x=\pm\dfrac12$ 处变号；于是 $F\bigl(\pm\frac12\bigr)=0$。一个次数不超过 $2$ 的多项式以 $\pm\dfrac12$ 为零点，只能是非零常数倍的 $x^2-\dfrac14$，再加上恒为零这一种。总之全部取等函数可以统一写成
+\[
+    F(x)=\lambda\left(x^2-\frac14\right),\qquad \lambda\in\mathbb{R}.
+\]
+反过来也验证一下：因为 $s(x)$ 与 $x^2-\dfrac14$ 同号，所以 $s(x)F(x)=\lambda\bigl|x^2-\dfrac14\bigr|$ 的符号与 $\lambda$ 一致，确实几乎处处不变号，$\lambda$ 取正取负都行。
+
+这样就证明了要证的不等式在 $F'''=0$的情形下成立，\eqref{eq:operator-bound} 中的常数 $8$ 也由这个构造给出。
+显然，取等对应的二次多项式就是$x^2-\dfrac{1}{4}$（连同它的任意常数倍，包括零倍）。通过这个多项式，我们证明了这个不等式对次数不超过 $2$ 的多项式成立，且得到了一个取等函数。
+\section{启发}
+
+第~\ref{sec:quadratic}~节给出了一个自然的起点。原因在于，既然$x^2-\dfrac{1}{4}$对其取等，那它也应该对\eqref{eq:operator-bound}取等。
+由于我们的$TF$又是一些$F$在不同点$u_1,u_2,\dots,u_n$处的线性组合，那么要取等，我们应该在$u_j$分别属于$[-1,-\dfrac{1}{2})$、$(-\dfrac{1}{2},\dfrac{1}{2})$、$(\dfrac{1}{2},1]$
+的时候给它系数取正数、负数、正数（也可以反过来，但是由于绝对值都一样，就这么取了）。
+
+据此来看的话，只有三种情形是需要特殊考虑的，那么我们不妨考虑一个最简的情形，也就是$n=3$的情形。设此时，对应的函数为
+$u:[-1,1]\to[-1,-\dfrac{1}{2}]$、$v:[-1,1]\to[-\dfrac{1}{2},\dfrac{1}{2}]$、$w:[-1,1]\to[\dfrac{1}{2},1]$。由于我们最终是要
+凑出来$\Lone{F}$的，最好是每一点都取到一遍，如果有点取到不止一遍呢？直觉上，这样每一点都会又被取到一遍，因此可以吸收到系数里面去。所以我们先不管它。
+这样，$u,v,w$就都是单且满的（每一个点取且只取一遍），从而由于它们是连续函数，自然是单调的，不妨设都是单增的吧。
+
+为了凑出$\Lone{F}$，像$c_1(x)F(u(x))$这个，最简单最方便的情形自然是系数能够分离出$u'(x)$，我们先满怀希望地假设$c_1(x)=8u'(x), c_2(x)=-8v'(x), c_3(x)=8w'(x)$，这样也符合我们对系数的正负性的选择了。
+
+总的来讲，由~\ref{sec:quadratic}~节，我们启发式地想到$T$应该如此定义：
+\begin{equation}
+    TF(x)
+    =8\Big(u'(x)F\big(u(x)\big)-v'(x)F\big(v(x)\big)+w'(x)F\big(w(x)\big)\Big),
+    \qquad x\in[-1,1].
+    \label{eq:T-heuristic}
+\end{equation}
+也就是说，第~\ref{sec:quadratic}~节中使 \eqref{eq:operator-bound} 取等的构造，被吸收成了三个带导数权重的采样点 $u,v,w$。
+
+\section{$T$的构造}
+\label{sec:construction}
+接下来我们就应该实际地求出$u,v,w$了，这很简单，因为我们有一个实际性的目的，就是拿$T$来逼近$\dfrac{d^2}{dx^2}$。
+这样，这个东西就应该在$F(x)=1$的时候取$0$，在$F(x)=x$的时候取$0$，在$F(x)=\dfrac{x^2}{2}$的时候取$1$。
+具体地，我们把上面三个测试函数分别代入 \eqref{eq:T-heuristic}，并要求 $TF=F''$。
+
+\begin{enumerate}
+    \item[\textbf{情形 (1).}] 取 $F\equiv1$，此时 $F''\equiv0$，由 \eqref{eq:T-heuristic} 得
+    \begin{equation}
+        u'(x)-v'(x)+w'(x)=0,\qquad x\in[-1,1].
+        \label{eq:moment-0}
+    \end{equation}
+    从$-1$到$x$积分，注意到$u(-1)-v(-1)+w(-1)=-1+\dfrac{1}{2}+\dfrac{1}{2}=0$，我们就知道
+    \begin{equation}
+        u(x)+w(x)=v(x),\qquad x\in[-1,1].
+        \label{eq:coe-0}
+    \end{equation}
+    \item[\textbf{情形 (2).}] 取 $F(x)=x$，此时 $F''\equiv0$，于是要求
+    \begin{equation}
+        u(x)u'(x)-v(x)v'(x)+w(x)w'(x)=0,\qquad x\in[-1,1].
+        \label{eq:moment-1}
+    \end{equation}
+    这个式子可以和$u'+w'=v'$联动，因为这说明
+    \begin{align*}
+        v(x)&=\frac{u'(x)}{u'(x)+w'(x)}u(x)+\frac{w'(x)}{u'(x)+w'(x)}w(x),\\
+        TF(x)&=8v'(x)\left(\frac{u'(x)}{u'(x)+w'(x)}F(u(x))+\frac{w'(x)}{u'(x)+w'(x)}F(w(x))-F(v(x))\right).
+    \end{align*}
+    这恰好是一个Jensen不等式可以应用的地方（由于我们的目的是逼近二阶导，所以这样的结果似乎不是令人惊讶的），于是得到下面以后要反复使用的结论。
+
+    \begin{claim}[Jensen 差与凸性]
+    \label{clm:convex}
+        设 $x\in[-1,1]$ 满足 $u'(x),w'(x)\ge0$ 且 $u'(x)+w'(x)>0$（在我们的情形是满足的）。若 $F$ 为凸函数，则
+        \[
+            TF(x)\ge0.
+        \]
+    \end{claim}
+    从$-1$到$x$积分，注意到$u(-1)^2-v(-1)^2+w(-1)^2=1-\dfrac{1}{4}+\dfrac{1}{4}=1$，我们就知道
+    \begin{equation}
+        u(x)^2+w(x)^2=v(x)^2+1,\qquad x\in[-1,1].
+        \label{eq:coe-1}
+    \end{equation}
+    这样我们实际上还有
+    \[
+        uw=\frac{1}{2}\bigl((u+w)^2-(u^2+w^2)\bigr)=-\frac{1}{2}.
+    \]
+    \item[\textbf{情形 (3).}] 取 $F(x)=\dfrac{x^{2}}{2}$，此时 $F''\equiv1$，于是要求
+    \begin{equation}
+        u(x)^{2}u'(x)-v(x)^{2}v'(x)+w(x)^{2}w'(x)=\dfrac{1}{4},\qquad x\in[-1,1].
+        \label{eq:moment-2}
+    \end{equation}
+    此时，注意到$u^3(-1)-v^3(-1)+w^3(-1)=-1+\dfrac{1}{8}+\dfrac{1}{8}=-\dfrac{3}{4}$，积分就有：
+    \[
+    u^3(x)-v^3(x)+w^3(x)=\frac{3x}{4},
+    \]
+    又由情形(1)以及情形(2)末尾的$uw=-\dfrac{1}{2}$知道
+    \[
+        v^3=(u+w)^3=u^3+w^3+3uw(u+w)=u^3+w^3-\frac{3}{2}v,
+    \]
+    所以
+    \[
+        \frac{3}{2}v=\frac{3}{4}x\implies v=\frac{x}{2}.
+    \]
+\end{enumerate}
+
+这样，我们由 $uw=-\dfrac{1}{2}$、$u+w=\dfrac{x}{2}$ 知道 $u,w$ 满足二次方程：
+\[
+    y^2-\frac{x}{2}y-\frac{1}{2}=0,
+\]
+其两根为 $\dfrac{x\pm\sqrt{x^{2}+8}}{4}$。由 $u(-1)=-1$、$w(-1)=\dfrac12$ 以及两根恒不相等（从而同一支在整个区间上不变），可知 $u$ 取较小根、$w$ 取较大根。于是
+\begin{align}
+    u(x)&=\frac{x-\sqrt{x^{2}+8}}{4}, \label{eq:u-explicit}\\
+    v(x)&=\frac{x}{2}, \label{eq:v-explicit}\\
+    w(x)&=\frac{x+\sqrt{x^{2}+8}}{4}, \label{eq:w-explicit}
+\end{align}
+其中第二式只是把第~\ref{sec:construction}~节得到的 $v=\dfrac{x}{2}$ 一并编号，方便后文引用。对 \eqref{eq:u-explicit}、\eqref{eq:w-explicit} 求导，得
+\begin{equation}
+    u'(x)=\frac{1}{4}\left(1-\frac{x}{\sqrt{x^{2}+8}}\right),\qquad
+    v'(x)=\frac{1}{2},\qquad
+    w'(x)=\frac{1}{4}\left(1+\frac{x}{\sqrt{x^{2}+8}}\right),
+    \label{eq:uvw-deriv}
+\end{equation}
+特别地 $u'(x),w'(x)>0$ 且 $u'(x)+w'(x)=\dfrac12=v'(x)$，与 \eqref{eq:coe-0} 相合。
+
+下面把这些式子代回检查一遍取值范围。因为 $\sqrt{x^{2}+8}>|x|$，所以 $u(x)<0<w(x)$；又 $u$、$w$ 在 $[-1,1]$ 上单调递增，故
+\[
+    u(x)\in\left[-1,-\frac12\right],\qquad
+    w(x)\in\left[\frac12,1\right],\qquad
+    v(x)\in\left[-\frac12,\frac12\right]\subset[-1,1],
+\]
+即三个采样点始终落在定义区间内。再注意
+\[
+    v(x)-u(x)=w(x)>0,\qquad w(x)-v(x)=-u(x)>0,
+\]
+所以 $u(x)<v(x)<w(x)$，并且结论~\ref{clm:convex} 所需要的条件在这里确实成立。
+
+
+
+
+这里还有一个值得记下来的关系（也是我们在推导 $T$ 的形式时的直觉的验证）。令第~\ref{sec:quadratic}~节构造的阶梯函数为 $s$。三个函数 $u,v,w$ 恰好单调地走遍了 $s$ 取正、负、正的三个区间，因此对任意连续函数 $F$，换元就有
+\begin{equation}
+    \int_{-1}^{1}TF(x)\,dx
+    =8\int_{-1}^{1}s(y)F(y)\,dy.
+    \label{eq:global-local}
+\end{equation}
+这就是说，先前那个用于消去低阶项的整体积分，被我们拆成了一个逐点定义的算子。并且，利用三角不等式及三个区间恰好拼成 $[-1,1]$，立刻得到
+\begin{align}
+    \Lone{TF}
+    &\le 8\int_{-1}^{1}\bigl(u'(x)|F(u(x))|+v'(x)|F(v(x))|+w'(x)|F(w(x))|\bigr)\,dx\\
+    &=8\Lone{F}.
+    \label{eq:T-bound-proof}
+\end{align}
+这样我们想要的第一个估计~\eqref{eq:operator-bound} 已经成立，剩下只需要问：这个 $T$ 究竟把二阶导数逼近得有多好？
+
+\section{泰勒余项：误差从哪里来}
+\label{sec:taylor}
+
+因为 $T$ 和二阶微分算子在所有次数不超过 $2$ 的多项式上相同，所以它们的差看不到这些多项式；误差自然应该由更高一阶的导数，也就是 $F'''$ 来控制。这提示我们把 $F$ 分成一个二次泰勒多项式和一个余项。
+
+泰勒余项有几种常见写法。这里选择积分余项：一方面它不需要再引入某个不确定的中间点，另一方面我们最终要证明的本来就是积分不等式，而且积分可以与 $T$ 的有限次取值运算交换。
+
+先考虑从哪个点展开。若从区间内部某点 $a$ 展开，余项是一个从 $a$ 到 $y$ 的定向积分。要把它写成 $[-1,1]$ 上的积分核，就得分辨 $y$ 在 $a$ 的哪一边。为了免去这种分类，直接从端点展开最简单。两个端点对称，我们选左端点 $-1$。
+
+对每个 $y\in[-1,1]$，有
+\begin{align}
+    F(y)&=P_2(y)+\frac12\int_{-1}^{y}(y-t)^2F'''(t)\,dt\\
+    &=P_2(y)+\int_{-1}^{1}h_t(y)F'''(t)\,dt,
+    \label{eq:taylor-kernel}
+\end{align}
+其中 $P_2$ 是 $F$ 在 $-1$ 处的二阶泰勒多项式，且
+\begin{equation}
+    h_t(y)=\frac12(y-t)_+^2,\qquad z_+=\max\{z,0\}.
+    \label{eq:hinge}
+\end{equation}
+注意，$h_t''(y)=\mathbf1_{\{y>t\}}$（在 $y=t$ 这一点的取值不影响后面的积分）。因为 $TP_2=P_2''$，且 $T$ 与对 $t$ 的积分可以交换，对~\eqref{eq:taylor-kernel} 分别作用 $D^2$ 和 $T$，相减得到
+\begin{equation}
+    F''(x)-TF(x)
+    =\int_{-1}^{1}\Bigl(\mathbf1_{\{x>t\}}-Th_t(x)\Bigr)F'''(t)\,dt.
+    \label{eq:Peano}
+\end{equation}
+这已经是我们要找的误差表达式。令
+\begin{equation}
+    E(t):=\int_{-1}^{1}\bigl|\mathbf1_{\{x>t\}}-Th_t(x)\bigr|\,dx.
+    \label{eq:E-definition}
+\end{equation}
+由积分三角不等式并交换积分次序，
+\begin{align}
+    \Lone{F''-TF}
+    &\le\int_{-1}^{1}E(t)|F'''(t)|\,dt\\
+    &\le\left(\sup_{-1\le t\le1}E(t)\right)\Lone{F'''}.
+    \label{eq:error-via-E}
+\end{align}
+于是一个函数空间上的估计，变成了一个单变量函数 $E(t)$ 的最大值问题。我们下面就来计算它。
+
+\section{一次跳跃放在哪里最难逼近}
+\label{sec:estimate}
+
+直接计算 $E(t)$ 看似要处理不少绝对值。但在构造 $T$ 时，我们已经顺便得到了结论~\ref{clm:convex}：$T$ 把凸函数送到非负函数。而一个二次函数，只要它的二次项系数是正的，那么它就是凸的，另外一个凸函数，如果我们只取它在某一个区间上的值，其余为适合的线性函数拼起来的形式（这是不等式的一个常见技巧），那么它还是凸的。因此现在 $h_t$ 显然凸，而且
+\[
+    \frac12(y-t)^2-h_t(y)=\frac12(t-y)_+^2
+\]
+也凸。由于 $T((y-t)^2/2)=1$，我们立即有
+\begin{equation}
+    0\le Th_t(x)\le1.
+    \label{eq:Th-range}
+\end{equation}
+因此 $\mathbf1_{\{x>t\}}-Th_t(x)$ 在 $x<t$ 时非正，在 $x>t$ 时非负。绝对值可以去掉，得到
+\begin{align}
+    E(t)
+    &=\int_{-1}^{t}Th_t(x)\,dx+\int_t^1(1-Th_t(x))\,dx\\
+    &=1-t+2\int_{-1}^{t}Th_t(x)\,dx-\int_{-1}^{1}Th_t(x)\,dx.
+    \label{eq:E-integral}
+\end{align}
+
+两个积分都容易算。由 $T$ 的定义~\eqref{eq:T-heuristic}，
+\[
+    \int_{-1}^{z}Th_t(x)\,dx
+    =8\int_{-1}^{z}\Bigl(u'(x)h_t\bigl(u(x)\bigr)-v'(x)h_t\bigl(v(x)\bigr)+w'(x)h_t\bigl(w(x)\bigr)\Bigr)\,dx.
+\]
+三个积分分别作 $y=u(x)$、$y=v(x)$、$y=w(x)$ 的换元；由于 $u,v,w$ 在 $[-1,1]$ 上单调递增，上下限只是简单地带过去（$u(-1)=-1$、$v(-1)=-\frac12$、$w(-1)=\frac12$）。又 $h_t''(y)=\mathbf 1_{\{y>t\}}$，所以 $h_t$ 的一个原函数是
+\[
+    \Phi_t(y)=\frac{(y-t)_+^3}{6},
+\]
+于是
+\begin{align*}
+    \int_{-1}^{z}Th_t(x)\,dx
+    &=8\int_{-1}^{u(z)}h_t(y)\,dy-8\int_{-1/2}^{v(z)}h_t(y)\,dy+8\int_{1/2}^{w(z)}h_t(y)\,dy\\
+    &=\frac43\Bigl[(u(z)-t)_+^3-(v(z)-t)_+^3+(w(z)-t)_+^3\\
+    &\qquad\ -(u(-1)-t)_+^3+(v(-1)-t)_+^3-(w(-1)-t)_+^3\Bigr].
+\end{align*}
+代入三个下端点的值，并注意到只要参数满足 $t\ge-1$ 就有 $(-1-t)_+^3=0$，便得到：对任意 $z\in[-1,1]$，
+\begin{align}
+    \int_{-1}^{z}Th_t(x)\,dx
+     =\frac43\bigl[&(u(z)-t)_+^3-(v(z)-t)_+^3+(w(z)-t)_+^3\\
+     &+(-\tfrac12-t)_+^3-(\tfrac12-t)_+^3\bigr].
+    \label{eq:primitive-Th}
+\end{align}
+
+剩下的就是把各个正部项按大小关系逐一删掉。我们先考虑 $0\le t\le1$。由~\eqref{eq:u-explicit}、\eqref{eq:v-explicit} 有 $u(t)<0\le t$ 以及 $v(t)=\frac{t}{2}\le t$；而
+\[
+    w(t)-t=\frac{\sqrt{t^2+8}-3t}{4}\ \ge\ 0
+    \iff t^2+8\ge 9t^2
+    \iff 0\le t\le1,
+\]
+所以 $u(t)\le v(t)\le t\le w(t)$。于是在~\eqref{eq:primitive-Th} 中取 $z=t$ 时，只有 $w(t)-t$ 那个采样点给出非零的正部项；下端点处 $(-\frac12-t)_+^3=0$，另外还有来自下端点的 $(\frac12-t)_+^3$：
+\[
+    \int_{-1}^{t}Th_t(x)\,dx
+    =\frac43\Bigl[\bigl(w(t)-t\bigr)^3-\bigl(\tfrac12-t\bigr)_+^3\Bigr].
+\]
+再取 $z=1$。此时 $u(1)=-\frac12$、$v(1)=\frac12$、$w(1)=1$，故 $(u(1)-t)_+^3=0$、$(v(1)-t)_+^3=(\frac12-t)_+^3$、$(w(1)-t)_+^3=(1-t)^3$，即
+\[
+    \int_{-1}^{1}Th_t(x)\,dx
+    =\frac43\Bigl[(1-t)^3-2\bigl(\tfrac12-t\bigr)_+^3\Bigr].
+\]
+两式代回~\eqref{eq:E-integral}：含 $(\frac12-t)_+^3$ 的部分在前一项带系数 $2\cdot\frac43$、在后一项带系数 $-(-2\cdot\frac43)$，恰好抵消，得到
+\begin{equation}
+    E(t)=1-t+\frac83\bigl(w(t)-t\bigr)^3-\frac43(1-t)^3,
+    \quad 0\le t\le1.
+    \label{eq:E-positive}
+\end{equation}
+
+这里可以直接代入 $w$ 的根式去展开，但那样会突然出现一些不太有来由的计算。我们尝试利用 $T$ 本身的对称性。
+
+定义反射 $(RF)(x)=F(-x)$。由~\eqref{eq:u-explicit}--\eqref{eq:w-explicit}，
+\[
+    u(-x)=-w(x),\qquad v(-x)=-v(x),\qquad w(-x)=-u(x),
+\]
+而由~\eqref{eq:uvw-deriv}，相应的导数权重互换：
+\[
+    u'(-x)=w'(x),\qquad v'(-x)=v'(x),\qquad w'(-x)=u'(x).
+\]
+因此对任意 $F$，
+\begin{align*}
+    (TRF)(x)&=8\bigl(u'(x)F(-u(x))-v'(x)F(-v(x))+w'(x)F(-w(x))\bigr),\\
+    (RTF)(x)&=8\bigl(u'(-x)F(u(-x))-v'(-x)F(v(-x))+w'(-x)F(w(-x))\bigr)\\
+    &=8\bigl(w'(x)F(-w(x))-v'(x)F(-v(x))+u'(x)F(-u(x))\bigr),
+\end{align*}
+两式右端逐项相同，所以 $TR=RT$。同时
+\[
+    h_{-t}(-y)=\frac12(t-y)_+^2=\frac12(y-t)^2-\frac12(y-t)_+^2=\frac12(y-t)^2-h_t(y).
+\]
+于是由 $TR=RT$ 以及 $T$ 的线性性，
+\[
+    Th_{-t}(-x)=\bigl(RTh_{-t}\bigr)(x)=\bigl(TRh_{-t}\bigr)(x)
+    =T\Bigl(\tfrac12(\cdot-t)^2-h_t\Bigr)(x)=1-Th_t(x),
+\]
+最后一步用的是 $T$ 精确复制二次函数的二阶导数，而 $\bigl(\frac12(y-t)^2\bigr)''\equiv1$。将 $x$ 换成 $-x$（即在积分中作 $x\mapsto -x$），得到
+\begin{align*}
+    E(-t)&=\int_{-1}^{1}\bigl|\mathbf1_{\{x>-t\}}-Th_{-t}(x)\bigr|\,dx
+    =\int_{-1}^{1}\bigl|\mathbf1_{\{x<t\}}-Th_{-t}(-x)\bigr|\,dx\\
+    &=\int_{-1}^{1}\bigl|\mathbf1_{\{x<t\}}-1+Th_t(x)\bigr|\,dx
+    =\int_{-1}^{1}\bigl|\mathbf1_{\{x>t\}}-Th_t(x)\bigr|\,dx
+    =E(t),
+\end{align*}
+其中用了 $\mathbf1_{\{x<t\}}-1=-\mathbf1_{\{x>t\}}$（除去 $x=t$ 这一点，对积分没有影响）。即
+\begin{equation}
+    E(-t)=E(t).
+    \label{eq:E-even}
+\end{equation}
+
+既然如此，不如把 $E(t)$ 和 $E(-t)$ 的计算式相加。用同样的换元，或将~\eqref{eq:primitive-Th} 取 $z=-t$，可得（不可以直接将 $-t$ 代入~\eqref{eq:E-positive}，因为它是在$0\le t\le 1$下推导出来的，此时$0\ge -t \ge -1$，不满足这个条件，所以要重新推导，否则我们出现的还是$w(t)$，并不会出现$w(-t)$）。具体地，记参数 $s=-t\in[-1,0]$，在~\eqref{eq:primitive-Th} 中把下标 $h_t$ 换成 $h_s$、上限取 $z=s$，逐项检查正部：
+\[
+    u(s)-s=u(-t)+t=t-w(t)\le0,\qquad
+    v(s)-s=v(-t)+t=-\frac{s}{2}=\frac{t}{2},
+\]
+\[
+    w(s)-s=w(-t)+t=t-u(t)\ge0,\qquad
+    -\tfrac12-s=t-\tfrac12,\quad \tfrac12-s=t+\tfrac12,
+\]
+这里 $t-w(t)\le0$ 就是上面验证过的 $w(t)\ge t$，而 $t-u(t)\ge0$ 是因为 $u(t)<0\le t$。所以
+\[
+    \int_{-1}^{-t}Th_{-t}(x)\,dx
+    =\frac43\Bigl[-\frac{t^3}{8}+\bigl(t-u(t)\bigr)^3+\bigl(t-\tfrac12\bigr)_+^3-\bigl(t+\tfrac12\bigr)^3\Bigr].
+\]
+再取 $z=1$，此时 $(u(1)-s)_+^3=(t-\frac12)_+^3$、$(v(1)-s)_+^3=(t+\frac12)^3$、$(w(1)-s)_+^3=(1+t)^3$，故
+\[
+    \int_{-1}^{1}Th_{-t}(x)\,dx
+    =\frac43\Bigl[(1+t)^3+2\bigl(t-\tfrac12\bigr)_+^3-2\bigl(t+\tfrac12\bigr)^3\Bigr].
+\]
+两式代入~\eqref{eq:E-integral}（其中的 $t$ 现在是 $s=-t$，所以 $1-s=1+t$），$\bigl(t-\frac12\bigr)_+^3$ 与 $\bigl(t+\frac12\bigr)^3$ 都是前一项出现 $2\cdot\frac43$、后一项减去 $2\cdot\frac43$，正好抵消，于是
+\begin{equation}
+    E(-t)=1+t+\frac83\left[(t-u(t))^3-\frac{t^3}{8}\right]
+                    -\frac43(1+t)^3,
+    \qquad 0\le t\le1.
+    \label{eq:E-negative}
+\end{equation}
+于是令
+\[
+    A=w(t)-t,\qquad B=t-u(t),
+\]
+将~\eqref{eq:E-positive}、\eqref{eq:E-negative} 相加。左边由~\eqref{eq:E-even} 就是 $2E(t)$；右边线性项 $(1-t)+(1+t)=2$，而
+\[
+    \frac43\bigl[(1-t)^3+(1+t)^3\bigr]=\frac43\bigl(2+6t^2\bigr)=\frac83+8t^2,
+    \qquad
+    \frac83\cdot\Bigl(-\frac{t^3}{8}\Bigr)=-\frac{t^3}{3},
+\]
+所以
+\[
+    2E(t)=-\frac23-8t^2-\frac{t^3}{3}+\frac83\bigl(A^3+B^3\bigr),
+\]
+两边乘以 $3$ 便得到
+\begin{equation}
+    6E(t)=8(A^3+B^3)-2-24t^2-t^3.
+    \label{eq:E-AB}
+\end{equation}
+
+使用我们在构造 $T$ 时已经得到的关系 $u+w=t/2$、$uw=-1/2$。第一式给出
+\[
+    A+B=w-u=\frac{\sqrt{8+t^2}}{2},
+\]
+（也可直接由~\eqref{eq:u-explicit}、\eqref{eq:w-explicit} 相减验证：$w-u=\frac{2\sqrt{t^2+8}}{4}$。）第二式则把 $AB$ 展开：
+\[
+    AB=(w-t)(t-u)=t(u+w)-uw-t^2=\frac{t^2}{2}+\frac12-t^2=\frac{1-t^2}{2}.
+\]
+由初等恒等式 $A^3+B^3=(A+B)^3-3AB(A+B)$，记 $r=\sqrt{8+t^2}$，就有
+\[
+    A^3+B^3=\frac{r^3}{8}-\frac{3(1-t^2)}{4}\,r
+    =\frac{r}{8}\bigl[r^2-6(1-t^2)\bigr]
+    =\frac{r}{8}\bigl[(8+t^2)-6+6t^2\bigr]
+    =\frac{(2+7t^2)r}{8},
+\]
+即
+\begin{equation}
+    A^3+B^3=\frac{(2+7t^2)\sqrt{8+t^2}}{8}.
+    \label{eq:AB-cubes}
+\end{equation}
+因此最终
+\begin{equation}
+    \boxed{6E(t)=(2+7t^2)\sqrt{8+t^2}-2-24t^2-t^3},
+    \qquad 0\le t\le1.
+    \label{eq:E-explicit}
+\end{equation}
+
+接下来只需找最大值。记 $r=\sqrt{8+t^2}$，则 $2rr'=2t$，即 $r'=\dfrac{t}{r}$。对~\eqref{eq:E-explicit} 左端求导：
+\[
+    6E'(t)=14t\,r+(2+7t^2)\frac{t}{r}-48t-3t^2
+    =t\left(14r+\frac{2+7t^2}{r}-48-3t\right).
+\]
+对于 $0\le t\le1$，有 $2\sqrt{2}\le r\le3$ 以及 $2+7t^2\le9$，所以 $14r\le42$ 且
+\[
+    \frac{2+7t^2}{r}\le\frac{9}{2\sqrt{2}}=\frac{9\sqrt{2}}{4}<3.2,
+    \qquad -3t\le0,
+\]
+括号里的表达式满足
+\[
+    14r+\frac{2+7t^2}{r}-48-3t
+    \le 42+\frac9{2\sqrt{2}}-48<45.2-48=-2.8<0.
+\]
+故 $E$ 在 $(0,1]$ 上严格递减。再结合偶性~\eqref{eq:E-even}，我们知道 $E$ 的最大值只在 $t=0$ 处取到，并且
+\begin{equation}
+    \sup_{-1\le t\le1}E(t)=E(0)=\frac{2\sqrt{2}-1}{3}.
+    \label{eq:E-max}
+\end{equation}
+
+将~\eqref{eq:E-max} 代入~\eqref{eq:error-via-E}，得到第二个估计
+\[
+    \Lone{F''-TF}\le\frac{2\sqrt{2}-1}{3}\Lone{F'''}.
+\]
+再由~\eqref{eq:T-bound-proof} 和三角不等式，
+\[
+    \Lone{F''}
+    \le\Lone{TF}+\Lone{F''-TF}
+    \le8\Lone{F}+\frac{2\sqrt{2}-1}{3}\Lone{F'''},
+\]
+也就是~\eqref{eq:normalized}。换回 $[0,1]$ 就证明了原不等式~\eqref{eq:original}。
+
+\section{再从误差反推取等函数}
+\label{sec:sharpness}
+
+证明了不等式，还要问两个常数能否更小。第一个常数已经由 $Q(x)=x^2-1/4$ 给出：由于 $Q'''=0$ 且 $\Lone{Q''}=8\Lone{Q}$，常数 $8$ 不可能降低。
+
+第二个常数的来源更有趣。由~\eqref{eq:error-via-E} 可以看出，若想使余项估计尽可能接近取等，$F'''$ 就应该尽量集中在 $E(t)$ 最大的地方。而我们刚刚证明 $E$ 的唯一最大点是 $t=0$。直觉上，这意味着 $F''$ 应该在 $0$ 附近产生一次越来越尖锐的跳跃。
+
+这样我们不妨出格地假设二阶导数有跳跃，令 $G''(x)=\operatorname{sgn}x$。积分两次，就得到一族函数
+\[
+    G(x)=\frac12x|x|+ax+b.
+\]
+取奇函数可令 $b=0$；记 $a=-c/2$，写成
+\begin{equation}
+    G(x)=\frac12x(|x|-c).
+    \label{eq:G-general}
+\end{equation}
+怎样确定 $c$？我们还想使第一个估计 $\Lone{TG}\le8\Lone{G}$ 取等。我们尝试让取等条件自己把 $c$ 逼出来。
+
+由~\eqref{eq:T-heuristic} 可以把 $\frac18 TG$ 写成三个采样值的组合：
+\[
+    \frac18 TG(x)=u'(x)G\bigl(u(x)\bigr)-v'(x)G\bigl(v(x)\bigr)+w'(x)G\bigl(w(x)\bigr).
+\]
+把逐点三角不等式两边的差记下来，令
+\[
+    \Delta(x):=u'(x)\bigl|G(u(x))\bigr|+v'(x)\bigl|G(v(x))\bigr|+w'(x)\bigl|G(w(x))\bigr|-\frac18\bigl|TG(x)\bigr|.
+\]
+因为 $u',v',w'$ 在 $[-1,1]$ 上都为正，三角不等式给出 $\Delta(x)\ge0$；又 $u,v,w$ 与 $TG$ 都连续，所以 $\Delta$ 是连续函数。现在对它积分：$u(-1)=-1$、$u(1)=\dfrac{1-3}{4}=-\dfrac12$，且 $u'>0$ 使 $u$ 单调，故换元 $y=u(x)$ 合法，得到
+\[
+    \int_{-1}^{1}u'(x)\bigl|G(u(x))\bigr|\,dx=\int_{-1}^{-1/2}\bigl|G(y)\bigr|\,dy.
+\]
+同理，由 $v(-1)=-\dfrac12,\;v(1)=\dfrac12$ 与 $w(-1)=\dfrac12,\;w(1)=\dfrac{1+3}{4}=1$，另外两项分别给出 $\displaystyle\int_{-1/2}^{1/2}|G(y)|\,dy$ 与 $\displaystyle\int_{1/2}^{1}|G(y)|\,dy$。三段恰好拼成 $[-1,1]$，于是
+\[
+    \int_{-1}^{1}\Delta(x)\,dx=\Lone{G}-\frac18\Lone{TG}.
+\]
+左边是一个非负连续函数的积分，它等于零当且仅当被积函数恒为零。所以 $\Lone{TG}=8\Lone{G}$ 当且仅当 $\Delta\equiv0$；特别地，取等必须满足 $\Delta(0)=0$。
+
+接着看 $x=0$ 处。由~\eqref{eq:u-explicit}、\eqref{eq:v-explicit}、\eqref{eq:w-explicit} 及~\eqref{eq:uvw-deriv}，
+\[
+    u(0)=-\frac1{\sqrt{2}},\qquad v(0)=0,\qquad w(0)=\frac1{\sqrt{2}},
+    \qquad u'(0)=w'(0)=\frac14,\qquad v'(0)=\frac12.
+\]
+$G$ 是奇函数，故 $G(u(0))=-G(w(0))$，而 $G(v(0))=G(0)=0$。代入 $\Delta(0)$ 的绝对值部分，外侧两项是相加的：
+\[
+    u'(0)\bigl|G(u(0))\bigr|+v'(0)\bigl|G(v(0))\bigr|+w'(0)\bigl|G(w(0))\bigr|
+    =\frac14\bigl|G(w(0))\bigr|+0+\frac14\bigl|G(w(0))\bigr|
+    =\frac12\bigl|G(w(0))\bigr|;
+\]
+可是在 $\frac18 TG(0)$ 里，外侧两项符号相反而恰好互相抵消，中间一项又等于 $G(0)=0$，所以 $TG(0)=0$。于是
+\[
+    0=\Delta(0)=\frac12\bigl|G(w(0))\bigr|,
+    \qquad\text{即}\qquad
+    G\bigl(w(0)\bigr)=0.
+\]
+由~\eqref{eq:G-general}，$G(y)=\frac12y(|y|-c)$；这里 $w(0)=\frac1{\sqrt{2}}\ne0$，所以只能 $|w(0)|-c=0$。这样 $c$ 不是我们挑的，而是取等逼出来的：
+\begin{equation}
+    c=\frac1{\sqrt{2}},\qquad
+    G(x)=\frac12x\left(|x|-\frac1{\sqrt{2}}\right).
+    \label{eq:G-special}
+\end{equation}
+换句话说，连该看哪个点都是有理由的：在对称中心 $x=0$，奇性带来的抵消与取等要求的无抵消正面相遇，最后只剩 $G(w(0))$ 这一个因子必须为零。剩下的就是验证这个 $G$ 的确取等。
+则对 $x>0$，有 $-c<u(x)<0<v(x)<c<w(x)$，所以
+\[
+    G(u(x))>0,\qquad G(v(x))<0,\qquad G(w(x))>0.
+\]
+对 $x<0$，上述三个符号恰好同时反转。因为 $u',v',w'$ 都为正，$TG(x)$ 与 $\operatorname{sgn}x$ 同号，并且 $T$ 中的三项始终没有抵消。因此
+\begin{equation}
+    \Lone{TG}=8\Lone{G}.
+    \label{eq:G-T-equality}
+\end{equation}
+
+还需要检查最后一次三角不等式会不会损失。注意到
+\[
+    G(x)=2h_0(x)-\frac{x^2}{2}-\frac{cx}{2},
+\]
+故利用 $T$ 在二次多项式上的精确性，得到
+\[
+    G''(x)-TG(x)=2\bigl(\mathbf1_{\{x>0\}}-Th_0(x)\bigr).
+\]
+由~\eqref{eq:Th-range} 可知，这个误差在 $x<0$ 时非正，在 $x>0$ 时非负，因而也与 $G''(x)=\operatorname{sgn}x$ 同号。再结合 $TG$ 与 $G''$ 同号，就知道三角不等式同样取等：
+\begin{equation}
+    \Lone{G''}
+    =\Lone{TG}+\Lone{G''-TG}
+    =8\Lone{G}+2E(0).
+    \label{eq:G-sharp-equality}
+\end{equation}
+
+当然，$G''$ 在 $0$ 处不连续，$G$ 本身不属于原命题要求的 $C^3$ 类。但我们现在已经知道应该逼近什么了，只需把跳跃光滑化。例如，取 $G_n$ 满足
+\[
+    G_n''(x)=\tanh(nx),\qquad
+    G_n(0)=0,\qquad G_n'(0)=-\frac{c}{2}.
+\]
+那么 $G_n\in C^{\infty}([-1,1])$，并且 $G_n\to G$ 一致收敛、$G_n''\to G''$ 在 $L^1$ 中收敛；另一方面
+\[
+    \Lone{G_n'''}=\int_{-1}^{1}n\,\operatorname{sech}^2(nx)\,dx
+    =2\tanh n\longrightarrow2.
+\]
+于是利用~\eqref{eq:G-sharp-equality}，
+\begin{equation}
+    \lim_{n\to\infty}
+    \frac{\Lone{G_n''}-8\Lone{G_n}}{\Lone{G_n'''}}
+    =\frac{2E(0)}2
+    =\frac{2\sqrt{2}-1}{3}.
+    \label{eq:sharp-limit}
+\end{equation}
+这表明，在第一个常数固定为 $8$ 时，第二个常数不能再降低。经最初的区间换元，原不等式中的 $32$ 与 $(2\sqrt{2}-1)/6$ 都是锐的。
+
+还有一点收尾的余地。$E$ 的最大值唯一这件事，顺手把原题在 $C^3$ 中的全部取等函数也一并给出了。上面这一串估计其实是四个量的连不等，记
+\[
+    \begin{aligned}
+    A&=\Lone{F''}, & B&=\Lone{TF}+\Lone{F''-TF},\\
+    C&=8\Lone{F}+\int_{-1}^{1}E(t)|F'''(t)|\,dt, &
+    D&=8\Lone{F}+E(0)\Lone{F'''},
+    \end{aligned}
+\]
+则 $A\le B\le C\le D$，而 $D$ 恰好是~\eqref{eq:normalized} 的右端。设 $F\in C^3([-1,1])$ 使 $A=D$，那么中间每一步都得取等，特别地 $C=D$，即
+\[
+    \int_{-1}^{1}E(t)|F'''(t)|\,dt=E(0)\int_{-1}^{1}|F'''(t)|\,dt.
+\]
+我们说明这强迫 $F'''\equiv0$。反设不然：$F'''$ 连续且不恒为零，就存在 $t_1\ne0$ 以及一个含 $t_1$ 的闭区间 $J$，使 $|F'''|\ge m>0$ 在 $J$ 上成立（$J$ 可取充分小，以致 $|t|\ge\dfrac{|t_1|}{2}>0$ 于 $J$ 上）。由~\eqref{eq:E-explicit}，$E$ 连续；又由~\eqref{eq:E-max}，$E$ 只在 $t=0$ 取到最大值，所以在紧集 $J$ 上存在 $\eta>0$ 使 $E(t)\le E(0)-\eta$。于是
+\[
+    \begin{aligned}
+    \int_{-1}^{1}E|F'''|
+    &=\int_{J}E|F'''|+\int_{[-1,1]\setminus J}E|F'''|\\
+    &\le(E(0)-\eta)\int_{J}|F'''|+E(0)\int_{[-1,1]\setminus J}|F'''|\\
+    &=E(0)\Lone{F'''}-\eta\int_{J}|F'''|,
+    \end{aligned}
+\]
+而 $\displaystyle\int_{J}|F'''|\ge m|J|>0$，故 $\displaystyle\int_{-1}^{1}E|F'''|<E(0)\Lone{F'''}$，与 $C=D$ 矛盾。因此取等必须先有 $F'''\equiv0$，即 $F$ 是次数不超过 $2$ 的多项式。此时第二节已经把这个情形的取等函数全部列出：$\Lone{F''}\le8\Lone{F}$ 取等当且仅当 $F=\lambda\bigl(x^2-\dfrac14\bigr)$，$\lambda\in\mathbb{R}$。反过来它们确实取等，因为此时 $F'''=0$，而 $\Lone{F''}=4|\lambda|=8\Lone{F}$。
+
+换回 $[0,1]$：$f(t)=F(2t-1)=\lambda\bigl((2t-1)^2-\dfrac14\bigr)=4\lambda\bigl(t-\dfrac14\bigr)\bigl(t-\dfrac34\bigr)$，把常数 $4\lambda$ 仍记作 $\lambda$，就得到原题在 $C^3([0,1])$ 中的全部取等函数
+\[
+    f(x)=\lambda\left(x-\frac14\right)\left(x-\frac34\right),\qquad \lambda\in\mathbb{R}.
+\]
+代回原式验算一遍：$f''=2\lambda$，所以 $\Lone{f''}=2|\lambda|$，且 $f'''=0$；又 $f$ 在 $[0,1]$ 内的零点是 $\dfrac14$ 与 $\dfrac34$，关于 $x=\dfrac12$ 对称，故
+\[
+    \begin{aligned}
+    \int_{0}^{1}|f(x)|\,dx
+    &=2|\lambda|\left(\int_{0}^{1/4}\left(x^2-x+\frac3{16}\right)\,dx
+      -\int_{1/4}^{1/2}\left(x^2-x+\frac3{16}\right)\,dx\right)\\
+    &=2|\lambda|\left(\frac1{48}+\frac1{96}\right)
+    =\frac{|\lambda|}{16},
+    \end{aligned}
+\]
+于是 $32\displaystyle\int_0^1|f(x)|\,dx=2|\lambda|=\Lone{f''}$，两端恰好相等。开篇从取等条件里找到的那个二次多项式，到结尾才知道，它已经给出了全部的精确取等情形。
+
+我们从一个二次多项式的取等条件出发，构造了逼近二阶导的算子；又从这个算子的误差最大位置，反过来找到了另一个逼近取等的函数。这样两个看似独立的最佳常数，实际上都由同一个构造联系了起来。
+
+\end{document}
