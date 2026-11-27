@@ -145,7 +145,9 @@ status:
     - "Classical.choice"
     - "Quot.sound"
   main_results:
-    - "SharpL1.theorem_sharp_L1_interpolation_full"
+    - declaration: "SharpL1.Analysis.theorem_sharp_L1_interpolation_full"
+      file: "SharpL1/Analysis/MainTheorem.lean"
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
 
 automation:
   methods:
