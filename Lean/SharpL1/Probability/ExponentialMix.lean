@@ -1,8 +1,12 @@
-import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
-import Mathlib.MeasureTheory.Integral.Bochner.Set
-import Mathlib.Probability.Distributions.Exponential
-import Mathlib.Tactic.FieldSimp
-import Mathlib.Tactic.Linarith
+module
+
+public import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
+public import Mathlib.MeasureTheory.Integral.Bochner.Set
+public import Mathlib.Probability.Distributions.Exponential
+public import Mathlib.Tactic.FieldSimp
+public import Mathlib.Tactic.Linarith
+
+public section
 
 /-!
 # Exponential mixture tail integral

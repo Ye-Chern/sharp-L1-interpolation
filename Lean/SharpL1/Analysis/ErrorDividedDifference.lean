@@ -1,4 +1,8 @@
-import SharpL1.Analysis.DividedCDF
+module
+
+public import SharpL1.Analysis.DividedCDF
+
+public section
 
 /-! ## Algebraic form of the four-law derivative identity -/
 

@@ -1,6 +1,10 @@
-import SharpL1.Analysis.DividedCDF
-import Mathlib.Analysis.Calculus.Deriv.Polynomial
-import Mathlib.Analysis.Calculus.Deriv.Slope
+module
+
+public import SharpL1.Analysis.DividedCDF
+public import Mathlib.Analysis.Calculus.Deriv.Polynomial
+public import Mathlib.Analysis.Calculus.Deriv.Slope
+
+public section
 
 /-! ## Differentiation of a truncated power through its knot -/
 

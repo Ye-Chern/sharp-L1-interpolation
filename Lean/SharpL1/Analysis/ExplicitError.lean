@@ -1,15 +1,19 @@
-import SharpL1.Analysis.TruncatedPowerDeriv
-import SharpL1.Analysis.ErrorValue
-import SharpL1.Analysis.Exterior
-import SharpL1.Analysis.GlobalNodes
-import SharpL1.Analysis.DividedCDFBridge
-import SharpL1.Analysis.LowOrderNodes
-import SharpL1.Analysis.FirstTermPos
-import SharpL1.Analysis.ChordIntegral
-import Mathlib.Analysis.Calculus.Deriv.Comp
-import Mathlib.Tactic.FieldSimp
-import Mathlib.Tactic.Positivity
-import Mathlib.Tactic.FinCases
+module
+
+public import SharpL1.Analysis.TruncatedPowerDeriv
+public import SharpL1.Analysis.ErrorValue
+public import SharpL1.Analysis.Exterior
+public import SharpL1.Analysis.GlobalNodes
+public import SharpL1.Analysis.DividedCDFBridge
+public import SharpL1.Analysis.LowOrderNodes
+public import SharpL1.Analysis.FirstTermPos
+public import SharpL1.Analysis.ChordIntegral
+public import Mathlib.Analysis.Calculus.Deriv.Comp
+public import Mathlib.Tactic.FieldSimp
+public import Mathlib.Tactic.Positivity
+public import Mathlib.Tactic.FinCases
+
+@[expose] public section
 
 /-!
 # The explicit interpolation error, its derivative, exterior monotonicity, and Hcomp
@@ -341,7 +345,7 @@ private theorem nodePolynomial_eval_neg_one (k : ℕ) (t : ℝ) :
   simp only [pow_succ]
   ring
 
-private noncomputable def augmentedNodes (k : ℕ) (t : ℝ) : Finset ℝ :=
+noncomputable def augmentedNodes (k : ℕ) (t : ℝ) : Finset ℝ :=
   insert (-1 : ℝ) (insert (1 : ℝ) (Finset.univ.image (orderedNode k t)))
 
 private theorem augmentedNodes_card (k : ℕ) {t : ℝ} (ht : |t| < 1) :

@@ -1,10 +1,14 @@
-import SharpL1.JacobiOrdered
-import SharpL1.Probability.WeightedComparison
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.SpecialFunctions.PolarCoord
-import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
-import Mathlib.Probability.Distributions.Gaussian.Real
+module
+
+public import SharpL1.JacobiOrdered
+public import SharpL1.Probability.WeightedComparison
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.SpecialFunctions.PolarCoord
+public import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+public import Mathlib.Probability.Distributions.Gaussian.Real
+
+@[expose] public section
 
 /-!
 # Strict positivity of the first term in the H' decomposition (Claim 4)
@@ -187,7 +191,7 @@ private theorem gaussian_sq_half_eq_expMeasure :
   let g1 := ProbabilityTheory.gaussianReal 0 1
   have hmap_meas : Measurable (fun p : ℝ × ℝ => (p.1 ^ 2 + p.2 ^ 2) / 2) := by fun_prop
   haveI : IsProbabilityMeasure ((g1.prod g1).map (fun p : ℝ × ℝ => (p.1 ^ 2 + p.2 ^ 2) / 2)) :=
-    Measure.isProbabilityMeasure_map hmap_meas.aemeasurable
+    ⟨by rw [Measure.map_apply hmap_meas MeasurableSet.univ, Set.preimage_univ, measure_univ]⟩
   haveI : IsProbabilityMeasure (ProbabilityTheory.expMeasure 1) :=
     Probability.expMeasure_probability zero_lt_one
   apply Measure.ext_of_Iic
@@ -825,7 +829,7 @@ theorem firstTerm_lawSignMean_pos (k : ℕ) {t : ℝ} (ht : 0 < t) :
     have h1 : (S ∩ U : Set _) =ᵐ[P] S := by
       filter_upwards [compl_mem_ae_iff.mpr hU_compl] with ω hω
       have hωU : ω ∈ U := by simpa using hω
-      exact propext ⟨fun h => h.1, fun h => ⟨h, hωU⟩⟩
+      simp [hωU]
     exact h1
   -- Set decompositions inside `U`
   have hS1 : {ω | 0 < X ω + Y ω} ∩ U = ({ω | |Y ω| < X ω} ∩ U) ∪ ({ω | X ω - Y ω < 0} ∩ U) := by
@@ -841,7 +845,8 @@ theorem firstTerm_lawSignMean_pos (k : ℕ) {t : ℝ} (ht : 0 < t) :
   have hD1 : Disjoint ({ω | |Y ω| < X ω} ∩ U) ({ω | X ω - Y ω < 0} ∩ U) := by
     rw [Set.disjoint_left]
     rintro ω ⟨habs, _⟩ ⟨hlt, _⟩
-    dsimp only [Set.mem_setOf_eq] at habs hlt
+    change |Y ω| < X ω at habs
+    change X ω - Y ω < 0 at hlt
     linarith [(abs_lt.mp habs).2]
   have hS2 : {ω | 0 < X ω - Y ω} ∩ U = ({ω | |Y ω| < X ω} ∩ U) ∪ ({ω | X ω + Y ω < 0} ∩ U) := by
     ext ω; simp only [Set.mem_inter_iff, Set.mem_union, Set.mem_setOf_eq, U, abs_lt]
@@ -856,7 +861,8 @@ theorem firstTerm_lawSignMean_pos (k : ℕ) {t : ℝ} (ht : 0 < t) :
   have hD2 : Disjoint ({ω | |Y ω| < X ω} ∩ U) ({ω | X ω + Y ω < 0} ∩ U) := by
     rw [Set.disjoint_left]
     rintro ω ⟨habs, _⟩ ⟨hlt, _⟩
-    dsimp only [Set.mem_setOf_eq] at habs hlt
+    change |Y ω| < X ω at habs
+    change X ω + Y ω < 0 at hlt
     linarith [(abs_lt.mp habs).1]
   have hm_sub_neg : MeasurableSet ({ω | X ω - Y ω < 0} ∩ U) :=
     (measurableSet_lt hXY_sub_cont.measurable measurable_const).inter hU_meas
@@ -899,7 +905,7 @@ theorem firstTerm_lawSignMean_pos (k : ℕ) {t : ℝ} (ht : 0 < t) :
       exact div_nonneg (add_nonneg (quadForm_jacobiPencilD_nonneg k _) (quadForm_jacobiPencilD_nonneg k _))
         (by norm_num)
     have hY0 : Y ω0 = 0 := by dsimp [Y, ω0]; linarith
-    dsimp only [Set.mem_setOf_eq]
+    change |Y ω0| < X ω0
     rw [hY0, abs_zero]
     dsimp [X, ω0]
     nlinarith

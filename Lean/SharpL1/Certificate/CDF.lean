@@ -1,4 +1,8 @@
-import SharpL1.Certificate.Rounding
+module
+
+public import SharpL1.Certificate.Rounding
+
+public section
 
 /-!
 # Triangular CDF recurrence and directed enclosure
@@ -10,7 +14,7 @@ also specify the CDF convention for the all-zero subarray.
 
 namespace SharpL1.Certificate
 
-noncomputable def cdfMixed (l h : ℤ) (x y : ℝ) : ℝ :=
+@[expose] noncomputable def cdfMixed (l h : ℤ) (x y : ℝ) : ℝ :=
   (-(l : ℝ) * x + (h : ℝ) * y) / ((h : ℝ) - l)
 
 private theorem scaledAverage_eq (s l h : ℤ) (x y : ℝ) :
@@ -18,7 +22,7 @@ private theorem scaledAverage_eq (s l h : ℤ) (x y : ℝ) :
   rw [scaledAverage, cdfMixed, mul_div_assoc]
 
 /-- Compute one row from adjacent entries of the previous row. -/
-def cdfEntries {α : Type} (zero one : α) (mix : ℤ → ℤ → α → α → α) :
+@[expose] def cdfEntries {α : Type} (zero one : α) (mix : ℤ → ℤ → α → α → α) :
     List ℤ → List ℤ → List α → List α
   | l :: lows, h :: highs, x :: y :: values =>
     (if h ≤ 0 then one else if 0 ≤ l then zero else mix l h x y) ::
@@ -26,7 +30,7 @@ def cdfEntries {α : Type} (zero one : α) (mix : ℤ → ℤ → α → α → 
   | _, _, _ => []
 
 /-- Advance the table by the indicated number of rows. -/
-def cdfRows {α : Type} (zero one : α) (mix : ℤ → ℤ → α → α → α)
+@[expose] def cdfRows {α : Type} (zero one : α) (mix : ℤ → ℤ → α → α → α)
     (knots : List ℤ) (gap : ℕ) (values : List α) : ℕ → List α
   | 0 => values
   | count + 1 =>
@@ -34,21 +38,21 @@ def cdfRows {α : Type} (zero one : α) (mix : ℤ → ℤ → α → α → α)
       (cdfEntries zero one mix knots (knots.drop (gap + 1)) values) count
 
 /-- Run the shared arithmetic table from singleton entries. -/
-def cdfRun {α : Type} (zero one : α) (mix : ℤ → ℤ → α → α → α)
+@[expose] def cdfRun {α : Type} (zero one : α) (mix : ℤ → ℤ → α → α → α)
     (knots : List ℤ) : α :=
   (cdfRows zero one mix knots 0 (knots.map fun x => if x ≤ 0 then one else zero)
     (knots.length - 1)).headD zero
 
 /-- The real-valued recurrence, with CDF evaluated at zero. -/
-noncomputable def cdfExact (knots : List ℤ) : ℝ :=
+@[expose] noncomputable def cdfExact (knots : List ℤ) : ℝ :=
   cdfRun 0 1 cdfMixed knots
 
 /-- Lower directed enclosure in units of 1/s. -/
-def cdfLower (s : ℤ) (knots : List ℤ) : ℤ :=
+@[expose] def cdfLower (s : ℤ) (knots : List ℤ) : ℤ :=
   cdfRun 0 s lowerUpdate knots
 
 /-- Upper directed enclosure in units of 1/s. -/
-def cdfUpper (s : ℤ) (knots : List ℤ) : ℤ :=
+@[expose] def cdfUpper (s : ℤ) (knots : List ℤ) : ℤ :=
   cdfRun 0 s upperUpdate knots
 
 private theorem cdfRun_rel {α β : Type} (R : α → β → Prop)

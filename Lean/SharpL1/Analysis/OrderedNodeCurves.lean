@@ -1,7 +1,11 @@
-import SharpL1.Analysis.RootBranches
-import SharpL1.JacobiContainment
-import SharpL1.JacobiOrdered
-import Mathlib.Analysis.Calculus.Deriv.MeanValue
+module
+
+public import SharpL1.Analysis.RootBranches
+public import SharpL1.JacobiContainment
+public import SharpL1.JacobiOrdered
+public import Mathlib.Analysis.Calculus.Deriv.MeanValue
+
+public section
 
 /-! ## The ordered Jacobi roots follow the local branches in the interior -/
 
@@ -47,7 +51,7 @@ theorem orderedNode_coefficient_monotoneOn (k : ℕ) (i : Fin (k + 2)) :
   have hd (t : ℝ) (ht : t ∈ Ioo (-1 : ℝ) 1) :
       HasDerivAt (fun x => x - orderedNode k x i)
         (1 - 2 * (1 - orderedNode k t i ^ 2) / speedDenominator (k + 1) t (orderedNode k t i)) t :=
-    (hasDerivAt_id t).sub (hasDerivAt_orderedNode k (abs_lt.mpr ht) i)
+    HasDerivAt.sub (hasDerivAt_id t) (hasDerivAt_orderedNode k (abs_lt.mpr ht) i)
   apply monotoneOn_of_deriv_nonneg (convex_Ioo _ _)
   · intro t ht
     exact (hd t ht).continuousAt.continuousWithinAt

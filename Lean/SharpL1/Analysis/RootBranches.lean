@@ -1,11 +1,15 @@
-import SharpL1.Analysis.NodeSpeed
-import Mathlib.Analysis.Calculus.InverseFunctionTheorem.FDeriv
-import Mathlib.Analysis.Calculus.FDeriv.Prod
-import Mathlib.Analysis.Calculus.FDeriv.Mul
-import Mathlib.Algebra.Polynomial.Roots
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Positivity
-import Mathlib.Tactic.Ring
+module
+
+public import SharpL1.Analysis.NodeSpeed
+public import Mathlib.Analysis.Calculus.InverseFunctionTheorem.FDeriv
+public import Mathlib.Analysis.Calculus.FDeriv.Prod
+public import Mathlib.Analysis.Calculus.FDeriv.Mul
+public import Mathlib.Algebra.Polynomial.Roots
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Positivity
+public import Mathlib.Tactic.Ring
+
+public section
 
 /-!
 # Local differentiable root branches for the Jacobi pencil
@@ -36,12 +40,12 @@ open Polynomial.Chebyshev (U)
 
 /-- The map `(s, x) ↦ (s, p_s(x))` used to construct local root branches via the
 inverse function theorem. -/
-noncomputable def nodeMap (k : ℕ) (p : ℝ × ℝ) : ℝ × ℝ :=
+@[expose] noncomputable def nodeMap (k : ℕ) (p : ℝ × ℝ) : ℝ × ℝ :=
   (p.1, (nodePolynomial k p.1).eval p.2)
 
 /-- Continuous linear equivalence on `ℝ × ℝ` given by the lower-triangular map
 `(ds, dx) ↦ (ds, a * ds + b * dx)` for `b ≠ 0`. -/
-noncomputable def lowerTriangularEquiv (a b : ℝ) (hb : b ≠ 0) : (ℝ × ℝ) ≃L[ℝ] (ℝ × ℝ) where
+@[expose] noncomputable def lowerTriangularEquiv (a b : ℝ) (hb : b ≠ 0) : (ℝ × ℝ) ≃L[ℝ] (ℝ × ℝ) where
   toFun p := (p.1, a * p.1 + b * p.2)
   invFun q := (q.1, (q.2 - a * q.1) / b)
   map_add' p q := by
@@ -168,7 +172,7 @@ theorem hasStrictFDerivAt_nodeMap_equiv (k : ℕ) {t y : ℝ}
 
 /-- Local root branch `u : ℝ → ℝ` passing through `(t, y)` for `nodePolynomial k`,
 obtained as the second coordinate of the local inverse of `nodeMap k`. -/
-noncomputable def localRootBranch (k : ℕ) (t y : ℝ)
+@[expose] noncomputable def localRootBranch (k : ℕ) (t y : ℝ)
     (ht : |t| < 1) (hy : |y| ≤ 1) (hroot : (nodePolynomial k t).eval y = 0) : ℝ → ℝ :=
   fun s =>
     ((hasStrictFDerivAt_nodeMap_equiv k ht hy hroot).localInverse (nodeMap k)
@@ -318,15 +322,31 @@ theorem eventually_hasStrictDerivAt_localRootBranch (k : ℕ) {t y : ℝ}
   have hsymm_eq : e.symm (s, 0) = (s, localRootBranch k t y ht hy.le hroot s) := by
     have h1 : (e.symm (s, 0)).1 = s := congr_arg Prod.fst hsright
     exact Prod.ext h1 rfl
-  have hf_s : HasStrictFDerivAt e
+  have hf_s : HasStrictFDerivAt (nodeMap k)
       ((lowerTriangularEquiv (nodePolynomialDerivT k s (localRootBranch k t y ht hy.le hroot s))
         ((derivative (nodePolynomial k s)).eval (localRootBranch k t y ht hy.le hroot s))
         (derivative_nodePolynomial_ne_zero_of_root k hsabs huabs.le hsroot) :
         (ℝ × ℝ) ≃L[ℝ] (ℝ × ℝ)) : (ℝ × ℝ) →L[ℝ] (ℝ × ℝ))
-      (e.symm (s, 0)) := by
-    rw [hsymm_eq]
-    exact hasStrictFDerivAt_nodeMap_equiv k hsabs huabs.le hsroot
-  have hinv_s := e.hasStrictFDerivAt_symm hstgt hf_s
+      (s, localRootBranch k t y ht hy.le hroot s) :=
+    hasStrictFDerivAt_nodeMap_equiv k hsabs huabs.le hsroot
+  have hleft_inv : ∀ᶠ p in nhds (s, localRootBranch k t y ht hy.le hroot s),
+      e.symm (nodeMap k p) = p := by
+    have hsrc : (s, localRootBranch k t y ht hy.le hroot s) ∈ e.source := by
+      rw [← hsymm_eq]
+      exact e.map_target hstgt
+    filter_upwards [e.open_source.mem_nhds hsrc] with p hp
+    have hleft := e.left_inv hp
+    simpa only [e, HasStrictFDerivAt.toOpenPartialHomeomorph_coe] using hleft
+  have hnode_s : nodeMap k (s, localRootBranch k t y ht hy.le hroot s) = (s, 0) := by
+    simp [nodeMap, hsroot]
+  have hinv_s' := hf_s.to_local_left_inverse hleft_inv
+  have hinv_s : HasStrictFDerivAt e.symm
+      (((lowerTriangularEquiv (nodePolynomialDerivT k s (localRootBranch k t y ht hy.le hroot s))
+        ((derivative (nodePolynomial k s)).eval (localRootBranch k t y ht hy.le hroot s))
+        (derivative_nodePolynomial_ne_zero_of_root k hsabs huabs.le hsroot)).symm :
+          (ℝ × ℝ) ≃L[ℝ] (ℝ × ℝ)) : (ℝ × ℝ) →L[ℝ] (ℝ × ℝ))
+      (s, 0) := by
+    rwa [hnode_s] at hinv_s'
   have hslice_s : HasStrictFDerivAt (fun r : ℝ => (r, (0 : ℝ)))
       ((ContinuousLinearMap.id ℝ ℝ).prod (0 : ℝ →L[ℝ] ℝ)) s :=
     (hasStrictFDerivAt_id s).prodMk (hasStrictFDerivAt_const (0 : ℝ) s)

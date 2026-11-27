@@ -1,9 +1,15 @@
-import SharpL1.Chebyshev
-import Mathlib.Analysis.Calculus.Deriv.Comp
-import Mathlib.Analysis.Calculus.Deriv.Polynomial
-import Mathlib.Tactic.LinearCombination
-import Mathlib.Tactic.Positivity
-import Mathlib.Tactic.Ring
+module
+
+public import SharpL1.Chebyshev
+public import Mathlib.Analysis.Calculus.Deriv.Add
+public import Mathlib.Analysis.Calculus.Deriv.Comp
+public import Mathlib.Analysis.Calculus.Deriv.Mul
+public import Mathlib.Analysis.Calculus.Deriv.Polynomial
+public import Mathlib.Tactic.LinearCombination
+public import Mathlib.Tactic.Positivity
+public import Mathlib.Tactic.Ring
+
+public section
 
 /-!
 # Implicit differentiation and node speed for the Jacobi pencil
@@ -32,11 +38,11 @@ open Polynomial.Chebyshev (U)
 
 /-- The `t`-partial derivative of `nodePolynomial k t` as a polynomial in `y`:
 `∂_t p(t, y) = -2 U_{k+1}(y) + 2 t U_k(y)`. -/
-noncomputable def nodePolynomialDerivTPoly (k : ℕ) (t : ℝ) : ℝ[X] :=
+@[expose] noncomputable def nodePolynomialDerivTPoly (k : ℕ) (t : ℝ) : ℝ[X] :=
   -C 2 * U ℝ ((k : ℤ) + 1) + C (2 * t) * U ℝ k
 
 /-- The `t`-partial derivative `∂_t p(t, y) = -2 U_{k+1}(y) + 2 t U_k(y)` evaluated at `y`. -/
-noncomputable def nodePolynomialDerivT (k : ℕ) (t y : ℝ) : ℝ :=
+@[expose] noncomputable def nodePolynomialDerivT (k : ℕ) (t y : ℝ) : ℝ :=
   -2 * (U ℝ ((k : ℤ) + 1)).eval y + 2 * t * (U ℝ k).eval y
 
 @[simp]
@@ -46,7 +52,7 @@ theorem nodePolynomialDerivTPoly_eval (k : ℕ) (t y : ℝ) :
 
 /-- The node speed denominator `L_t(y) = (n + 2) - 2 (n + 1) t y + n t^2` from `paper.tex`,
 equation `speed`. For `nodePolynomial k t`, the order is `n = k + 1`. -/
-def speedDenominator (n : ℕ) (t y : ℝ) : ℝ :=
+@[expose] def speedDenominator (n : ℕ) (t y : ℝ) : ℝ :=
   (n + 2 : ℝ) - 2 * (n + 1 : ℝ) * t * y + (n : ℝ) * t ^ 2
 
 /-! ### Algebraic identity (Priority 1) -/
@@ -239,10 +245,10 @@ theorem hasDerivAt_nodePolynomial_eval (k : ℕ) (u : ℝ → ℝ) (t u' : ℝ)
       ((derivative (U ℝ k)).eval (u t) * u') t :=
     HasDerivAt.comp t (Polynomial.hasDerivAt _ (u t)) hu
   have h2t : HasDerivAt (fun s : ℝ => 2 * s) 2 t := by
-    simpa using (hasDerivAt_id t).const_mul (2 : ℝ)
+    simpa using HasDerivAt.const_mul (2 : ℝ) (hasDerivAt_id t)
   have ht2 : HasDerivAt (fun s : ℝ => s ^ 2) (2 * t) t := by
     simpa using hasDerivAt_pow 2 t
-  have hcomb := (h2.sub (h2t.mul h1)).add (ht2.mul h0)
+  have hcomb := (h2.sub (HasDerivAt.mul h2t h1)).add (HasDerivAt.mul ht2 h0)
   have hfun : (fun s => (nodePolynomial k s).eval (u s)) =
       ((fun s => (U ℝ ((k : ℤ) + 2)).eval (u s)) -
         (fun s => 2 * s) * (fun s => (U ℝ ((k : ℤ) + 1)).eval (u s)) +

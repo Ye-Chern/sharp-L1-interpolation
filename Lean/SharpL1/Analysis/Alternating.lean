@@ -1,4 +1,8 @@
-import Mathlib.Data.Real.Basic
+module
+
+public import Mathlib.Data.Real.Basic
+
+public section
 
 /-!
 # Nonnegativity of the alternating left fold

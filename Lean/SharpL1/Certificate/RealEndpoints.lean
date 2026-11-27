@@ -1,6 +1,10 @@
-import SharpL1.Certificate.CDFBridge
-import SharpL1.Certificate.DerivativeBridge
-import Mathlib.Data.List.Forall2
+module
+
+public import SharpL1.Certificate.CDFBridge
+public import SharpL1.Certificate.DerivativeBridge
+public import Mathlib.Data.List.Forall2
+
+public section
 
 /-! ## Coefficient enclosures derived from the actual bracket rows -/
 
@@ -9,7 +13,7 @@ namespace SharpL1.Certificate
 open SharpL1.Probability
 
 /-- The real coefficients use the same descending order of roots as the CSV. -/
-noncomputable def coreCoefficients {m : ℕ} (row : Row) (roots : Fin m → ℝ) : List ℝ :=
+@[expose] noncomputable def coreCoefficients {m : ℕ} (row : Row) (roots : Fin m → ℝ) : List ℝ :=
   List.ofFn fun i => parameter row.t - roots i
 
 /-- A checked row supplies ordered integer lists and positionwise enclosures

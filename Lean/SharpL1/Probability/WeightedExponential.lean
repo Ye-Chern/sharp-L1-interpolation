@@ -1,6 +1,10 @@
-import SharpL1.Probability.ExponentialRecurrence
-import SharpL1.Probability.CDFOrder
-import SharpL1.Probability.ScaledExponential
+module
+
+public import SharpL1.Probability.ExponentialRecurrence
+public import SharpL1.Probability.CDFOrder
+public import SharpL1.Probability.ScaledExponential
+
+public section
 
 /-! ## Laws of finite weighted sums of unit exponential variables -/
 
@@ -9,16 +13,17 @@ namespace SharpL1.Probability
 open MeasureTheory
 
 /-- The law of c times a rate-one exponential. -/
-noncomputable def weightedExp (c : ℝ) : Measure ℝ :=
+@[expose] noncomputable def weightedExp (c : ℝ) : Measure ℝ :=
   (ProbabilityTheory.expMeasure 1).map (fun x : ℝ => c * x)
 
 instance (c : ℝ) : IsProbabilityMeasure (weightedExp c) := by
   letI : IsProbabilityMeasure (ProbabilityTheory.expMeasure 1) := expMeasure_probability zero_lt_one
-  exact Measure.isProbabilityMeasure_map (measurable_const.mul measurable_id).aemeasurable
+  have hmeas : Measurable (fun x : ℝ => c * x) := measurable_const.mul measurable_id
+  exact ⟨by rw [weightedExp, Measure.map_apply hmeas MeasurableSet.univ, Set.preimage_univ, measure_univ]⟩
 
 /-- The law of the sum of independent rate-one exponentials with the listed
 coefficients. The empty sum is a point mass at zero. -/
-noncomputable def weightedExpSum : List ℝ → Measure ℝ
+@[expose] noncomputable def weightedExpSum : List ℝ → Measure ℝ
   | [] => Measure.dirac 0
   | c :: cs => weightedExp c ∗ weightedExpSum cs
 
@@ -101,7 +106,7 @@ theorem weightedExpSum_mixed {l h : ℝ} (hl : l < 0) (hh : 0 < h) (middle : Lis
   rw [sub_eq_add_neg, add_comm h (-l)]
 
 /-- The real-valued closed CDF at zero of a finite weighted exponential sum. -/
-noncomputable def weightedCdfZero (cs : List ℝ) : ℝ :=
+@[expose] noncomputable def weightedCdfZero (cs : List ℝ) : ℝ :=
   (weightedExpSum cs).real (Set.Iic 0)
 
 /-- The mixed branch agrees with the normalized real CDF recursion. -/

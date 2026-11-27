@@ -1,5 +1,9 @@
-import SharpL1.Certificate.CDF
-import SharpL1.Probability.WeightedExponential
+module
+
+public import SharpL1.Certificate.CDF
+public import SharpL1.Probability.WeightedExponential
+
+public section
 
 /-! ## Probability semantics of the exact arithmetic table -/
 

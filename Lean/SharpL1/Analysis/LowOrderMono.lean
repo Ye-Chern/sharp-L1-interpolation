@@ -1,9 +1,13 @@
-import SharpL1.Analysis.LowOrders
-import SharpL1.Analysis.LowOrderNodes
-import SharpL1.Analysis.ChordIntegral
-import SharpL1.Analysis.ChordBoundsN4
-import Mathlib.Tactic.FinCases
-import Mathlib.Tactic.LinearCombination
+module
+
+public import SharpL1.Analysis.LowOrders
+public import SharpL1.Analysis.LowOrderNodes
+public import SharpL1.Analysis.ChordIntegral
+public import SharpL1.Analysis.ChordBoundsN4
+public import Mathlib.Tactic.FinCases
+public import Mathlib.Tactic.LinearCombination
+
+@[expose] public section
 
 /-!
 # Low-Order Strict Monotonicity (`n = 1, 2, 3`)

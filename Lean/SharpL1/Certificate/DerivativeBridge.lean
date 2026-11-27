@@ -1,6 +1,10 @@
-import SharpL1.Certificate.Checker
-import Mathlib.Analysis.Calculus.Deriv.MeanValue
-import Mathlib.Tactic.NormNum
+module
+
+public import SharpL1.Certificate.Checker
+public import Mathlib.Analysis.Calculus.Deriv.MeanValue
+public import Mathlib.Tactic.NormNum
+
+public section
 
 /-!
 # From a checked partition to continuous derivative positivity
@@ -13,7 +17,7 @@ namespace SharpL1.Certificate
 
 open Set
 
-noncomputable def parameter (t : ℤ) : ℝ := (t : ℝ) / gridScale
+@[expose] noncomputable def parameter (t : ℤ) : ℝ := (t : ℝ) / gridScale
 
 theorem checkOrder_derivative_pos (n : ℕ) (rows : List Row) (h : checkOrder n rows = true)
     (signs : ℝ → Signs ℝ) (D : ℝ → ℝ)

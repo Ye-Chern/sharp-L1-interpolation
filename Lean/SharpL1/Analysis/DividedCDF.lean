@@ -1,5 +1,9 @@
-import SharpL1.Analysis.DividedDifference
-import Lean.Elab.Tactic.Omega
+module
+
+public import SharpL1.Analysis.DividedDifference
+public import Lean.Elab.Tactic.Omega
+
+public section
 
 /-! ## Finite differences of truncated powers -/
 
@@ -9,7 +13,7 @@ open Polynomial
 
 /-- At order zero this is the closed indicator, consistent with the CDF at a
 singleton node. At higher orders it is the corresponding positive-part power. -/
-noncomputable def truncatedPower (m : ℕ) (t y : ℝ) : ℝ :=
+@[expose] noncomputable def truncatedPower (m : ℕ) (t y : ℝ) : ℝ :=
   if t ≤ y then (y - t) ^ m else 0
 
 theorem truncatedPower_succ (m : ℕ) (t y : ℝ) :

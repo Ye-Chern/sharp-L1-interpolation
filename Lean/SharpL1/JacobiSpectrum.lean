@@ -1,9 +1,13 @@
-import SharpL1.Jacobi
-import Mathlib.Analysis.Matrix.Spectrum
-import Mathlib.LinearAlgebra.Eigenspace.Basic
-import Mathlib.LinearAlgebra.Matrix.ToLin
-import Mathlib.LinearAlgebra.Dimension.Finite
-import Mathlib.Tactic.NormNum
+module
+
+public import SharpL1.Jacobi
+public import Mathlib.Analysis.Matrix.Spectrum
+public import Mathlib.LinearAlgebra.Eigenspace.Basic
+public import Mathlib.LinearAlgebra.Matrix.ToLin
+public import Mathlib.LinearAlgebra.Dimension.Finite
+public import Mathlib.Tactic.NormNum
+
+public section
 
 namespace SharpL1
 
@@ -14,7 +18,7 @@ theorem jacobi_eigenvector_eq_zero_of_head_eq_zero (k : ℕ) (t μ : ℝ)
   have h : ∀ m : ℕ, ∀ hm : m < k + 2, v ⟨m, hm⟩ = 0 := by
     intro m
     induction m using Nat.strong_induction_on with
-    | h m ih =>
+    | ind m ih =>
       intro hm
       cases m with
       | zero => simpa using h0
@@ -130,7 +134,7 @@ theorem nodePolynomial_roots_nodup (k : ℕ) (t : ℝ) :
 
 
 /-- Positive parameter direction of the core pencil tI − J(t). -/
-noncomputable def jacobiPencilD (k : ℕ) : Matrix (Fin (k + 2)) (Fin (k + 2)) ℝ :=
+@[expose] noncomputable def jacobiPencilD (k : ℕ) : Matrix (Fin (k + 2)) (Fin (k + 2)) ℝ :=
   Matrix.diagonal fun i => if i.val = 0 ∨ i.val + 1 = k + 2 then 1 / 2 else 1
 
 theorem jacobi_pencil_affine (k : ℕ) (t : ℝ) :

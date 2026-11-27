@@ -1,0 +1,241 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Sharp Second Constants in L^1 Landau-Kolmogorov Inequalities on a Finite Interval"
+  description: >-
+    Complete Lean 4 formalization of the lexicographically sharp all-L^1
+    Landau-Kolmogorov inequality on any compact interval [a, b] (a < b) and
+    every order n = k + 1 >= 1:
+    ||f^(n)||_1 <= 4^n n! (b-a)^(-n) ||f||_1 + ((b-a)/2) B_n ||f^(n+1)||_1
+    for f in W^(n+1,1)([a,b]), where B_n = 1 - 2^n/(n+1) +
+    2^(n+1)/(n+1) sum_{m=1}^{floor((n+1)/2)} (-1)^(m-1) cos^(n+1)(m pi/(n+2)).
+    The development constructs the (n+1)-point moving-node Chebyshev divided-
+    difference operator driven by the eigenvalues of a symmetric tridiagonal
+    Jacobi matrix, proves unconditionally for every n >= 1 that the Peano error
+    profile E_n is strictly decreasing on [0, 1] and attains its unique global
+    maximum on [-1, 1] at t = 0 with value B_n, proves optimality of both
+    constants on C^infty([a,b]), and characterizes equality in C^(n+1)([a,b])
+    as scalar multiples of the rescaled second-kind Chebyshev polynomial U_n.
+  # PalomarPolicy Leiden Declaration rule: authors and responsible_maintainers
+  # MUST list only responsible humans (never AI models or agents).
+  authors:
+    - "Lijails"
+  # TODO (Maintainer decision required before external submission):
+  # Choose either "Apache-2.0" or "MIT" (both are accepted by Palomar Registry
+  # AND Lean Pool), replace the placeholder value below with that exact SPDX
+  # identifier, and place a matching root LICENSE file (full SPDX legal text)
+  # at the repository root.
+  license: "PENDING-MAINTAINER-CHOICE"
+  responsible_maintainers:
+    - "Lijails"
+
+classification:
+  arxiv:
+    - "math.CA"
+    - "math.FA"
+  msc2020:
+    - "26D10"
+    - "41A17"
+    - "41A44"
+    - "41A50"
+
+sources:
+  - title: "Sharp Second Constants in L^1 Landau--Kolmogorov Inequalities on a Finite Interval"
+    authors:
+      - "Lijails"
+    contributors:
+      - name: "GPT 6.2 Astra"
+        role: "AI collaborator (initial n = 2 derivation)"
+      - name: "GPT 6.2 Sol"
+        role: "AI collaborator (all-order moving-node operator, v0.1/v0.2 drafts, initial Lean architecture)"
+      - name: "Gemini 4 Neon"
+        role: "AI collaborator (vertical-chord n >= 4 proof and Python interval verification)"
+      - name: "Gemini 4 Hydrogen"
+        role: "AI collaborator (Lean 4 formalization coordination, literature audit, and closure)"
+    type: "original-proof"
+    location: "paper.tex (repository root)"
+    relationship: "other"
+    note: >-
+      Original result presented jointly by this paper and its Lean 4
+      formalization: independent rediscovery of the sharp finite-interval all-L^1
+      constants and—to the best of our knowledge—the first explicit closed-form
+      evaluation B_n = E_n(0) across all n >= 1 resolving Burenkov's (1980) L^1
+      open sharpness problem, paired with the moving-node Jacobi operator and
+      complete machine-checked proof. See notes/project-history.md and
+      notes/literature.md for provenance and primary-source comparisons.
+    author_endorsement: "participated"
+
+  - title: "Exact constants in inequalities for norms of intermediate derivatives on a finite interval"
+    authors:
+      - "V. I. Burenkov"
+    id: "Trudy Mat. Inst. Steklov. 156 (1980), 22-29"
+    type: "paper"
+    location: "https://www.mathnet.ru/eng/tm2408"
+    relationship: "background"
+    note: >-
+      Established the sharp first constant A_n([0,1]) = 4^n n! (§4°) and bounded
+      the second constant B(n+1, 1) in [1/12, 1/2] (p. 29 note added in proof);
+      explicitly left sharpness of the L^1 constant at n = 1 (eq. (24): 1/2)
+      open on p. 27.
+
+  - title: "Exact constants in inequalities for norms of intermediate derivatives on a finite interval. II"
+    authors:
+      - "V. I. Burenkov"
+    id: "Trudy Mat. Inst. Steklov. 173 (1986), 38-49"
+    type: "paper"
+    location: "https://www.mathnet.ru/eng/tm2147"
+    relationship: "background"
+    note: >-
+      Constructed a rank-one, constant-valued approximating functional (Theorem
+      2(1)) matching the spatial average of our moving-node operator T_n, whose
+      remainder norm on L^1 is 1/2 on [0,1] (1 on [-1,1]) for all n.
+
+  - title: "Approximation in the mean of classes of differentiable functions by algebraic polynomials"
+    authors:
+      - "V. A. Kofanov"
+    id: "Math. USSR Izv. 23 (1984), no. 2, 353-365"
+    type: "paper"
+    location: "https://doi.org/10.1070/im1984v023n02abeh001774"
+    relationship: "background"
+    note: >-
+      Determined the best L^1 polynomial approximation error E_n(W_1^(n+1))_1 =
+      |s_{n,n+1}(0)| (building on Boyanov 1975), satisfying B_n = 1 - A_n
+      E_n(W_1^(n+1))_1 at t = 0 while differing strictly for t != 0 and not
+      yielding the upper bound in Theorem 1.
+
+  - title: "Inequalities for Derivatives and Their Applications"
+    authors:
+      - "V. F. Babenko"
+      - "N. P. Korneichuk"
+      - "V. A. Kofanov"
+      - "S. A. Pichugov"
+    type: "book"
+    location: "Naukova Dumka, Kiev, 2003"
+    relationship: "background"
+    note: "General finite-interval additive constant theory and equivalence with Markov-Nikolskii constants."
+
+  - title: "On the Landau--Kolmogorov inequality between ||f'||_infinity, ||f||_infinity and ||f'''||_1"
+    authors:
+      - "D. Skorokhodov"
+    id: "Res. Math. 27 (2019), no. 1, 55-66"
+    type: "paper"
+    location: "https://doi.org/10.15421/241906"
+    relationship: "background"
+    note: "Background on Stechkin's optimal operator approximation duality."
+
+related_formalizations: []
+
+status:
+  scope: >-
+    Formalizes all four clauses of Theorem 1 in paper.tex unconditionally for
+    every integer order n = k + 1 >= 1 and every compact interval [a, b] with
+    a < b: (i) existence and uniqueness of the strictly increasing moving
+    Jacobi nodes and strict monotonicity E_n'(t) < 0 on (0, 1) with unique
+    global maximum E_n(0) = B_n on [-1, 1]; (ii) the sharp W^(n+1,1)([a, b])
+    inequality using the 1D iterated-FTC Sobolev characterization SobolevW1;
+    (iii) optimality of both constants even over C^infty([a, b]); and (iv)
+    exact equality characterization in C^(n+1)([a, b]) as scalar multiples of
+    rescaled U_n. Challenge.lean uses a single deliberate sorry on
+    SharpL1.theorem_sharp_L1_interpolation_full that is proved unconditionally in
+    Solution.lean via SharpL1.Analysis.MainTheorem. Outside Lean scope: prose
+    Corollaries 2 (Stechkin L^1-quotient extension) and 3 (contour-integral
+    strict monotonicity B_{n+1} > B_n), historical comparisons in
+    notes/literature.md, and supplementary observations in
+    notes/structural-observations.md.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms:
+    - "propext"
+    - "Classical.choice"
+    - "Quot.sound"
+  main_results:
+    - "SharpL1.theorem_sharp_L1_interpolation_full"
+
+automation:
+  methods:
+    - method: "agent"
+      models:
+        - "GPT 6.2 Astra"
+        - "GPT 6.2 Sol"
+        - "Gemini 4 Neon"
+        - "Gemini 4 Hydrogen"
+        - "Qwen 3.8 Flash"
+        - "GPT 6 Luna Low"
+        - "GPT 6.1 Terra XHigh"
+        - "CodeBuddy"
+      framework: "Human-directed multi-agent swarm + local Lean 4 CLI verification"
+      tool_setup: >-
+        Lean 4 with Mathlib compiled locally and audited in CI; Python/mpmath.iv
+        used for independent numerical cross-checking of manuscript formulas;
+        no external solvers or native_decide used inside Lean proofs.
+      cost:
+        wall_time: "Multi-day development across 2026-11-20 to 2026-11-26"
+        spend_usd: "subscription-based"
+        hardware: "Local Windows workstation + GitHub Actions ubuntu-latest"
+      prompting_notes: >-
+        Iterative mathematical discovery and theorem decomposition directed by the
+        human maintainer; see notes/project-history.md and notes/team-calibration.md.
+    - method: "manual"
+      models: []
+      framework: "n/a"
+      tool_setup: "Human mathematical problem formulation, scope review, literature audit oversight, and verification"
+      cost:
+        wall_time: "Multi-day oversight across 2026-11-20 to 2026-11-26"
+        spend_usd: "not tracked"
+        hardware: "Local workstation"
+      prompting_notes: "n/a"
+  spend_usd: "subscription-based"
+  notes: >-
+    All mathematical claims, literature boundaries, and formal statements were
+    iteratively reviewed against primary sources (notes/literature.md) and
+    verified by Lean's kernel, Lean/Audit.lean, and Comparator.
+
+fidelity:
+  divergences: >-
+    None in the statement of Theorem 1: Challenge.lean unpacks the exact 1D
+    iterated-FTC Sobolev space W^(n+1,1)([a,b]) (eq. (eq:W1-char) / SobolevW1),
+    explicit node polynomial roots, and explicit error formula directly over
+    Mathlib primitives. Internally in Solution/SharpL1, four proof routes are
+    streamlined relative to the paper prose without changing any theorem:
+    (1) DividedCDFBridge.lean establishes 0 <= T_n h_t <= 1 and eq. (9)
+    algebraically via weighted-exponential CDFs rather than Hermite-Genocchi
+    integration; (2) FirstTermPos.lean represents the complex quadratic form via
+    paired real Gaussian vectors; (3) ChordIntegral.lean proves the vertical-chord
+    identity via Lagrange partial fractions and Complex.log/FTC along the
+    Joukowsky loop rather than Fourier inversion; and (4) LowOrderMono.lean
+    replaces external mpmath.iv arithmetic for n = 3 with five pure-kernel
+    natural-number fixed-point quadrature blocks discharged by decide (depending
+    only on propext). Corollaries 2 and 3, historical remarks, and
+    notes/structural-observations.md are prose outside Lean scope.
+
+review:
+  status: "self-assessed"
+  reviewers:
+    - "Lijails"
+    - "Automated pre-submission verification agents"
+  notes: >-
+    Checked against Lean 4 compiler, Lean/Audit.lean (#print axioms showing
+    only propext, Classical.choice, Quot.sound), Palomar source/Comparator checks,
+    and primary-source literature verification in notes/literature.md.
+
+alignment:
+  namespace: "SharpL1"
+  statements:
+    - source: "Theorem 1 (clauses (i)-(iv) of paper.tex)"
+      lean: "SharpL1.theorem_sharp_L1_interpolation_full"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        Statement-only declaration in Challenge.lean (Mathlib-only imports),
+        discharged unconditionally in Solution.lean via
+        SharpL1.Analysis.theorem_sharp_L1_interpolation_full in
+        SharpL1.Analysis.MainTheorem.
+
+acknowledgements: >-
+  Built on Lean 4 and Mathlib4. Initiated and maintained by Lijails, in
+  collaboration with GPT 6.2 Astra, GPT 6.2 Sol, Gemini 4 Neon, and Gemini 4
+  Hydrogen, with earlier Lean experimentation from Qwen 3.8 Flash, GPT 6 Luna
+  Low, GPT 6.1 Terra XHigh, and CodeBuddy (documented in
+  notes/project-history.md and notes/team-calibration.md). Literature comparisons
+  recorded in notes/literature.md.

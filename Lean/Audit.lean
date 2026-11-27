@@ -1,4 +1,6 @@
-import SharpL1
+module
+
+public import SharpL1
 
 #print axioms SharpL1.scaledNodeEval_spec
 #print axioms SharpL1.natDegree_nodePolynomial

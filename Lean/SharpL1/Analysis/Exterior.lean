@@ -1,6 +1,10 @@
-import SharpL1.Analysis.Alternating
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Ring
+module
+
+public import SharpL1.Analysis.Alternating
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Ring
+
+public section
 
 /-!
 # Scalar bounds on the exterior of the certificate region
@@ -13,10 +17,10 @@ namespace SharpL1.Analysis
 
 open Set
 
-def speedDenominator (n : ℕ) (t y : ℝ) : ℝ :=
+@[expose] def speedDenominator (n : ℕ) (t y : ℝ) : ℝ :=
   n + 2 - 2 * (n + 1) * t * y + n * t ^ 2
 
-noncomputable def speedFactor (n : ℕ) (t y : ℝ) : ℝ :=
+@[expose] noncomputable def speedFactor (n : ℕ) (t y : ℝ) : ℝ :=
   2 * (1 - y ^ 2) / speedDenominator n t y
 
 theorem speedDenominator_decomposition (n : ℕ) (t y : ℝ) :
@@ -90,7 +94,7 @@ theorem speedFactor_strictAntiOn (n : ℕ) {t : ℝ} (ht : 0 < t) (ht1 : t < 1) 
   exact sub_pos.mp (hdiff.symm ▸ hmul)
 
 /-- Nonnegative weight in the alternating sum for the exterior derivative. -/
-noncomputable def exteriorWeight (n : ℕ) (t y : ℝ) : ℝ :=
+@[expose] noncomputable def exteriorWeight (n : ℕ) (t y : ℝ) : ℝ :=
   if y < t then 0 else (y - t) ^ n * (1 - speedFactor n t y)
 
 theorem exteriorWeight_nonneg (n : ℕ) (hn : 1 ≤ n) {t y : ℝ}

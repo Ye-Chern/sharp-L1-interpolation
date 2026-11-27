@@ -1,12 +1,16 @@
-import SharpL1.Analysis.ChebyshevFirstConstant
-import SharpL1.Analysis.GlobalNodes
-import SharpL1.Analysis.DividedCDF
-import SharpL1.Analysis.ErrorValue
-import SharpL1.Analysis.NodeWeights
-import SharpL1.Analysis.TruncatedPowerDeriv
-import Mathlib.MeasureTheory.Function.JacobianOneDim
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
-import Mathlib.MeasureTheory.Integral.Prod
+module
+
+public import SharpL1.Analysis.ChebyshevFirstConstant
+public import SharpL1.Analysis.GlobalNodes
+public import SharpL1.Analysis.DividedCDF
+public import SharpL1.Analysis.ErrorValue
+public import SharpL1.Analysis.NodeWeights
+public import SharpL1.Analysis.TruncatedPowerDeriv
+public import Mathlib.MeasureTheory.Function.JacobianOneDim
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+public import Mathlib.MeasureTheory.Integral.Prod
+
+@[expose] public section
 
 /-!
 # Moving-node operator `T_n`, Taylor kernel representation, and explicit error `E_n`
@@ -274,7 +278,7 @@ theorem barycentric_truncatedPower_mem_Icc {ι : Type*} [DecidableEq ι]
     0 ≤ barycentricDividedDifferenceOn s a (fun i => truncatedPower (s.card - 1) t (a i)) ∧
     barycentricDividedDifferenceOn s a (fun i => truncatedPower (s.card - 1) t (a i)) ≤ 1 := by
   induction hn : s.card using Nat.strong_induction_on generalizing s with
-  | h m ih =>
+  | ind m ih =>
     rcases m with _ | _ | m
     · exact absurd hn (Finset.card_pos.mpr hs).ne'
     · obtain ⟨i, rfl⟩ := Finset.card_eq_one.mp hn
@@ -317,7 +321,7 @@ theorem barycentric_truncatedPower_higher_nonneg {ι : Type*} [DecidableEq ι]
     (s : Finset ι) {a : ι → ℝ} (ha : Set.InjOn a s) (hs : 2 ≤ s.card) (t : ℝ) :
     0 ≤ barycentricDividedDifferenceOn s a (fun i => truncatedPower (s.card - 2) t (a i)) := by
   induction hn : s.card using Nat.strong_induction_on generalizing s with
-  | h m ih =>
+  | ind m ih =>
     rcases m with _ | _ | _ | m
     · omega
     · omega

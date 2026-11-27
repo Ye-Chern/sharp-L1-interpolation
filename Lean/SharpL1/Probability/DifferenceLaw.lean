@@ -1,4 +1,8 @@
-import SharpL1.Probability.NoAtom
+module
+
+public import SharpL1.Probability.NoAtom
+
+public section
 
 /-! ## The mixture law of a difference of independent exponentials -/
 
@@ -66,7 +70,8 @@ theorem exp_difference_cdf {a b : ℝ} (ha : 0 < a) (hb : 0 < b) (x : ℝ) :
     have hμ0 : μ (Iic 0) = 0 := by simpa [μ] using expMeasure_Iic ha' 0
     have hμneg : μ (Ici (-x)) = 1 := by
       have hsmall : μ (Iio (-x)) = 0 :=
-        le_antisymm ((measure_mono fun y hy => le_of_lt (hy.trans_le (neg_nonpos.mpr hx))).trans_eq hμ0)
+        le_antisymm ((measure_mono fun (y : ℝ) (hy : y ∈ Iio (-x)) =>
+          show y ∈ Iic (0 : ℝ) from le_of_lt (hy.trans_le (neg_nonpos.mpr hx))).trans_eq hμ0)
           bot_le
       rw [← compl_Iio, measure_compl measurableSet_Iio (measure_ne_top _ _), measure_univ, hsmall,
         tsub_zero]
@@ -125,7 +130,7 @@ theorem exp_difference_law {a b : ℝ} (ha : 0 < a) (hb : 0 < b) :
   letI : IsProbabilityMeasure ν := expMeasure_probability (one_div_pos.mpr hb)
   have hmeas : Measurable (fun p : ℝ × ℝ => p.2 - p.1) := measurable_snd.sub measurable_fst
   letI : IsProbabilityMeasure ((μ.prod ν).map (fun p : ℝ × ℝ => p.2 - p.1)) :=
-    Measure.isProbabilityMeasure_map hmeas.aemeasurable
+    ⟨by rw [Measure.map_apply hmeas MeasurableSet.univ, Set.preimage_univ, measure_univ]⟩
   apply Measure.ext_of_Iic
   intro x
   simp only [Measure.map_apply hmeas measurableSet_Iic, Measure.add_apply,

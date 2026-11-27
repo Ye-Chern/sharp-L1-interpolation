@@ -1,11 +1,15 @@
-import SharpL1.JacobiOrdered
-import SharpL1.JacobiContainment
-import SharpL1.Analysis.NodeWeights
-import SharpL1.Analysis.ErrorDividedDifference
-import SharpL1.Probability.WeightedComparison
-import Mathlib.Analysis.SpecialFunctions.Complex.LogDeriv
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
-import Mathlib.LinearAlgebra.Lagrange
+module
+
+public import SharpL1.JacobiOrdered
+public import SharpL1.JacobiContainment
+public import SharpL1.Analysis.NodeWeights
+public import SharpL1.Analysis.ErrorDividedDifference
+public import SharpL1.Probability.WeightedComparison
+public import Mathlib.Analysis.SpecialFunctions.Complex.LogDeriv
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+public import Mathlib.LinearAlgebra.Lagrange
+
+@[expose] public section
 
 /-!
 # Exact vertical-chord integral representation of `Δ_n(t)` (Claim 5)

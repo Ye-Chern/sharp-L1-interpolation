@@ -1,5 +1,9 @@
-import Mathlib.Analysis.Calculus.Deriv.MeanValue
-import Mathlib.Tactic.NormNum
+module
+
+public import Mathlib.Analysis.Calculus.Deriv.MeanValue
+public import Mathlib.Tactic.NormNum
+
+public section
 
 /-! ## One-dimensional criterion for the center maximum -/
 

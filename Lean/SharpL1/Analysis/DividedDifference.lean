@@ -1,6 +1,10 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.LinearAlgebra.Lagrange
-import Mathlib.Tactic.Ring
+module
+
+public import Mathlib.Data.Real.Basic
+public import Mathlib.LinearAlgebra.Lagrange
+public import Mathlib.Tactic.Ring
+
+public section
 
 /-!
 # Barycentric divided differences
@@ -14,13 +18,13 @@ from Lagrange interpolation (Section 2 of `paper.tex`).
 namespace SharpL1.Analysis
 
 /-- Divided difference over a finite set of node indices. -/
-noncomputable def barycentricDividedDifferenceOn {ι : Type*} [DecidableEq ι]
+@[expose] noncomputable def barycentricDividedDifferenceOn {ι : Type*} [DecidableEq ι]
     (s : Finset ι) (a f : ι → ℝ) : ℝ :=
   ∑ i ∈ s, f i * (∏ j ∈ s.erase i, (a i - a j))⁻¹
 
 /-- Barycentric divided difference on `n + 1` nodes.  The product in the
 denominator ranges over every node except the selected node. -/
-noncomputable def barycentricDividedDifference {n : ℕ} (a : Fin (n + 1) → ℝ)
+@[expose] noncomputable def barycentricDividedDifference {n : ℕ} (a : Fin (n + 1) → ℝ)
     (f : Fin (n + 1) → ℝ) : ℝ :=
   barycentricDividedDifferenceOn Finset.univ a f
 

@@ -1,5 +1,9 @@
-import SharpL1.Probability.ExponentialMix
-import Mathlib.Tactic.Linarith
+module
+
+public import SharpL1.Probability.ExponentialMix
+public import Mathlib.Tactic.Linarith
+
+public section
 
 /-! ## No atoms for a sum with a nonzero independent exponential term -/
 

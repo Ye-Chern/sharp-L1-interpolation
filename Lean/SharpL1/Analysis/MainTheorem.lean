@@ -1,8 +1,12 @@
-import SharpL1.Analysis.ExplicitError
-import SharpL1.Analysis.ChordBoundsN4
-import SharpL1.Analysis.LowOrderMono
-import SharpL1.Analysis.MovingOperator
-import SharpL1.Analysis.SharpSobolev
+module
+
+public import SharpL1.Analysis.ExplicitError
+public import SharpL1.Analysis.ChordBoundsN4
+public import SharpL1.Analysis.LowOrderMono
+public import SharpL1.Analysis.MovingOperator
+public import SharpL1.Analysis.SharpSobolev
+
+@[expose] public section
 
 /-!
 # Unconditional All-Order Center Maximum & Sharp `L¹` Sobolev Interpolation (Theorem 1)

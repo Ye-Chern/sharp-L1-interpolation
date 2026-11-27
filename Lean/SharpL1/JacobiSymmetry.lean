@@ -1,6 +1,10 @@
-import SharpL1.Jacobi
-import Mathlib.Algebra.Polynomial.Roots
-import Mathlib.Tactic.Ring
+module
+
+public import SharpL1.Jacobi
+public import Mathlib.Algebra.Polynomial.Roots
+public import Mathlib.Tactic.Ring
+
+public section
 
 open Polynomial
 open Polynomial.Chebyshev (U)

@@ -1,5 +1,9 @@
-import SharpL1.Probability.DifferenceLaw
-import Mathlib.MeasureTheory.Group.Convolution
+module
+
+public import SharpL1.Probability.DifferenceLaw
+public import Mathlib.MeasureTheory.Group.Convolution
+
+public section
 
 /-! ## Adding independent interior terms in the mixed-sign recursion -/
 
@@ -21,7 +25,7 @@ theorem exp_difference_conv {a b : ℝ} (ha : 0 < a) (hb : 0 < b)
   letI : IsProbabilityMeasure (ProbabilityTheory.expMeasure (1 / b)) :=
     expMeasure_probability (one_div_pos.mpr hb)
   letI : IsProbabilityMeasure ((ProbabilityTheory.expMeasure (1 / a)).map (fun y : ℝ => -y)) :=
-    Measure.isProbabilityMeasure_map measurable_neg.aemeasurable
+    ⟨by rw [Measure.map_apply measurable_neg MeasurableSet.univ, Set.preimage_univ, measure_univ]⟩
   dsimp only
   rw [exp_difference_law ha hb, Measure.add_conv, Measure.conv_smul_left, Measure.conv_smul_left]
 

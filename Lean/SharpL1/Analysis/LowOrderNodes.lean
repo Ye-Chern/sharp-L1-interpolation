@@ -1,14 +1,18 @@
-import SharpL1.Chebyshev
-import SharpL1.Jacobi
-import SharpL1.Analysis.LowOrders
-import SharpL1.Analysis.ErrorValue
-import SharpL1.JacobiOrdered
-import Mathlib.Algebra.Polynomial.Roots
-import Mathlib.Tactic.FinCases
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.LinearCombination
-import Mathlib.Tactic.Positivity
-import Mathlib.Tactic.Ring
+module
+
+public import SharpL1.Chebyshev
+public import SharpL1.Jacobi
+public import SharpL1.Analysis.LowOrders
+public import SharpL1.Analysis.ErrorValue
+public import SharpL1.JacobiOrdered
+public import Mathlib.Algebra.Polynomial.Roots
+public import Mathlib.Tactic.FinCases
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.LinearCombination
+public import Mathlib.Tactic.Positivity
+public import Mathlib.Tactic.Ring
+
+public section
 
 /-!
 # Explicit low-order Jacobi nodes and error-formula bridge
@@ -82,7 +86,7 @@ theorem nodePolynomial_one_eval (t y : ℝ) :
 
 /-- The two increasing real roots of `nodePolynomial 0 t` (order `n = 1`):
 `(t - 1) / 2` and `(t + 1) / 2`. -/
-noncomputable def nodes₁ (t : ℝ) : Fin 2 → ℝ
+@[expose] noncomputable def nodes₁ (t : ℝ) : Fin 2 → ℝ
   | ⟨0, _⟩ => (t - 1) / 2
   | ⟨1, _⟩ => (t + 1) / 2
 
@@ -144,7 +148,7 @@ theorem explicitError_nodes₁ {t : ℝ} (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
 
 /-- The three increasing real roots of `nodePolynomial 1 t` (order `n = 2`):
 `(t - √(8 + t²)) / 4`, `t / 2`, and `(t + √(8 + t²)) / 4`. -/
-noncomputable def nodes₂ (t : ℝ) : Fin 3 → ℝ
+@[expose] noncomputable def nodes₂ (t : ℝ) : Fin 3 → ℝ
   | ⟨0, _⟩ => (t - Real.sqrt (8 + t ^ 2)) / 4
   | ⟨1, _⟩ => t / 2
   | ⟨2, _⟩ => (t + Real.sqrt (8 + t ^ 2)) / 4

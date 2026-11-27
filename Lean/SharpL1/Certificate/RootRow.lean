@@ -1,27 +1,31 @@
-import SharpL1.RootBrackets
-import Lean.Elab.Tactic.Omega
+module
+
+public import SharpL1.RootBrackets
+public import Lean.Elab.Tactic.Omega
+
+public section
 
 /-! ## Per-row root certificates -/
 
 namespace SharpL1.Certificate
 
 /-- Brackets are enclosed in the scaled open interval and have an integer sign change. -/
-def ValidBracket (s t : ℤ) (k : ℕ) (bracket : ℤ × ℤ) : Prop :=
+@[expose] def ValidBracket (s t : ℤ) (k : ℕ) (bracket : ℤ × ℤ) : Prop :=
   -s < bracket.1 ∧ bracket.1 < bracket.2 ∧ bracket.2 < s ∧
     scaledNodeEval s t bracket.1 k * scaledNodeEval s t bracket.2 k < 0
 
-instance (s t : ℤ) (k : ℕ) (bracket : ℤ × ℤ) : Decidable (ValidBracket s t k bracket) :=
+@[expose] instance (s t : ℤ) (k : ℕ) (bracket : ℤ × ℤ) : Decidable (ValidBracket s t k bracket) :=
   inferInstanceAs (Decidable (_ ∧ _ ∧ _ ∧ _))
 
 /-- Check one certificate row: exact cardinality, strict containment in the
 scaled open interval, ordered disjoint brackets, and integer sign changes. -/
-def checkRootRow (s t : ℤ) (k : ℕ) (brackets : List (ℤ × ℤ)) : Bool :=
+@[expose] def checkRootRow (s t : ℤ) (k : ℕ) (brackets : List (ℤ × ℤ)) : Bool :=
   decide (0 < s ∧ brackets.length = k + 2) &&
     brackets.all (fun bracket => decide (ValidBracket s t k bracket)) &&
     decide (brackets.Pairwise (fun a b => b.2 < a.1))
 
 /-- At a valid list length this is just the indexed bracket. -/
-def rowBracket (brackets : List (ℤ × ℤ)) (i : ℕ) : ℤ × ℤ :=
+@[expose] def rowBracket (brackets : List (ℤ × ℤ)) (i : ℕ) : ℤ × ℤ :=
   brackets.getD i (0, 0)
 
 theorem checkRootRow_sound (s t : ℤ) (k : ℕ) (brackets : List (ℤ × ℤ))

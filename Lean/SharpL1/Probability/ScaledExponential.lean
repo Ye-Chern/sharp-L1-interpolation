@@ -1,4 +1,8 @@
-import SharpL1.Probability.ExponentialMix
+module
+
+public import SharpL1.Probability.ExponentialMix
+
+public section
 
 /-! ## Rescaling the unit exponential measure -/
 
@@ -17,7 +21,7 @@ theorem expMeasure_one_map_mul {a : ℝ} (ha : 0 < a) :
   letI : IsProbabilityMeasure μ := expMeasure_probability zero_lt_one
   letI : IsProbabilityMeasure ν := expMeasure_probability (one_div_pos.mpr ha)
   letI : IsProbabilityMeasure (μ.map (fun x : ℝ => a * x)) :=
-    Measure.isProbabilityMeasure_map hmeas.aemeasurable
+    ⟨by rw [Measure.map_apply hmeas MeasurableSet.univ, Set.preimage_univ, measure_univ]⟩
   change μ.map (fun x : ℝ => a * x) = ν
   apply Measure.ext_of_Iic
   intro t

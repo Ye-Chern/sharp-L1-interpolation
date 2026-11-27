@@ -1,7 +1,11 @@
-import SharpL1.Analysis.DividedCDF
-import SharpL1.Analysis.ErrorDividedDifference
-import SharpL1.Probability.WeightedExponential
-import SharpL1.Probability.WeightedComparison
+module
+
+public import SharpL1.Analysis.DividedCDF
+public import SharpL1.Analysis.ErrorDividedDifference
+public import SharpL1.Probability.WeightedExponential
+public import SharpL1.Probability.WeightedComparison
+
+public section
 
 /-! ## Bridge between barycentric divided differences and weighted exponential laws -/
 
@@ -82,7 +86,7 @@ theorem weightedCdfZero_eq_barycentric_truncatedPower (zs : List ℝ)
           (fun z => truncatedPower (zs.length - 1) t z) := by
     intro n
     induction n using Nat.strong_induction_on with
-    | h n ih =>
+    | ind n ih =>
       intro zs hlen hdesc hne
       cases zs with
       | nil => contradiction

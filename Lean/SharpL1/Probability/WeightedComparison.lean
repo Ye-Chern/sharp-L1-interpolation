@@ -1,6 +1,10 @@
-import SharpL1.Probability.NoAtom
-import SharpL1.Probability.SignMean
-import SharpL1.Probability.WeightedExponential
+module
+
+public import SharpL1.Probability.NoAtom
+public import SharpL1.Probability.SignMean
+public import SharpL1.Probability.WeightedExponential
+
+public section
 
 /-! ## Order and scaling for the weighted exponential laws used by the checker -/
 
