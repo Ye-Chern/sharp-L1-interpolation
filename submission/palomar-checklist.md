@@ -1,17 +1,15 @@
 # Palomar Registry & Multi-Platform Maintainer Checklist
 
-Complete the manual decisions below before making any external submission from branch `palomar/submission-prep`.
+Maintainer status & final submission checklist from `main` (following the `palomar/preflight-polish` PR).
 
 ## 1. Before Submitting to Palomar Registry (`submit.palomar-registry.org`)
 
-- [ ] **Choose a permissive repository license (`Apache-2.0` or `MIT` recommended):**
-  - Both `Apache-2.0` and `MIT` are accepted by **Palomar Registry** AND required by **Lean Pool** (do **not** use `CC-BY-ND-*`).
-  - Add the full SPDX legal text as a single `LICENSE` file at the **repository root** (`D:\work\sharp-L1-interpolation\LICENSE`).
-  - Update `project.license` in `Lean/formalization.yaml` from `"PENDING-MAINTAINER-CHOICE"` to the exact matching SPDX identifier (`"Apache-2.0"` or `"MIT"`).
-- [ ] **Confirm human identity fields in `Lean/formalization.yaml`:**
-  - Verify `project.authors` and `project.responsible_maintainers` list the maintainer name(s) you wish published (currently `["Lijails"]`; Palomar forbids listing AI models in those two fields).
+- [x] **Choose a permissive repository license (`Apache-2.0`):**
+  - Root [`LICENSE`](../LICENSE) (`Apache-2.0`) added and `project.license: "Apache-2.0"` set in [`Lean/formalization.yaml`](../Lean/formalization.yaml) (compatible with both Palomar Registry and Lean Pool).
+- [x] **Confirm human identity fields in [`Lean/formalization.yaml`](../Lean/formalization.yaml):**
+  - `project.authors` and `project.responsible_maintainers` list `["Lijails"]` (human-only per Palomar policy), while AI collaborators (`GPT 6.2 Astra`, `GPT 6.2 Sol`, `Gemini 4 Neon`, `Gemini 4 Hydrogen`, and helper models) are credited in `automation.methods`, `sources[0].contributors`, and `acknowledgements`.
 - [ ] **Merge & verify full Linux Comparator CI:**
-  - Review and merge PR #8 (`docs/english-paper` $\to$ `main`) first if keeping `main` clean, then review and merge the `palomar/submission-prep` PR so GitHub Actions (`.github/workflows/palomar.yml`) runs `scripts/check-lean-sources.py` + `lake build` + Linux `bubblewrap` `lake comparator` (checking NanoDa + Lean kernel) on the exact submission commit.
+  - Review and merge the `palomar/preflight-polish` PR into `main` and confirm all GitHub Actions workflows (including `.github/workflows/palomar.yml`: `scripts/check-lean-sources.py`, `Lean/formalization.yaml` v0.4 schema validation, `lake build`, `Audit.lean`, and Linux `bubblewrap` `lake comparator` with NanoDa + advisory con-ron) pass on the exact target commit.
   - Record the resulting **full 40-character commit SHA** on `main` (Palomar rejects branch/tag names).
   - Optionally run Palomar's official preflight workflow (`PalomarRegistry/PalomarSubmission/.github/workflows/submission.yml` with `mode: full`, `execution_profile: palomar-standard-v1`).
 - [ ] **Submit to Palomar Registry:**
@@ -25,8 +23,8 @@ Complete the manual decisions below before making any external submission from b
 
 ## 2. Before Submitting to Hexagon (`hexagonmath.org`)
 
-- [ ] Review [`submission/hexagon/README.md`](hexagon/README.md), [`submission/hexagon/paper_hexagon.tex`](hexagon/paper_hexagon.tex), and [`submission/hexagon/metadata.json`](hexagon/metadata.json).
-- [ ] Fill in submitter ORCID iD, choose a Hexagon distribution license (`CC BY 4.0`, `CC BY-SA 4.0`, or `CC0 1.0`), confirm `humanUnderstanding` (`"all"` or `"some"`), set `rightsConfirmed: true`, and insert the registered Palomar URL in `formalizations`.
+- [x] Filled in submitter ORCID iD (`0009-0004-1849-2354`), distribution license (`"CC BY 4.0"`), `humanUnderstanding: "some"`, and `rightsConfirmed: true` in [`submission/hexagon/metadata.json`](hexagon/metadata.json).
+- [ ] Review [`submission/hexagon/README.md`](hexagon/README.md), [`submission/hexagon/paper_hexagon.tex`](hexagon/paper_hexagon.tex), and [`submission/hexagon/metadata.json`](hexagon/metadata.json), and replace the placeholder URL `https://palomar-registry.org/PENDING-PALOMAR-ID` in `formalizations` once Palomar registration completes.
 
 ## 3. After Palomar Registration: Lean Pool (`LeanPool/lean-pool`)
 

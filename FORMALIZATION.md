@@ -1,9 +1,11 @@
 # Lean 4 Formalization Map
 
-This document maps [`paper.tex`](paper.tex) (*Sharp Second Constants in $L^1$ Landau--Kolmogorov Inequalities on a Finite Interval*, Section 9) to the machine-checked Lean 4.32.2 + Mathlib formalization in `Lean/`.
+This document maps [`paper.tex`](paper.tex) (*Sharp Second Constants in $L^1$ Landau--Kolmogorov Inequalities on a Finite Interval*, Section 9) to the machine-checked Lean 4.36.0 + Mathlib formalization in `Lean/`.
 
-**Master theorem:** `SharpL1.Analysis.theorem_sharp_L1_interpolation_full` in [`Lean/SharpL1/Analysis/MainTheorem.lean`](Lean/SharpL1/Analysis/MainTheorem.lean)  
-**Axiom & certificate audit:** [`Lean/Audit.lean`](Lean/Audit.lean)
+**Palomar Comparator statement:** `SharpL1.theorem_sharp_L1_interpolation_full` in [`Lean/Challenge.lean`](Lean/Challenge.lean) / [`Lean/Solution.lean`](Lean/Solution.lean) ([`Lean/comparator.json`](Lean/comparator.json))  
+**Internal library master theorem:** `SharpL1.Analysis.theorem_sharp_L1_interpolation_full` in [`Lean/SharpL1/Analysis/MainTheorem.lean`](Lean/SharpL1/Analysis/MainTheorem.lean)  
+**Axiom & certificate audit:** [`Lean/Audit.lean`](Lean/Audit.lean)  
+**Palomar metadata:** [`Lean/formalization.yaml`](Lean/formalization.yaml)
 
 ---
 
@@ -30,7 +32,7 @@ Without altering any theorem statement, four Lean modules use elementary algebra
 ### Outside the Lean 4 Formalization
 - Historical and literature comparisons in [`paper.tex`](paper.tex) Section 1.1, Remarks 3.2 and 4.2, and [`notes/literature.md`](notes/literature.md).
 - Supplementary/unformalized analytical observations in [`notes/structural-observations.md`](notes/structural-observations.md) (cross-order interlacing, generalized Gauss quadrature walk counts, cancellation-free $1/\sqrt{\pi n}$ asymptotics, $B_n$ tables for $n=1\dots 100$, and heuristic Gaussian scaling).
-- The short $L^1$-quotient extension step concluding Stechkin's problem (Corollary 2 in [`paper.tex`](paper.tex)), although all four quantitative ingredients (`movingOperator_L1_le`, `SobolevW1.L1_deriv_sub_movingOperator_le`, `sharp_L1_interpolation_constants_optimal`, and `explicitErrorCurve_le_centerBestConstant`) are Lean-verified.
+- The short $L^1$-quotient extension step concluding Stechkin's problem (Corollary 2 in [`paper.tex`](paper.tex)), although all four quantitative ingredients (`movingOperator_L1_le`, `SobolevW1.L1_deriv_sub_movingOperator_le`, `sharp_L1_interpolation_constants_optimal`, and `explicitErrorCurve_le_centerBestConstant`) are Lean-verified, and the short Cauchy-theorem contour deduction proving strict monotonicity $B_{n+1} > B_n$ (Corollary 3 in [`paper.tex`](paper.tex)), deduced from the Lean-verified formula `centerBestConstant` / `explicitError_center_eq`.
 
 ---
 
@@ -47,7 +49,8 @@ Without altering any theorem statement, four Lean modules use elementary algebra
 | Prop. `prop:chord` (vertical-chord integral) | [`ChordIntegral.lean`](Lean/SharpL1/Analysis/ChordIntegral.lean) | `barycentricDelta_eq_chordDelta`, `lawSignMean_diff_eq_chordDelta` |
 | Prop. `prop:n4` & App. `app:poly-n4` ($n \ge 4$) | [`ChordBoundsN4.lean`](Lean/SharpL1/Analysis/ChordBoundsN4.lean) | `rem_lt_main_of_ge_four`, `chordDelta_pos_of_ge_four` |
 | Prop. `prop:low-orders` & App. `app:n3` ($n=1,2,3$) | [`LowOrderMono.lean`](Lean/SharpL1/Analysis/LowOrderMono.lean) | `explicitError_orderedNode_one_strictAntiOn`, `explicitError_orderedNode_two_strictAntiOn`, `explicitError_orderedNode_three_lt_center`, `n3_block0_certified`..`n3_block4_certified`, `chordDelta_three_pos` |
-| **Theorem 1** (`thm:full`) | [`MainTheorem.lean`](Lean/SharpL1/Analysis/MainTheorem.lean) | `explicitErrorDerivCurve_neg_all_orders`, `explicitErrorCurve_unique_global_max_zero`, `explicitErrorCurve_le_centerBestConstant`, `sharp_L1_interpolation_W1`, `sharp_L1_interpolation_constants_optimal`, `sharp_L1_interpolation_contDiffOn_eq_iff`, `theorem_sharp_L1_interpolation_full` |
+| **Theorem 1** (`thm:full`, internal bundle) | [`MainTheorem.lean`](Lean/SharpL1/Analysis/MainTheorem.lean) | `explicitErrorDerivCurve_neg_all_orders`, `explicitErrorCurve_unique_global_max_zero`, `explicitErrorCurve_le_centerBestConstant`, `sharp_L1_interpolation_W1`, `sharp_L1_interpolation_constants_optimal`, `sharp_L1_interpolation_contDiffOn_eq_iff`, `theorem_sharp_L1_interpolation_full` |
+| **Theorem 1** (`thm:full`, Palomar Comparator pair) | [`Challenge.lean`](Lean/Challenge.lean), [`Solution.lean`](Lean/Solution.lean) | `SharpL1.theorem_sharp_L1_interpolation_full` (Mathlib-only statement surface in `Challenge.lean`, verified by `lake comparator` with NanoDa + Lean kernel against `Solution.lean`) |
 | Axiom & `decide` footprint audit | [`Lean/Audit.lean`](Lean/Audit.lean) | `#print axioms` on all top-level theorems: only `[propext, Classical.choice, Quot.sound]` (`[propext]` for `n=3` `decide` certificates) |
 
 ---
@@ -57,10 +60,13 @@ Without altering any theorem statement, four Lean modules use elementary algebra
 ### Local Verification
 
 ```bash
-# Lean 4 build + axiom audit (Lean v4.32.2 + Mathlib)
+# Lean module checks, Lean 4.36.0 + Mathlib build, and axiom audit
+python3 Lean/scripts/check-lean-sources.py
 cd Lean
-lake build
+lake exe cache get
+lake build Challenge Solution SharpL1
 lake env lean Audit.lean
+# On Linux with bubblewrap (bwrap): ./scripts/verify-comparator.sh
 
 # Independent Python / mpmath.iv interval-arithmetic cross-check (threshold n = 4, 5-block n = 3)
 cd ..
