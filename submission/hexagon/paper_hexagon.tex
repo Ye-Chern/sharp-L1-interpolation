@@ -178,7 +178,7 @@ $4$ & $(9\sqrt{3} - 12)/5$ & $0.717691454$ & $0.358845727$ \\
 \end{table}
 
 \paragraph{Contribution boundary.}
-We separate established prior results from our contributions clearly: the minimal first constant $A_n$ (Proposition~\ref{prop:An}) and the existence of a finite second constant are known~\cite{Burenkov1980,BKP1997,Kofanov2002,BKKP2003}. To the best of our knowledge, however, no prior work determines the exact all-$L^1$ second constant $B_n$ (even at $n = 1$): Theorem~\ref{thm:full} resolves the $L^1$ half of Burenkov's 1980 open problem (while the $L^2$ inequality~\cite[eq.~(25)]{Burenkov1980} remains open), introduces the Jacobi moving-node operator $T_n$, proves the all-$n$ center maximum of $E_n$, characterizes $C^{n+1}$ extremizers, and provides a complete Lean~4 formalization of Theorem~\ref{thm:full}.
+We separate established prior results from our contributions clearly: the minimal first constant $A_n$ (Proposition~\ref{prop:An}) and the existence of a finite second constant are known~\cite{Burenkov1980,BKP1997,Kofanov2002,BKKP2003}. To the best of our knowledge, however, no prior work determines the exact all-$L^1$ second constant $B_n$ (even at $n = 1$): Theorem~\ref{thm:full} resolves the $L^1$ half of Burenkov's 1980 open problem (the $L^2$ inequality~\cite[eq.~(25)]{Burenkov1980} is not addressed here), introduces the Jacobi moving-node operator $T_n$, proves the all-$n$ center maximum of $E_n$, characterizes $C^{n+1}$ extremizers, and provides a complete Lean~4 formalization of Theorem~\ref{thm:full}.
 
 As an immediate consequence of the moving-node construction and Theorem~\ref{thm:full}, we also solve Stechkin's optimal operator approximation problem~\cite{Stechkin1967} (see also~\cite[Proposition~2]{Skorokhodov2019}) for $D^n$ on $L^1(I)$ at the minimal admissible operator norm $N = A_n$.
 
@@ -923,25 +923,33 @@ For supplementary structural observations surrounding the moving-node family—i
 \section{Formal Verification in Lean 4}
 \label{sec:lean}
 
-The complete proof of Theorem~\ref{thm:full} has been formally verified in Lean~4.32.2 with Mathlib inside \code{Lean/SharpL1/Analysis/}.
+The complete proof of Theorem~\ref{thm:full} has been formally verified in Lean~4.36.0 with Mathlib (using Lean's \code{module} system) inside \code{Lean/}.
 
-\subsection{Master entry point, Sobolev characterization, and axiom audit}
+\subsection{Master entry points, Sobolev characterization, and axiom audit}
 
-The top-level unconditional theorem is
-\begin{center}
-    \code{SharpL1.Analysis.theorem_sharp_L1_interpolation_full}
-\end{center}
-in \code{Lean/SharpL1/Analysis/MainTheorem.lean}. Indexed by \code{k : Nat} (order $n = k + 1 \ge 1$) and arbitrary endpoints \code{a < b}, it bundles all four clauses of Theorem~\ref{thm:full}:
-\begin{enumerate}[label=\textup{(\roman*)}]
-    \item \code{explicitErrorDerivCurve_neg_all_orders}, \code{explicitErrorCurve_strictAntiOn_Icc_zero_one}, \code{explicitErrorCurve_zero_eq_centerBestConstant}, and \code{explicitErrorCurve_unique_global_max_zero};
-    \item \code{sharp_L1_interpolation_W1} on \code{SobolevW1 (k + 2) a b f}, and \code{sharp_L1_interpolation_contDiffOn} for $C^{n+1}$ functions (\code{ContDiffOn});
-    \item \code{sharp_L1_interpolation_constants_optimal} over smooth functions (\code{ContDiff});
-    \item \code{sharp_L1_interpolation_contDiffOn_eq_iff} characterizing equality in $C^{n+1}([a,b])$.
-\end{enumerate}
+The formalization exposes Theorem~\ref{thm:full} at two aligned entry points:
+\begin{itemize}[leftmargin=1.8em]
+    \item \textbf{External Comparator interface (\code{Lean/Challenge.lean}, \code{Lean/Solution.lean}):} The 82-line statement file \code{Challenge.lean} imports only Lean core and Mathlib (with zero custom definitions or structures) and states all four clauses of Theorem~\ref{thm:full} in
+    \begin{center}
+        \code{SharpL1.theorem_sharp_L1_interpolation_full}
+    \end{center}
+    unpacking the 1D Sobolev condition~\eqref{eq:W1-char}, the closed-form cosine sum~\eqref{eq:bn-thm}, the Jacobi node polynomial~\eqref{eq:charpoly}, and the error profile~\eqref{eq:En} directly in Mathlib primitives. \code{Solution.lean} proves this exact declaration and is checked against \code{Challenge.lean} via \code{Lean/comparator.json}.
+    \item \textbf{Internal library bundle (\code{Lean/SharpL1/Analysis/MainTheorem.lean}):}
+    \begin{center}
+        \code{SharpL1.Analysis.theorem_sharp_L1_interpolation_full}
+    \end{center}
+    Indexed by \code{k : Nat} (order $n = k + 1 \ge 1$) and arbitrary endpoints \code{a < b}, it bundles all four clauses of Theorem~\ref{thm:full}:
+    \begin{enumerate}[label=\textup{(\roman*)}]
+        \item \code{explicitErrorDerivCurve_neg_all_orders}, \code{explicitErrorCurve_strictAntiOn_Icc_zero_one}, \code{explicitErrorCurve_zero_eq_centerBestConstant}, and \code{explicitErrorCurve_unique_global_max_zero};
+        \item \code{sharp_L1_interpolation_W1} on \code{SobolevW1 (k + 2) a b f}, and \code{sharp_L1_interpolation_contDiffOn} for $C^{n+1}$ functions (\code{ContDiffOn});
+        \item \code{sharp_L1_interpolation_constants_optimal} over smooth functions (\code{ContDiff});
+        \item \code{sharp_L1_interpolation_contDiffOn_eq_iff} characterizing equality in $C^{n+1}([a,b])$.
+    \end{enumerate}
+\end{itemize}
 
-The structure \code{SobolevW1 m a b f} in \code{MovingOperator.lean} encodes the exact one-dimensional characterization~\eqref{eq:W1-char}: a family \code{d : Nat -> R -> R} with \code{d 0 = f} on $[a,b]$, \code{ContinuousOn (d j) (Icc a b)} for $j < m$, \code{IntegrableOn (d m) (Icc a b) volume}, and \code{d j x - d j a = integral_a^x d (j + 1)} for all $j < m$ and $x \in [a,b]$.
+The internal structure \code{SobolevW1 m a b f} in \code{MovingOperator.lean} encodes the exact one-dimensional characterization~\eqref{eq:W1-char}: a family \code{d : Nat -> R -> R} with \code{d 0 = f} on $[a,b]$, \code{ContinuousOn (d j) (Icc a b)} for $j < m$, \code{IntegrableOn (d m) (Icc a b) volume}, and \code{d j x - d j a = integral_a^x d (j + 1)} for all $j < m$ and $x \in [a,b]$.
 
-Verification is reproduced from \code{Lean/} by running \code{lake build} followed by \code{lake env lean Audit.lean}. Across the entire library, there are zero \code{sorry}s, zero \code{admit}s, zero \code{native_decide}s, and zero custom axioms; \code{Audit.lean} prints the axiom footprint of every main theorem and confirms that all audited declarations depend solely on \code{[propext, Classical.choice, Quot.sound]} (with the pure-kernel \code{decide} certificates for $n = 3$ depending only on \code{[propext]}).
+Verification is reproduced from \code{Lean/} by running \code{lake build Challenge Solution SharpL1} followed by \code{lake env lean Audit.lean} (and on Linux via \code{./scripts/verify-comparator.sh}, which executes \code{lake comparator} with Lean's kernel and the bundled independent checkers \code{nanoda_bin} and \code{con-ron} against \code{Lean/comparator.json}). Across the entire proof library and \code{Solution.lean}, there are zero \code{sorry}s, zero \code{admit}s, zero \code{native_decide}s, and zero custom axioms; \code{Audit.lean} and Comparator confirm that all proved declarations depend solely on \code{[propext, Classical.choice, Quot.sound]} (with the pure-kernel \code{decide} certificates for $n = 3$ depending only on \code{[propext]}).
 
 \subsection{Formalization scope and proof-path differences}
 
@@ -1003,9 +1011,13 @@ Prop.~\ref{prop:low-orders} \& App.~\ref{app:n3} ($n=1,2,3$) &
 \code{LowOrderMono.lean} &
 \code{explicitError_orderedNode_one_strictAntiOn}, \code{explicitError_orderedNode_two_strictAntiOn}, \code{explicitError_orderedNode_three_lt_center}, \code{n3_block0_certified}--\code{n3_block4_certified}, \code{chordDelta_three_pos} \\
 \addlinespace[3pt]
-\textbf{Theorem~\ref{thm:full}} (unconditional bundle) &
+\textbf{Theorem~\ref{thm:full}} (internal bundle) &
 \code{MainTheorem.lean} &
 \code{explicitErrorDerivCurve_neg_all_orders}, \code{explicitErrorCurve_unique_global_max_zero}, \code{explicitErrorCurve_le_centerBestConstant}, \code{sharp_L1_interpolation_W1}, \code{sharp_L1_interpolation_constants_optimal}, \code{sharp_L1_interpolation_contDiffOn_eq_iff}, \code{theorem_sharp_L1_interpolation_full} \\
+\addlinespace[3pt]
+\textbf{Theorem~\ref{thm:full}} (Comparator entry) &
+\code{Challenge.lean}, \code{Solution.lean} &
+\code{SharpL1.theorem_sharp_L1_interpolation_full} (Mathlib-only statement surface verified via \code{comparator.json}) \\
 \bottomrule
 \end{tabular}
 \end{table}

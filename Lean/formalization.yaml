@@ -131,12 +131,15 @@ status:
     inequality using the 1D iterated-FTC Sobolev characterization SobolevW1;
     (iii) optimality of both constants even over C^infty([a, b]); and (iv)
     exact equality characterization in C^(n+1)([a, b]) as scalar multiples of
-    rescaled U_n. Challenge.lean uses a single deliberate sorry on
-    SharpL1.theorem_sharp_L1_interpolation_full that is proved unconditionally in
-    Solution.lean via SharpL1.Analysis.MainTheorem. Outside Lean scope: prose
-    Corollaries 2 (Stechkin L^1-quotient extension) and 3 (contour-integral
-    strict monotonicity B_{n+1} > B_n), historical comparisons in
-    notes/literature.md, and supplementary observations in
+    rescaled U_n. Externally, Challenge.lean states the single bundled theorem
+    SharpL1.theorem_sharp_L1_interpolation_full using only Lean core and Mathlib
+    imports (with one deliberate statement-surface sorry), discharged
+    unconditionally in Solution.lean by delegating to the internal master
+    theorem SharpL1.Analysis.theorem_sharp_L1_interpolation_full in
+    SharpL1/Analysis/MainTheorem.lean (listed under status.main_results). Outside
+    Lean scope: prose Corollaries 2 (Stechkin L^1-quotient extension) and 3
+    (contour-integral strict monotonicity B_{n+1} > B_n), historical comparisons
+    in notes/literature.md, and supplementary observations in
     notes/structural-observations.md.
   sorry_count: 0
   sorry_in_definitions: 0
@@ -163,11 +166,13 @@ automation:
         - "CodeBuddy"
       framework: "Human-directed multi-agent swarm + local Lean 4 CLI verification"
       tool_setup: >-
-        Lean 4 with Mathlib compiled locally and audited in CI; Python/mpmath.iv
-        used for independent numerical cross-checking of manuscript formulas;
-        no external solvers or native_decide used inside Lean proofs.
+        Lean v4.36.0 with Mathlib v4.36.0 built and audited via lake build,
+        Audit.lean, and Linux lake comparator (NanoDa + Lean kernel; advisory
+        con-ron) in GitHub Actions CI; Python/mpmath.iv used for independent
+        numerical cross-checking of manuscript formulas; no external solvers or
+        native_decide used inside Lean proofs.
       cost:
-        wall_time: "Multi-day development across 2026-11-20 to 2026-11-26"
+        wall_time: "Multi-day development across 2026-11-20 to 2026-11-27"
         spend_usd: "subscription-based"
         hardware: "Local Windows workstation + GitHub Actions ubuntu-latest"
       prompting_notes: >-
@@ -178,7 +183,7 @@ automation:
       framework: "n/a"
       tool_setup: "Human mathematical problem formulation, scope review, literature audit oversight, and verification"
       cost:
-        wall_time: "Multi-day oversight across 2026-11-20 to 2026-11-26"
+        wall_time: "Multi-day oversight across 2026-11-20 to 2026-11-27"
         spend_usd: "not tracked"
         hardware: "Local workstation"
       prompting_notes: "n/a"
@@ -186,12 +191,12 @@ automation:
   notes: >-
     All mathematical claims, literature boundaries, and formal statements were
     iteratively reviewed against primary sources (notes/literature.md) and
-    verified by Lean's kernel, Lean/Audit.lean, and Comparator.
+    verified by Lean's kernel, Lean/Audit.lean, and Linux lake comparator.
 
 fidelity:
   divergences: >-
     None in the statement of Theorem 1: Challenge.lean unpacks the exact 1D
-    iterated-FTC Sobolev space W^(n+1,1)([a,b]) (eq. (eq:W1-char) / SobolevW1),
+    iterated-FTC Sobolev space W^(n+1,1)([a,b]) (SobolevW1),
     explicit node polynomial roots, and explicit error formula directly over
     Mathlib primitives. Internally in Solution/SharpL1, four proof routes are
     streamlined relative to the paper prose without changing any theorem:
@@ -212,9 +217,10 @@ review:
     - "Lijails"
     - "Automated pre-submission verification agents"
   notes: >-
-    Checked against Lean 4 compiler, Lean/Audit.lean (#print axioms showing
-    only propext, Classical.choice, Quot.sound), Palomar source/Comparator checks,
-    and primary-source literature verification in notes/literature.md.
+    Self-assessed pre-submission review only (not an external Palomar review):
+    verified against Lean v4.36.0, Lean/Audit.lean (#print axioms showing only
+    propext, Classical.choice, Quot.sound), Linux lake comparator with NanoDa,
+    and primary-source literature checks in notes/literature.md.
 
 alignment:
   namespace: "SharpL1"
@@ -224,10 +230,11 @@ alignment:
       module: "Challenge"
       status: "proved"
       note: >-
-        Statement-only declaration in Challenge.lean (Mathlib-only imports),
-        discharged unconditionally in Solution.lean via
+        External Palomar Comparator declaration in Challenge.lean (Mathlib-only
+        imports, listed in comparator.json), discharged unconditionally in
+        Solution.lean via the internal master theorem
         SharpL1.Analysis.theorem_sharp_L1_interpolation_full in
-        SharpL1.Analysis.MainTheorem.
+        SharpL1/Analysis/MainTheorem.lean.
 
 acknowledgements: >-
   Built on Lean 4 and Mathlib4. Initiated and maintained by Lijails, in

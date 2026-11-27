@@ -1,20 +1,28 @@
 # Lean formalization
 
-This package uses Lean 4.32.2 and Mathlib v4.32.2, pinned to
-`905b95818eb32af7874a58b427f50c1711a5e96c` in the Lake manifest along with its
-transitive dependencies. Elan selects the toolchain from `lean-toolchain`.
+This package uses Lean 4.36.0 and Mathlib v4.36.0, pinned to
+`fc4f59e577feb1a4956671bc04ac18aaaf8cd842` in `lake-manifest.json` along with
+its transitive dependencies. Elan selects the toolchain from `lean-toolchain`.
 
 ```sh
-cd Lean
+python3 scripts/check-lean-sources.py   # from Lean/ (or repo root on Lean/scripts/)
 lake exe cache get
-lake build
+lake build Challenge Solution SharpL1
 lake env lean Audit.lean
 ```
 
-`Audit.lean` prints the axiom dependencies of the main theorems, including
-`SharpL1.Analysis.theorem_sharp_L1_interpolation_full`. The Lean CI job also
-audits declarations against the standard axiom allowlist. See the
-[formalization map](../FORMALIZATION.md) for the current theorem and its proof modules.
+- **Palomar Comparator entry point:** `SharpL1.theorem_sharp_L1_interpolation_full`
+  in [`Challenge.lean`](Challenge.lean) / [`Solution.lean`](Solution.lean),
+  configured in [`comparator.json`](comparator.json) and documented in
+  [`formalization.yaml`](formalization.yaml). On Linux with `bubblewrap`
+  (`bwrap`), run `./scripts/verify-comparator.sh` to verify the statement/solution
+  pair with Lean's kernel and NanoDa.
+- **Internal library master theorem & audit:** `Audit.lean` prints the axiom
+  dependencies of the internal theorems, including
+  `SharpL1.Analysis.theorem_sharp_L1_interpolation_full` in
+  `SharpL1/Analysis/MainTheorem.lean`, confirming only the standard axioms
+  `[propext, Classical.choice, Quot.sound]`. See the
+  [formalization map](../FORMALIZATION.md) for the full module correspondence.
 
 ## Parallel work
 
