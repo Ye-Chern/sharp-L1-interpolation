@@ -24,7 +24,7 @@
   "authors": [
     {
       "name": "Lijails",
-      "orcid": "TODO: 0000-0000-0000-0000 (replace with submitter ORCID iD)",
+      "orcid": "TODO: 0009-0004-1849-2354",
       "role": "Human initiator, maintainer, mathematical direction, verification and literature oversight"
     }
   ],
@@ -60,9 +60,9 @@
   ],
   "humanUnderstanding": "some",
   "provenance": "The project began on 2026-11-20 when Lijails and GPT 6.2 Astra (with writing assistance from Qwen 3.8 Flash) investigated the sharp second-order L^1 inequality on [0,1]. Between 2026-11-25 and 2026-11-26, Lijails collaborated with GPT 6.2 Sol to generalize the moving-node divided-difference construction and Jacobi/Gauss connections to all n >= 1 (v0.1 and v0.2 with threshold n >= 20), and with Gemini 4 Neon to discover the vertical-chord contour estimate cutting the analytic threshold to n >= 4 (leaving n = 1, 2 elementary and n = 3 certified on five subintervals). Subsequently, a multi-agent workflow coordinated by Gemini 4 Hydrogen (including GPT- and Gemini-family swarm workers plus earlier helper trials with Qwen 3.8 Flash, GPT 6 Luna Low, GPT 6.1 Terra XHigh, and CodeBuddy) produced a complete unconditional Lean 4 / Mathlib formalization of Theorem 1 using zero sorry and only [propext, Classical.choice, Quot.sound], executed a primary-source literature audit uncovering Burenkov (1980, 1986) and Kofanov (1984), added the Stechkin corollary (Corollary 2) and contour-integral strict monotonicity B_{n+1} > B_n (Corollary 3), and drafted paper_hexagon.tex under Lijails's supervision.",
-  "license": "TODO: choose exactly one of \"CC BY 4.0\" | \"CC BY-SA 4.0\" | \"CC0 1.0\"",
+  "license": "CC BY 4.0"",
   "correctnessConfirmed": true,
   "communityInterestConfirmed": true,
   "citationsConfirmed": true,
-  "rightsConfirmed": false
+  "rightsConfirmed": true
 }
