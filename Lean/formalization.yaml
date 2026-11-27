@@ -21,12 +21,7 @@ project:
   # MUST list only responsible humans (never AI models or agents).
   authors:
     - "Lijails"
-  # TODO (Maintainer decision required before external submission):
-  # Choose either "Apache-2.0" or "MIT" (both are accepted by Palomar Registry
-  # AND Lean Pool), replace the placeholder value below with that exact SPDX
-  # identifier, and place a matching root LICENSE file (full SPDX legal text)
-  # at the repository root.
-  license: "PENDING-MAINTAINER-CHOICE"
+  license: "Apache-2.0"
   responsible_maintainers:
     - "Lijails"
 
