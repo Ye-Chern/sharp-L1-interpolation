@@ -39,15 +39,10 @@ sources:
   - title: "Sharp Second Constants in L^1 Landau--Kolmogorov Inequalities on a Finite Interval"
     authors:
       - "Lijails"
-    contributors:
-      - name: "GPT 6.2 Astra"
-        role: "AI collaborator (initial n = 2 derivation)"
-      - name: "GPT 6.2 Sol"
-        role: "AI collaborator (all-order moving-node operator, v0.1/v0.2 drafts, initial Lean architecture)"
-      - name: "Gemini 4 Neon"
-        role: "AI collaborator (vertical-chord n >= 4 proof and Python interval verification)"
-      - name: "Gemini 4 Hydrogen"
-        role: "AI collaborator (Lean 4 formalization coordination, literature audit, and closure)"
+      - "GPT 6.2 Astra"
+      - "GPT 6.2 Sol"
+      - "Gemini 4 Neon"
+      - "Gemini 4 Hydrogen"
     type: "original-proof"
     location: "paper.tex (repository root)"
     relationship: "other"
@@ -57,8 +52,14 @@ sources:
       constants and—to the best of our knowledge—the first explicit closed-form
       evaluation B_n = E_n(0) across all n >= 1 resolving Burenkov's (1980) L^1
       open sharpness problem, paired with the moving-node Jacobi operator and
-      complete machine-checked proof. See notes/project-history.md and
-      notes/literature.md for provenance and primary-source comparisons.
+      complete machine-checked proof. Author/AI roles on this source: Lijails
+      (human initiator, maintainer, mathematical direction, verification and
+      literature oversight); GPT 6.2 Astra (initial n = 2 derivation); GPT 6.2
+      Sol (all-order moving-node operator, v0.1/v0.2 drafts, initial Lean
+      architecture); Gemini 4 Neon (vertical-chord n >= 4 proof and Python
+      interval verification); Gemini 4 Hydrogen (Lean 4 formalization
+      coordination, literature audit, and closure). See notes/project-history.md
+      and notes/literature.md for provenance and primary-source comparisons.
     author_endorsement: "participated"
 
   - title: "Exact constants in inequalities for norms of intermediate derivatives on a finite interval"
